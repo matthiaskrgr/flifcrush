@@ -25,32 +25,40 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 #print(os.environ['FLIF'])
 
 
-INFILE="/home/matthias/vcs/git/freedroid/graphics/obstacles/obstacles_atlas1.png"
 
-for N in list(range(30)):
+
+INFILE=sys.argv[1]
+print(INFILE)
+size_orig = os.path.getsize(INFILE)
+size_increased_times=0
+for N in list(range(10)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	if (N == 0): #first run, initialize
 		N_best=0
 		output_best = proc.stdout.read()
 		size_best = sys.getsizeof(output_best)
-		print("run {run}, size {size} b".format(run=N, size=size_best))
+		print("run {run}, size {size} b, better than before ({size_orig} b; {size_change} b)".format(run=N, size=size_best, size_orig=size_orig, size_change=size_best-size_orig))
 		continue
 
 	output = proc.stdout.read()
 	size = sys.getsizeof(output)
 
+
 	if (size_best > size): # new file is smaller
+		size_increased_times = 0
 		output_best = output
+
 		print("run {run}, size {size} b, better than {run_best} ({size_best} b; -{size_change} b)".format(run=N, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
 		N_best = N
 		size_best = size
-
 	else:
 		print("run {run}, size {size} b".format(run=N, size=size))
-		#break  //determine whether it is save to break out of loop here
+		size_increased_times += 1
+		if (size_increased_times == 4): # if size increases 4 times in a row, break
+			break; # do NOT quit, we need to write the file
 
-
-
+	
+	
 
 
 # write final best file
