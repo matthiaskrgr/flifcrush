@@ -31,13 +31,14 @@ INFILE=sys.argv[1]
 print(INFILE)
 size_orig = os.path.getsize(INFILE)
 size_increased_times=0
-for N in list(range(10)):
+_range=10
+for N in list(range(_range)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	if (N == 0): #first run, initialize
 		N_best=0
 		output_best = proc.stdout.read()
 		size_best = sys.getsizeof(output_best)
-		print("run {run}, size {size} b, better than before ({size_orig} b; {size_change} b)".format(run=N, size=size_best, size_orig=size_orig, size_change=size_best-size_orig))
+		print("run {run}, size {size} b, better than before which was {size_orig} b ({size_change} b)".format(run=N, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 		continue
 
 	output = proc.stdout.read()
@@ -48,7 +49,7 @@ for N in list(range(10)):
 		size_increased_times = 0
 		output_best = output
 
-		print("run {run}, size {size} b, better than {run_best} ({size_best} b; -{size_change} b)".format(run=N, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
+		print("run {run}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(run=N, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
 		N_best = N
 		size_best = size
 	else:
@@ -57,11 +58,10 @@ for N in list(range(10)):
 		if (size_increased_times == 4): # if size increases 4 times in a row, break
 			break; # do NOT quit, we need to write the file
 
-	
-	
-
-
 # write final best file
 file = open("/tmp/out_final.flif", "wb")
 file.write(output)
 file.close()
+
+size_flif = os.path.getsize("/tmp/out_final.flif")
+print("reduced from {size_orig} to {size_flif} ( {size_diff})".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff =size_flif - size_orig))
