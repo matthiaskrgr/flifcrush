@@ -24,8 +24,24 @@ import os
 
 __author__ = 'Matthias "matthiaskrgr" Krüger'
 
-#print(os.environ['FLIF'])
+# check for flif
+flif_binary = ""
+try:
+	flif_path = os.environ['FLIF']
+	if os.path.isfile(flif_path):
+		flif_binary = flif_path
+except KeyError: # env var not set, check if /usr/bin/flif exists
+	if (flif_binary == ""):
+		if (os.path.isfile("/usr/bin/flif")):
+			flif_binary = "/usr/bin/flif"
+		else:
+			print("Error: no flif binary found")
+			quit()
 
+
+print(flif_binary)
+
+ # check if we have an input file
 try:
 	INFILE=sys.argv[1]
 	print(INFILE)
