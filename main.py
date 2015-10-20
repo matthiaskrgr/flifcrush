@@ -26,11 +26,13 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 #print(os.environ['FLIF'])
 
+try:
+	INFILE=sys.argv[1]
+	print(INFILE)
+except IndexError:
+	print("Error: no filename given.")
+	quit()
 
-
-
-INFILE=sys.argv[1]
-print(INFILE)
 size_orig = os.path.getsize(INFILE)
 size_increased_times=0
 _range=10
