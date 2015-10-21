@@ -35,18 +35,16 @@ except KeyError: # env var not set, check if /usr/bin/flif exists
 		if (os.path.isfile("/usr/bin/flif")):
 			flif_binary = "/usr/bin/flif"
 		else:
-			print("Error: no flif binary found")
+			print("Error: no flif binary found, please use 'export FLIF=/path/to/flif'")
 			quit()
 
-
-print(flif_binary)
 
  # check if we have an input file
 try:
 	INFILE=sys.argv[1]
 	print(INFILE)
 except IndexError:
-	print("Error: no filename given.")
+	print("Error: no input file given.")
 	quit()
 
 size_orig = os.path.getsize(INFILE)
@@ -79,9 +77,12 @@ for N in list(range(_range)):
 			break; # do NOT quit, we need to write the file
 
 # write final best file
-file = open("/tmp/out_final.flif", "wb")
-file.write(output)
-file.close()
 
-size_flif = os.path.getsize("/tmp/out_final.flif")
+OUTFILE="/tmp/out_final.flif"
+with open(OUTFILE, "r+b") as f:
+	f.write(output)
+	f.close
+
+
+size_flif = os.path.getsize(OUTFILE)
 print("reduced from {size_orig} to {size_flif} ( {size_diff})".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff =size_flif - size_orig))
