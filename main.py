@@ -110,13 +110,13 @@ for N in list(range(range_N)):
 
 	output = proc.stdout.read()
 	size = sys.getsizeof(output)
-	debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D,'size': size}])
+	debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size}])
 
 
 	if ((size_best > size) or (size_best == -1337)): # new file is smaller
 		size_increased_times_N = 0
 		output_best = output
-		print("{count}, N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
+		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
 		N_best = N
 		size_best = size
 
@@ -139,7 +139,7 @@ for N in list(range(range_N)):
 				size_increased_times_S = 0
 				output_best = output
 
-				print("{count}, N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=S_best, size_best=size_best, size_change=size_best-size))
+				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=S_best, size_best=size_best, size_change=size_best-size))
 				S_best = S
 				size_best = size
 
@@ -240,6 +240,6 @@ print("reduced from {size_orig} to {size_flif} ( {size_diff})".format(size_orig 
 print("called flif " + str(count) + " times")
 
 #print debug information
-for index, val in enumerate(debug_array):
-		print("index:", index, "  val:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
+#for index, val in enumerate(debug_array):
+#		print("index:", index, "  val:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
 
