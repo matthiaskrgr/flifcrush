@@ -100,7 +100,7 @@ for N in list(range(range_N)):
 		N_best=0
 		output_best = proc.stdout.read()
 		size_best = sys.getsizeof(output_best)
-		print("N {N}, S {S}, M {M},D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
+		#print("N {N}, S {S}, M {M},D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 		continue
 
 	output = proc.stdout.read()
@@ -125,7 +125,7 @@ for N in list(range(range_N)):
 				S_best=1
 				#output_best = proc.stdout.read()
 				#size_best = sys.getsizeof(output_best)
-				print("N {N}, S {S}, M {M},D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)....".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
+				#print("N {N}, S {S}, M {M},D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)....".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 				continue
 
 			output = proc.stdout.read()
@@ -153,7 +153,7 @@ for N in list(range(range_N)):
 						M_best=1
 						#output_best = proc.stdout.read()
 						#size_best = sys.getsizeof(output_best)
-						print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
+						#print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 						continue
 
 					output = proc.stdout.read()
@@ -181,7 +181,7 @@ for N in list(range(range_N)):
 								D_best=1
 								#output_best = proc.stdout.read()
 								#size_best = sys.getsizeof(output_best)
-								print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
+								#print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 								continue
 
 							output = proc.stdout.read()
