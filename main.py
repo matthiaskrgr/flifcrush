@@ -56,10 +56,10 @@ M=0
 D=0
 
 
-range_N = 10 # default: 3 // try: 0-20
-range_S = 1000 # default: 50  // try: 1-200
-range_M = 1000 # default: 5461*8*5 ? // try 
-range_D = 1000 # default: // try  1-200
+range_N = 10   # default: 3 // try: 0-20
+range_S = 1000 # default: 40  // try: 1-200
+range_M = 1000 # default: 30  // try: 1-200
+range_D = 1000 # default: 50  // try  1-200
 
 giveUp_N = 4
 giveUp_S= 100
