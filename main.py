@@ -97,6 +97,7 @@ size_increased_times_S=0
 
 size_best = -1337
 count= 0
+best_nr=-1
 # MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -116,7 +117,9 @@ for N in list(range(range_N)):
 	if ((size_best > size) or (size_best == -1337)): # new file is smaller
 		size_increased_times_N = 0
 		output_best = output
-		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
+		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=best_nr, size_best=size_best, size_change=size_best-size))
+		best_nr=count
+
 		N_best = N
 		size_best = size
 
@@ -139,7 +142,9 @@ for N in list(range(range_N)):
 				size_increased_times_S = 0
 				output_best = output
 
-				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=S_best, size_best=size_best, size_change=size_best-size))
+				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=best_nr, size_best=size_best, size_change=size_best-size))
+				best_nr=count
+
 				S_best = S
 				size_best = size
 
@@ -164,7 +169,8 @@ for N in list(range(range_N)):
 						size_increased_times_M = 0
 						output_best = output
 
-						print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=M_best, size_best=size_best, size_change=size_best-size))
+						print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=best_nr, size_best=size_best, size_change=size_best-size))
+						best_nr=count
 						M_best = M
 						size_best = size
 
@@ -191,7 +197,8 @@ for N in list(range(range_N)):
 								size_increased_times_D = 0
 								output_best = output
 
-								print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=D_best, size_best=size_best, size_change=size_best-size))
+								print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=best_nr, size_best=size_best, size_change=size_best-size))
+								best_nr=count
 								D_best = D
 								size_best = size
 							else: # D
