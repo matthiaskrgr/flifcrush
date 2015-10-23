@@ -109,7 +109,7 @@ for N in list(range(range_N)):
 	if ((size_best > size) or (size_best == -1337)): # new file is smaller
 		size_increased_times_N = 0
 		output_best = output
-		print("N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
+		print("{count}, N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
 		N_best = N
 		size_best = size
 
@@ -136,7 +136,7 @@ for N in list(range(range_N)):
 				size_increased_times_S = 0
 				output_best = output
 
-				print("N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=S_best, size_best=size_best, size_change=size_best-size))
+				print("{count}, N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=S_best, size_best=size_best, size_change=size_best-size))
 				S_best = S
 				size_best = size
 
@@ -163,7 +163,7 @@ for N in list(range(range_N)):
 						size_increased_times_M = 0
 						output_best = output
 
-						print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=M_best, size_best=size_best, size_change=size_best-size))
+						print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=M_best, size_best=size_best, size_change=size_best-size))
 						M_best = M
 						size_best = size
 
@@ -192,7 +192,7 @@ for N in list(range(range_N)):
 								size_increased_times_D = 0
 								output_best = output
 
-								print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=D_best, size_best=size_best, size_change=size_best-size))
+								print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(count=count, N=N, S=S, M=M, D=D, size=size, run_best=D_best, size_best=size_best, size_change=size_best-size))
 								D_best = D
 								size_best = size
 							else: # D
