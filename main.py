@@ -48,10 +48,20 @@ except IndexError:
 	quit()
 
 size_orig = os.path.getsize(INFILE)
+
+
+range_N = 10 # default: 3 // try: 0-20
+range_S = 1000 # default: 50  // try: 1-200
+range_M = 1000 # default: 5461*8*5 ? // try 
+range_D = 1000 # default: // try  1-200
+
+giveUp_N = 4
+giveUp_SMD= 100
+
 size_increased_times=0
 _range=10
 size_best = -1337
-for N in list(range(_range)):
+for N in list(range(range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	if (N == 0): #first run, initialize
 		N_best=0
@@ -64,7 +74,7 @@ for N in list(range(_range)):
 	size = sys.getsizeof(output)
 
 
-	if (size_best > size || size_best = -1337): # new file is smaller
+	if ((size_best > size) or (size_best == -1337)): # new file is smaller
 		size_increased_times = 0
 		output_best = output
 
@@ -74,7 +84,8 @@ for N in list(range(_range)):
 	else:
 		print("run {run}, size {size} b".format(run=N, size=size))
 		size_increased_times += 1
-		if (size_increased_times == 4): # if size increases 4 times in a row, break
+		if (size_increased_times == giveUp_N): # if size increases 4 times in a row, break
+			size_increased_times = 0
 			break; # do NOT quit, we need to write the file
 
 
@@ -86,7 +97,7 @@ print("S")
 
 size_orig = size_best
 
-for S in list(range(1, 200, 1)):
+for S in list(range(1, range_S, 1)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	if (S == 1): #first run, initialize
 		#size_orig=size_best # need new value here
@@ -110,7 +121,8 @@ for S in list(range(1, 200, 1)):
 	else:
 		print("run S {run}, size {size} b".format(run=S, size=size))
 		size_increased_times += 1
-		if (size_increased_times == 100): # if size increases 4 times in a row, break
+		if (size_increased_times == giveUp_SMD): # if size increases 4 times in a row, break
+			size_increased_times = 0
 			break; # do NOT quit, we need to write the file
 
 
@@ -124,7 +136,7 @@ print("M")
 
 size_orig = size_best
 
-for M in list(range(1, 200, 1)):
+for M in list(range(1, range_M, 1)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S_best), '-M', str(M),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	if (M == 1): #first run, initialize
 		#size_orig=size_best # need new value here
@@ -148,7 +160,8 @@ for M in list(range(1, 200, 1)):
 	else:
 		print("run M {run}, size {size} b".format(run=M, size=size))
 		size_increased_times += 1
-		if (size_increased_times == 100): # if size increases 4 times in a row, break
+		if (size_increased_times == giveUp_SMD): # if size increases 4 times in a row, break
+			size_increased_times = 0
 			break; # do NOT quit, we need to write the file
 
 
@@ -162,7 +175,7 @@ print("D")
 
 size_orig = size_best
 
-for D in list(range(1, 200, 1)):
+for D in list(range(1, range_D, 1)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best), '-S', str(S_best), '-M', str(M_best), '-D', str(D),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	if (D == 1): #first run, initialize
 		#size_orig=size_best # need new value here
@@ -186,14 +199,10 @@ for D in list(range(1, 200, 1)):
 	else:
 		print("run D {run}, size {size} b".format(run=D, size=size))
 		size_increased_times += 1
-		if (size_increased_times == 100): # if size increases 4 times in a row, break
+		if (size_increased_times == giveUp_SMD): # if size increases 4 times in a row, break
+			size_increased_times = 0
 			break; # do NOT quit, we need to write the file
 
-# best found here, try  -S -M -M now
-
-_split_threadshold= 0 # 0 - 500 in 50 steps   S
-_divisor= 0 # 0 - 100 in 10 steps  M
-_min_size= 0 # 0-15  M
 
 
 
