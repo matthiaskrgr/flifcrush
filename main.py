@@ -135,7 +135,6 @@ for N in list(range(range_N)):
 			output = proc.stdout.read()
 			size = sys.getsizeof(output)
 			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D,'size': size}])
-
 			if (size_best > size): # new file is smaller
 				size_increased_times_S = 0
 				output_best = output
@@ -242,5 +241,5 @@ print("called flif " + str(count) + " times")
 
 #print debug information
 for index, val in enumerate(debug_array):
-		print(index, val[0]['Nr'], val[0]['N'], val[0]['S'], val[0]['M'], val[0]['D'], val[0]['size'] )
+		print("index:", index, "  val:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
 
