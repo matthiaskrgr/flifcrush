@@ -62,9 +62,18 @@ range_M = 1000 # default: 5461*8*5 ? // try
 range_D = 1000 # default: // try  1-200
 
 giveUp_N = 4
-giveUp_SMD= 100
+giveUp_S= 100
+giveUp_D= 100
+giveUp_M= 100
 
-size_increased_times=0
+
+size_increased_times_N=0
+size_increased_times_D=0
+
+size_increased_times_M=0
+
+size_increased_times_S=0
+
 _range=10
 size_best = -1337
 for N in list(range(range_N)):
@@ -81,7 +90,7 @@ for N in list(range(range_N)):
 
 
 	if ((size_best > size) or (size_best == -1337)): # new file is smaller
-		size_increased_times = 0
+		size_increased_times_N = 0
 		output_best = output
 
 		print("N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
@@ -94,7 +103,7 @@ for N in list(range(range_N)):
 #print("S")
 
 		size_orig = size_best
-
+		size_increased_times_S = 0
 		for S in list(range(1, range_S, 1)):
 			proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 			if (S == 1): #first run, initialize
@@ -110,7 +119,7 @@ for N in list(range(range_N)):
 
 
 			if (size_best > size): # new file is smaller
-				size_increased_times = 0
+				size_increased_times_S = 0
 				output_best = output
 
 				print("N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=S_best, size_best=size_best, size_change=size_best-size))
@@ -125,7 +134,7 @@ for N in list(range(range_N)):
 			#print("M")
 
 				size_orig = size_best
-
+				usize_increased_times_M = 0
 				for M in list(range(1, range_M, 1)):
 					proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S_best), '-M', str(M),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 					if (M == 1): #first run, initialize
@@ -133,7 +142,7 @@ for N in list(range(range_N)):
 						M_best=1
 						#output_best = proc.stdout.read()
 						#size_best = sys.getsizeof(output_best)
-						print("N {N}, S {S}, M {M},D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
+						print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 						continue
 
 					output = proc.stdout.read()
@@ -141,10 +150,10 @@ for N in list(range(range_N)):
 
 
 					if (size_best > size): # new file is smaller
-						size_increased_times = 0
+						size_increased_times_M = 0
 						output_best = output
 
-						print("N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=M_best, size_best=size_best, size_change=size_best-size))
+						print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=M_best, size_best=size_best, size_change=size_best-size))
 						M_best = M
 						size_best = size
 
@@ -152,7 +161,7 @@ for N in list(range(range_N)):
 						
 						size_best = sys.getsizeof(output_best)
 				#print("D")
-
+						size_increased_times_D = 0
 						size_orig = size_best
 
 						for D in list(range(1, range_D, 1)):
@@ -162,7 +171,7 @@ for N in list(range(range_N)):
 								D_best=1
 								#output_best = proc.stdout.read()
 								#size_best = sys.getsizeof(output_best)
-								print("N {N}, S {S}, M {M},D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
+								print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 								continue
 
 							output = proc.stdout.read()
@@ -170,16 +179,16 @@ for N in list(range(range_N)):
 
 
 							if (size_best > size): # new file is smaller
-								size_increased_times = 0
+								size_increased_times_D = 0
 								output_best = output
 
-								print("N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=D_best, size_best=size_best, size_change=size_best-size))
+								print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=D_best, size_best=size_best, size_change=size_best-size))
 								D_best = D
 								size_best = size
 							else:
 								#print("run D {run}, size {size} b".format(run=D, size=size))
-								size_increased_times += 1
-								if (size_increased_times == giveUp_SMD): # if size increases 4 times in a row, break
+								size_increased_times_D += 1
+								if (size_increased_times_D == giveUp_D): # if size increases 4 times in a row, break
 									size_increased_times = 0
 									break; # do NOT quit, we need to write the file
 
@@ -187,9 +196,9 @@ for N in list(range(range_N)):
 						
 					else:
 						#print("run M {run}, size {size} b".format(run=M, size=size))
-						size_increased_times += 1
-						if (size_increased_times == giveUp_SMD): # if size increases 4 times in a row, break
-							size_increased_times = 0
+						size_increased_times_M += 1
+						if (size_increased_times_M == giveUp_M): # if size increases 4 times in a row, break
+							size_increased_times_M = 0
 							break; # do NOT quit, we need to write the file
 
 
@@ -197,9 +206,9 @@ for N in list(range(range_N)):
 				
 			else:
 				#print("run S {run}, size {size} b".format(run=S, size=size))
-				size_increased_times += 1
-				if (size_increased_times == giveUp_SMD): # if size increases 4 times in a row, break
-					size_increased_times = 0
+				size_increased_times_S += 1
+				if (size_increased_times_S == giveUp_S): # if size increases 4 times in a row, break
+					size_increased_times_S = 0
 					break; # do NOT quit, we need to write the file
 
 
@@ -209,9 +218,9 @@ for N in list(range(range_N)):
 		
 	else:
 		#print("run {run}, size {size} b".format(run=N, size=size))
-		size_increased_times += 1
-		if (size_increased_times == giveUp_N): # if size increases 4 times in a row, break
-			size_increased_times = 0
+		size_increased_times_N += 1
+		if (size_increased_times_N == giveUp_N): # if size increases 4 times in a row, break
+			size_increased_times_N = 0
 			break; # do NOT quit, we need to write the file
 
 
