@@ -236,7 +236,6 @@ with open(OUTFILE, "w+b") as f:
 	f.close
 
 size_flif=os.path.getsize(OUTFILE)
-
-size_flif = os.path.getsize(OUTFILE)
+size_orig=os.path.getsize(INFILE)
 print("reduced from {size_orig} to {size_flif} ( {size_diff})".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff =size_flif - size_orig))
 print("called flif " + str(count) + " times")
