@@ -91,8 +91,11 @@ size_increased_times_M=0
 size_increased_times_S=0
 
 size_best = -1337
+count= 0
+# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+	count +=1
 	if (N == 0): #first run, initialize
 		N_best=0
 		output_best = proc.stdout.read()
@@ -103,24 +106,20 @@ for N in list(range(range_N)):
 	output = proc.stdout.read()
 	size = sys.getsizeof(output)
 
-
 	if ((size_best > size) or (size_best == -1337)): # new file is smaller
 		size_increased_times_N = 0
 		output_best = output
-
 		print("N {N}, S {S}, M {M},D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=N_best, size_best=size_best, size_change=size_best-size))
 		N_best = N
 		size_best = size
 
 
-
-
-#print("S")
-
+		# -S, --split-threshold=T  MANIAC tree growth control (default: T=40)
 		size_orig = size_best
 		size_increased_times_S = 0
 		for S in list(range(1, range_S, 1)):
 			proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+			count +=1
 			if (S == 1): #first run, initialize
 				#size_orig=size_best # need new value here
 				S_best=1
@@ -141,17 +140,14 @@ for N in list(range(range_N)):
 				S_best = S
 				size_best = size
 
-
-
 				size_best = sys.getsizeof(output_best)
 
-
-			#print("M")
-
+				#-M, --min-size=M         MANIAC leaves post-pruning (default: M=50)
 				size_orig = size_best
 				usize_increased_times_M = 0
 				for M in list(range(1, range_M, 1)):
 					proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S_best), '-M', str(M),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+					count +=1
 					if (M == 1): #first run, initialize
 						#size_orig=size_best # need new value here
 						M_best=1
@@ -163,7 +159,6 @@ for N in list(range(range_N)):
 					output = proc.stdout.read()
 					size = sys.getsizeof(output)
 
-
 					if (size_best > size): # new file is smaller
 						size_increased_times_M = 0
 						output_best = output
@@ -172,15 +167,15 @@ for N in list(range(range_N)):
 						M_best = M
 						size_best = size
 
-
-						
 						size_best = sys.getsizeof(output_best)
-				#print("D")
+
+						#   -D, --divisor=D          MANIAC node count divisor (default: D=30)
 						size_increased_times_D = 0
 						size_orig = size_best
 
 						for D in list(range(1, range_D, 1)):
 							proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best), '-S', str(S_best), '-M', str(M_best), '-D', str(D),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+							count +=1
 							if (D == 1): #first run, initialize
 								#size_orig=size_best # need new value here
 								D_best=1
@@ -200,70 +195,48 @@ for N in list(range(range_N)):
 								print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b)".format(N=N, S=S, M=M, D=D, size=size, run_best=D_best, size_best=size_best, size_change=size_best-size))
 								D_best = D
 								size_best = size
-							else:
+							else: # D
 								#print("run D {run}, size {size} b".format(run=D, size=size))
 								size_increased_times_D += 1
-								showActivity()
-								if (size_increased_times_D == giveUp_D): # if size increases 4 times in a row, break
+								showActivity() # print that we are still running
+								if (size_increased_times_D == giveUp_D): # give up if we didn't make many progress for so many times
 									size_increased_times = 0
-									break; # do NOT quit, we need to write the file
+									break;
 
-
-						
-					else:
+					else: # M
 						#print("run M {run}, size {size} b".format(run=M, size=size))
 						size_increased_times_M += 1
 						showActivity()
-						if (size_increased_times_M == giveUp_M): # if size increases 4 times in a row, break
+						if (size_increased_times_M == giveUp_M):
 							size_increased_times_M = 0
-							break; # do NOT quit, we need to write the file
+							break;
 
-
-
-				
-			else:
+			else: # S
 				#print("run S {run}, size {size} b".format(run=S, size=size))
 				size_increased_times_S += 1
 				showActivity()
-				if (size_increased_times_S == giveUp_S): # if size increases 4 times in a row, break
+				if (size_increased_times_S == giveUp_S):
 					size_increased_times_S = 0
-					break; # do NOT quit, we need to write the file
+					break;
 
-
-
-
-
-		
-	else:
+	else: # N
 		#print("run {run}, size {size} b".format(run=N, size=size))
 		size_increased_times_N += 1
 		showActivity()
-		if (size_increased_times_N == giveUp_N): # if size increases 4 times in a row, break
+		if (size_increased_times_N == giveUp_N):
 			size_increased_times_N = 0
-			break; # do NOT quit, we need to write the file
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			break;
 
 
 # write final best file
 
 OUTFILE="/tmp/out_final.flif"
-with open(OUTFILE, "r+b") as f:
-	f.write(output)
+with open(OUTFILE, "w+b") as f:
+	f.write(output_best)
 	f.close
 
+size_flif=os.path.getsize(OUTFILE)
 
 size_flif = os.path.getsize(OUTFILE)
 print("reduced from {size_orig} to {size_flif} ( {size_diff})".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff =size_flif - size_orig))
+print("called flif " + str(count) + " times")
