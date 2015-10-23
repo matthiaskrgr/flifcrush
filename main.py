@@ -24,6 +24,24 @@ import os
 
 __author__ = 'Matthias "matthiaskrgr" Krüger'
 
+
+
+global arr_index
+global progress_array
+arr_index = 0
+progress_array=["|", "/", "-", "\\",]
+#progress_array=[".", "o", "0", "O", "O", "o", "."]
+
+
+def showActivity():
+	global arr_index
+	arr_index = arr_index + 1
+	if (arr_index == len(progress_array)):
+		arr_index = 0
+	print(progress_array[arr_index], end="\r",flush=True)
+	return
+
+
 # check for flif
 flif_binary = ""
 try:
@@ -62,19 +80,16 @@ range_M = 1000 # default: 30  // try: 1-200
 range_D = 1000 # default: 50  // try  1-200
 
 giveUp_N = 4
-giveUp_S= 100
-giveUp_D= 100
-giveUp_M= 100
+giveUp_S = 100
+giveUp_D = 100
+giveUp_M = 100
 
 
 size_increased_times_N=0
 size_increased_times_D=0
-
 size_increased_times_M=0
-
 size_increased_times_S=0
 
-_range=10
 size_best = -1337
 for N in list(range(range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -188,6 +203,7 @@ for N in list(range(range_N)):
 							else:
 								#print("run D {run}, size {size} b".format(run=D, size=size))
 								size_increased_times_D += 1
+								showActivity()
 								if (size_increased_times_D == giveUp_D): # if size increases 4 times in a row, break
 									size_increased_times = 0
 									break; # do NOT quit, we need to write the file
@@ -197,6 +213,7 @@ for N in list(range(range_N)):
 					else:
 						#print("run M {run}, size {size} b".format(run=M, size=size))
 						size_increased_times_M += 1
+						showActivity()
 						if (size_increased_times_M == giveUp_M): # if size increases 4 times in a row, break
 							size_increased_times_M = 0
 							break; # do NOT quit, we need to write the file
@@ -207,6 +224,7 @@ for N in list(range(range_N)):
 			else:
 				#print("run S {run}, size {size} b".format(run=S, size=size))
 				size_increased_times_S += 1
+				showActivity()
 				if (size_increased_times_S == giveUp_S): # if size increases 4 times in a row, break
 					size_increased_times_S = 0
 					break; # do NOT quit, we need to write the file
@@ -219,6 +237,7 @@ for N in list(range(range_N)):
 	else:
 		#print("run {run}, size {size} b".format(run=N, size=size))
 		size_increased_times_N += 1
+		showActivity()
 		if (size_increased_times_N == giveUp_N): # if size increases 4 times in a row, break
 			size_increased_times_N = 0
 			break; # do NOT quit, we need to write the file
