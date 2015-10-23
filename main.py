@@ -121,10 +121,7 @@ for N in list(range(range_N)):
 			proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			if (S == 1): #first run, initialize
-				#size_orig=size_best # need new value here
 				S_best=1
-				#output_best = proc.stdout.read()
-				#size_best = sys.getsizeof(output_best)
 				#print("N {N}, S {S}, M {M},D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)....".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 				continue
 
@@ -149,10 +146,7 @@ for N in list(range(range_N)):
 					proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best),'-S', str(S_best), '-M', str(M),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 					count +=1
 					if (M == 1): #first run, initialize
-						#size_orig=size_best # need new value here
 						M_best=1
-						#output_best = proc.stdout.read()
-						#size_best = sys.getsizeof(output_best)
 						#print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 						continue
 
@@ -177,10 +171,7 @@ for N in list(range(range_N)):
 							proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N_best), '-S', str(S_best), '-M', str(M_best), '-D', str(D),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 							count +=1
 							if (D == 1): #first run, initialize
-								#size_orig=size_best # need new value here
 								D_best=1
-								#output_best = proc.stdout.read()
-								#size_best = sys.getsizeof(output_best)
 								#print("N {N}, S {S}, M {M}, D {D}, size {size} b, better than before which was {size_orig} b ({size_change} b)...".format(N=N, S=S, M=M, D=D, size=size_best, size_orig=size_orig, size_change=size_best-size_orig, minusperc="1"))
 								continue
 
