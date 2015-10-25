@@ -111,7 +111,56 @@ size_new = size_best = os.path.getsize(INFILE)
 # -S and -D must at least be 1
 
 
-# -r is independent of the other parameters
+# -r is said to be independent of the other parameters
+
+
+
+
+
+# do a first -n run
+
+
+
+
+
+
+range_N=20
+
+size_orig=os.path.getsize(INFILE)
+
+
+
+first_best_N=0
+# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
+for N in list(range(0, range_N)):
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif', '-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+	count +=1
+
+
+	output = proc.stdout.read()
+	size_new = sys.getsizeof(output)
+	debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
+	if (((size_best > size_new) or ((N==0) and size_new < size_orig))) : # new file is smaller
+		size_increased_times_N_first = 0 # reset break-counter
+		output_best = output
+		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+		best_count=count
+		size_best = size_new
+		best_N_first=N
+	else:
+		size_increased_times_N += 1
+		showActivity()
+		if (size_increased_times_N_first >= 5):
+			break; # break out of loop, we have wasted enough time here
+
+best_N= best_N_first
+N=0 # reset N
+
+
+
+
+
 
 #order: s, d, m, n
 N = best_N =1
@@ -195,7 +244,7 @@ M = good_S_M_D[1]
 
 
 
-best_N=1
+#best_N=1
 # MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(0, range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif',  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
