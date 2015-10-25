@@ -32,6 +32,8 @@ to be faster: first calculate SMD with -r 1, then bruteforce best r value
 
 '''
 
+output_best="none"
+
 global arr_index
 global progress_array
 arr_index = 0
@@ -146,7 +148,7 @@ size_orig=os.path.getsize(INFILE)
 
 size_increased_times_N_first=0
 
-first_best_N=0
+first_best_N=best_N_first=0
 # MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(0, range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif', '-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -298,16 +300,18 @@ print("N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D
 
 # write final best file
 
-OUTFILE=INFILE+".flif"
-with open(OUTFILE, "w+b") as f:
-	f.write(output_best)
-	f.close
+if output_best != "none":
+	OUTFILE=INFILE+".flif"
+	with open(OUTFILE, "w+b") as f:
+		f.write(output_best)
+		f.close
 
-size_flif=os.path.getsize(OUTFILE)
-size_orig=os.path.getsize(INFILE)
-print("\nreduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %)".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6]))
-print("called flif " + str(count) + " times")
-
+	size_flif=os.path.getsize(OUTFILE)
+	size_orig=os.path.getsize(INFILE)
+	print("\nreduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %)".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6]))
+	print("called flif " + str(count) + " times")
+else:
+	print("WARNING: could not reduce size")
 
 #			print debug information
 #for index, val in enumerate(debug_array):
