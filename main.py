@@ -21,9 +21,9 @@
 import subprocess
 import sys
 import os
-
+from PIL import Image
+from collections import Counter
 __author__ = 'Matthias "matthiaskrgr" Krüger'
-
 
 
 
@@ -77,7 +77,22 @@ except IndexError:
 	print("Error: no input file given.")
 	quit()
 
+
+#output some metrics:
+im=Image.open(INFILE)
+img=[]
+
+for px in (im.getdata()):
+	img.append(px)
+
+unique_colors = len(Counter(img).items())
 size_orig = os.path.getsize(INFILE)
+
+
+print("{x}x{y}, {px} pixels, {uc} unique colors, {b} bytes".format(x=im.size[0], y=im.size[1], px=im.size[0]*im.size[1], uc=unique_colors, b=size_orig))
+
+
+
 
 # avoid undecl var:
 N = S = M = D = 0
