@@ -39,7 +39,7 @@ global progress_array
 arr_index = 0
 #progress_array=["|", "/", "-", "\\",]
 #progress_array=[".", "o", "0", "O", "O", "o", "."]
-progress_array=["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃", "▁"]
+progress_array=[" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃", "▁"]
 arrlen=len(progress_array)
 
 def showActivity():
