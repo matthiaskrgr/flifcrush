@@ -129,6 +129,7 @@ range_N=20
 size_orig=os.path.getsize(INFILE)
 
 
+size_increased_times_N_first=0
 
 first_best_N=0
 # MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
