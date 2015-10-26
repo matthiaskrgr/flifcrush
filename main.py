@@ -74,7 +74,6 @@ except KeyError: # env var not set, check if /usr/bin/flif exists
  # check if we have an input file
 try:
 	INFILE=sys.argv[1]
-	print(INFILE)
 except IndexError:
 	print("Error: no input file given.")
 	quit()
@@ -91,7 +90,7 @@ unique_colors = len(Counter(img).items())
 size_orig = os.path.getsize(INFILE)
 
 
-print("{x}x{y}, {px} pixels, {uc} unique colors, {b} bytes".format(x=im.size[0], y=im.size[1], px=im.size[0]*im.size[1], uc=unique_colors, b=size_orig))
+print("{inf}: {x}x{y}, {px} pixels, {uc} unique colors, {b} bytes".format(inf=INFILE, x=im.size[0], y=im.size[1], px=im.size[0]*im.size[1], uc=unique_colors, b=size_orig))
 
 
 
@@ -299,7 +298,7 @@ for N in list(range(0, range_N)):
 #print(good_S_M_D)
 
 
-print("N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2]))
+bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2])
 
 
 
@@ -313,8 +312,8 @@ if output_best != "none":
 
 	size_flif=os.path.getsize(OUTFILE)
 	size_orig=os.path.getsize(INFILE)
-	print("\nreduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %)".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6]))
-	print("called flif " + str(count) + " times")
+	print("\nreduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)))
+#	print("called flif " + str(count) + " times")
 else:
 	print("WARNING: could not reduce size")
 
