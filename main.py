@@ -306,7 +306,7 @@ print("N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D
 # write final best file
 
 if output_best != "none":
-	OUTFILE=INFILE+".flif"
+	OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif"
 	with open(OUTFILE, "w+b") as f:
 		f.write(output_best)
 		f.close
