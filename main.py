@@ -48,7 +48,7 @@ def showActivity():
 	arr_index = arr_index + 1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count), end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + "     ", end="\r",flush=True)
 	#return
 
 debug_array=[]
@@ -162,7 +162,7 @@ for N in list(range(0, range_N)):
 	if (((size_best > size_new) or ((N==0) and size_new < size_orig))) : # new file is smaller
 		size_increased_times_N_first = 0 # reset break-counter
 		output_best = output
-		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best="orig" if (count == 1) else best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		best_count=count
 		size_best = size_new
 		best_N_first=N
