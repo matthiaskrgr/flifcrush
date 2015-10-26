@@ -166,6 +166,7 @@ for N in list(range(0, range_N)):
 		best_count=count
 		size_best = size_new
 		best_N_first=N
+		arr_index = 0
 	else:
 		size_increased_times_N += 1
 		showActivity()
@@ -199,6 +200,7 @@ for S in list(range(1, range_S, 1)):
 		size_best = size_new
 		best_count = count
 		size_increased_times = 0
+		arr_index = 0
 	else:
 		showActivity()
 #				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
@@ -224,6 +226,7 @@ for D in list(range(1, range_D, 1)):
 		size_best=size_new
 		best_count = count
 		size_increased_times = 0
+		arr_index = 0
 	else:
 		showActivity()
 #				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
@@ -250,6 +253,7 @@ for M in list(range(0, range_M, 1)):
 		size_best=size_new
 		best_count = count
 		size_increased_times = 0
+		arr_index = 0
 	else:
 		showActivity()
 #				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
@@ -284,6 +288,7 @@ for N in list(range(0, range_N)):
 		best_count=count
 		size_best = size_new
 		best_N=N
+		arr_index = 0
 	else:
 		size_increased_times_N += 1
 		showActivity()
