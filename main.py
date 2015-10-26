@@ -23,6 +23,7 @@ import sys
 import os
 from PIL import Image
 from collections import Counter
+
 __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 
@@ -312,7 +313,7 @@ if output_best != "none":
 
 	size_flif=os.path.getsize(OUTFILE)
 	size_orig=os.path.getsize(INFILE)
-	print("\nreduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)))
+	print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)), end="\r",flush=True)
 #	print("called flif " + str(count) + " times")
 else:
 	print("WARNING: could not reduce size")
