@@ -78,17 +78,15 @@ except IndexError:
 	quit()
 
 
-#output some metrics:
-im=Image.open(INFILE)
-img=[]
+#output some metrics about the png that we are about to convert
 
+im=Image.open(INFILE)
+img=[] # will contain pixel data
 for px in (im.getdata()):
 	img.append(px)
 
-unique_colors = len(Counter(img).items())
-size_orig = os.path.getsize(INFILE)
-
-
+unique_colors = len(Counter(img).items()) # get number of unique pixels
+size_orig = os.path.getsize(INFILE) # size of the png
 print("{inf}: {x}x{y}, {px} pixels, {uc} unique colors, {b} bytes".format(inf=INFILE, x=im.size[0], y=im.size[1], px=im.size[0]*im.size[1], uc=unique_colors, b=size_orig))
 
 
@@ -107,9 +105,9 @@ range_D = 600 # default: 50  // try  1-100
 give_up_after = 200
 
 #defaults:
-S=40
-M=30
-D=50
+S=40 # must at least be 1
+M=30 # can be 0
+D=50 # must at least be 1
 
 # if we did this many attempts without getting better results, give up
 giveUp_N = 5
@@ -122,28 +120,6 @@ best_count=0 # what was the smallest compression so far?
 
 size_new = size_best = os.path.getsize(INFILE)
 
-# -M can be 0
-# -S and -D must at least be 1
-
-
-# -r is said to be independent of the other parameters
-
-
-
-
-
-# do a first -n run
-
-
-
-
-
-
-range_N=20
-
-size_orig=os.path.getsize(INFILE)
-
-
 size_increased_times_N_first=0
 
 first_best_N=best_N_first=0
@@ -151,7 +127,6 @@ first_best_N=best_N_first=0
 for N in list(range(0, range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif', '-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
-
 
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -172,21 +147,15 @@ for N in list(range(0, range_N)):
 			break; # break out of loop, we have wasted enough time here
 
 best_N = best_N_first
-N=0 # reset N
-
-
-
 
 
 
 #order: s, d, m, n
-N  =1
+N = 1
 
 size_increased_times = 0
 good_S_M_D=["40","30","50"]
 for S in list(range(1, range_S, 1)):
-	#print('S'+ str(S))
-	#size_increased_times_M = 0
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1), '-S', str(S),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
@@ -206,13 +175,9 @@ for S in list(range(1, range_S, 1)):
 		if (size_increased_times >= give_up_after):
 			break;
 S = good_S_M_D[0]
-#print(good_S_M_D)
-#quit()
 
 size_increased_times = 0
 for D in list(range(1, range_D, 1)):
-	#print('D'+ str(D))
-	#size_increased_times_M = 0
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
@@ -228,7 +193,6 @@ for D in list(range(1, range_D, 1)):
 	else:
 		showActivity()
 #				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-		#size_increased_times += 1
 		size_increased_times += 1
 		if (size_increased_times >= give_up_after):
 			break;
@@ -238,8 +202,6 @@ D = good_S_M_D[2]
 
 size_increased_times = 0
 for M in list(range(0, range_M, 1)):
-	#print('M'+ str(M))
-	#size_increased_times_M = 0
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
@@ -255,7 +217,6 @@ for M in list(range(0, range_M, 1)):
 	else:
 		showActivity()
 #				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-		#size_increased_times += 1
 		size_increased_times += 1
 		if (size_increased_times >= give_up_after):
 			break;
@@ -263,18 +224,9 @@ for M in list(range(0, range_M, 1)):
 M = good_S_M_D[1]
 
 
-
-#best_N=1
-# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(0, range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif',  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
-	#if (N == 1): #first run, initialize
-		#print("first run, orig size")
-		#size_new = size_best = os.path.getsize(INFILE) #size of png
-		#debug_array.append([{'Nr': 0, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
-		#print("0, N {N}, S {S}, M {M}, D {D}, size {size} b, (original size)".format(N=N, S=S, M=M, D=D, size=size_new))
-
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
 	debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
@@ -293,10 +245,6 @@ for N in list(range(0, range_N)):
 		if (size_increased_times_N >= giveUp_N):
 			break; # break out of loop, we have wasted enough time here
 
-#print("best N: " + str(best_N))
-#print(good_S_M_D)
-
-
 bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2])
 
 
@@ -312,7 +260,6 @@ if output_best != "none":
 	size_flif=os.path.getsize(OUTFILE)
 	size_orig=os.path.getsize(INFILE)
 	print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)), end="\r",flush=True)
-#	print("called flif " + str(count) + " times")
 else:
 	print("WARNING: could not reduce size")
 
