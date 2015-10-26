@@ -172,7 +172,7 @@ for N in list(range(0, range_N)):
 		if (size_increased_times_N_first >= 5):
 			break; # break out of loop, we have wasted enough time here
 
-best_N= best_N_first
+best_N = best_N_first
 N=0 # reset N
 
 
@@ -181,7 +181,7 @@ N=0 # reset N
 
 
 #order: s, d, m, n
-N = best_N =1
+N  =1
 
 size_increased_times = 0
 good_S_M_D=["40","30","50"]
