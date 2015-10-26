@@ -28,13 +28,7 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 
 
-'''
-to be faster: first calculate SMD with -r 1, then bruteforce best r value
-
-'''
-
 output_best="none"
-
 global arr_index
 global progress_array
 arr_index = 0
@@ -43,13 +37,15 @@ arr_index = 0
 progress_array=[" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃", "▁"]
 arrlen=len(progress_array)
 
+# prints activity indicator (some kind of ascii animation)
 def showActivity():
+	#return
 	global arr_index
-	arr_index = arr_index + 1
-	if (arr_index == arrlen):
+	arr_index+=1
+	if (arr_index == arrlen-1):
 		arr_index = 0
 	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + "     ", end="\r",flush=True)
-	#return
+
 
 debug_array=[]
 #debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'size':""}
@@ -57,7 +53,7 @@ debug_array=[]
 
 
 
-# check for flif
+# make sure we know where flif binary is
 flif_binary = ""
 try:
 	flif_path = os.environ['FLIF']
@@ -67,6 +63,8 @@ except KeyError: # env var not set, check if /usr/bin/flif exists
 	if (flif_binary == ""):
 		if (os.path.isfile("/usr/bin/flif")):
 			flif_binary = "/usr/bin/flif"
+		elif (os.path.isfile("/usr/share/bin/flif")):
+			flif_binary = "/usr/share/bin/flif"
 		else:
 			print("Error: no flif binary found, please use 'export FLIF=/path/to/flif'")
 			quit()
@@ -313,7 +311,7 @@ if output_best != "none":
 
 	size_flif=os.path.getsize(OUTFILE)
 	size_orig=os.path.getsize(INFILE)
-	print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)), end="\r",flush=True)
+	print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)), end="\r",flush=True)
 #	print("called flif " + str(count) + " times")
 else:
 	print("WARNING: could not reduce size")
