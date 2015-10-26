@@ -48,7 +48,7 @@ def showActivity():
 	arr_index = arr_index + 1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index], end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count), end="\r",flush=True)
 	#return
 
 debug_array=[]
