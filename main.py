@@ -42,7 +42,7 @@ def showActivity():
 	#return
 	global arr_index
 	arr_index+=1
-	if (arr_index == arrlen-1):
+	if (arr_index == arrlen):
 		arr_index = 0
 	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + "     ", end="\r",flush=True)
 
@@ -112,7 +112,7 @@ D=50 # must at least be 1
 # if we did this many attempts without getting better results, give up
 giveUp_N = 5
 giveUp_S = 200
-giveUp_D = 100
+giveUp_D = 200 #100
 giveUp_M = 200
 
 count = 0 # how many recompression attempts did we take?
