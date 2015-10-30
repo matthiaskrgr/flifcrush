@@ -23,8 +23,24 @@ import sys
 import os
 from PIL import Image
 from collections import Counter
+import argparse
 
 __author__ = 'Matthias "matthiaskrgr" Krüger'
+
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--interlace", help="enable interlacing (default: false)", action='store_true')
+parser.add_argument("infile", help="file to be converted to flif", type=str)
+args = parser.parse_args()
+if args.interlace:
+	interlace_flag="--interlace"
+else:
+	interlace_flag="--no-interlace"
+
+INFILE=args.infile
+
 
 
 
@@ -68,15 +84,6 @@ except KeyError: # env var not set, check if /usr/bin/flif exists
 		else:
 			print("Error: no flif binary found, please use 'export FLIF=/path/to/flif'")
 			quit()
-
-
- # check if we have an input file
-try:
-	INFILE=sys.argv[1]
-except IndexError:
-	print("Error: no input file given.")
-	quit()
-
 
 #output some metrics about the png that we are about to convert
 
@@ -125,7 +132,7 @@ size_increased_times_N_first=0
 first_best_N=best_N_first=0
 # MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(0, range_N)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif', '-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif', '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 
 	output = proc.stdout.read()
@@ -156,7 +163,7 @@ N = 1
 size_increased_times = 0
 good_S_M_D=["40","30","50"]
 for S in list(range(1, range_S, 1)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1), '-S', str(S),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -178,7 +185,7 @@ S = good_S_M_D[0]
 
 size_increased_times = 0
 for D in list(range(1, range_D, 1)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -202,7 +209,7 @@ D = good_S_M_D[2]
 
 size_increased_times = 0
 for M in list(range(0, range_M, 1)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -225,7 +232,7 @@ M = good_S_M_D[1]
 
 
 for N in list(range(0, range_N)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif',  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif',  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
