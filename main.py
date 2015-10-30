@@ -97,35 +97,34 @@ print("{inf}: {x}x{y}, {px} pixels, {uc} unique colors, {b} bytes".format(inf=IN
 
 
 
-# avoid undecl var:
-N = S = M = D = 0
-size_increased_times_N = size_increased_times_D = size_increased_times_M = size_increased_times_S = 0
 
 
+# how many max attempts (in "best" case)?
 range_N = 20   # default: 3 // try: 0-20
 range_S = 600 # default: 40  // try: 1-100
 range_M = 600 # default: 30  // try: 1-100
 range_D = 5000 # default: 50  // try  1-100
 
-give_up_after = 200
-
-#defaults:
-S=40 # must at least be 1
-M=50 # can be 0
-D=30 # must at least be 1
 
 # if we did this many attempts without getting better results, give up
 giveUp_N = 5
-giveUp_S = 200
-giveUp_D = 200 #100
-giveUp_M = 200
+give_up_after = 200
+size_increased_times_N = 0
+size_increased_times_N_first = 0 # TODO: refactor this
+
+
+#defaults:
+N = 0 # avoid undecl var
+S = 40 # must at least be 1
+M = 50 # can be 0
+D = 30 # must at least be 1
+
 
 count = 0 # how many recompression attempts did we take?
-best_count=0 # what was the smallest compression so far?
+best_count = 0 # what was the smallest compression so far?
 
 size_new = size_best = os.path.getsize(INFILE)
 
-size_increased_times_N_first=0
 
 if (DEBUG):
 	debug_array=[]
@@ -146,7 +145,7 @@ for N in list(range(0, range_N)):
 	if (DEBUG):
 		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
 
-	if (((size_best > size_new) or ((N==0) and size_new < size_orig))) : # new file is smaller
+	if (((size_best > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
 		size_increased_times_N_first = 0 # reset break-counter
 		output_best = output
 		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best="orig" if (count == 1) else best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
