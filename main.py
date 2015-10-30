@@ -159,16 +159,16 @@ for N in list(range(0, range_N)):
 		if (size_increased_times_N_first >= giveUp_N):
 			break; # break out of loop, we have wasted enough time here
 
-best_N = best_N_first
+best_N = best_N_first 
 
 
 #order: n, s, d, m, n
-N = 1
+N = best_N # was: 1 for performance
 
 size_increased_times = 0
 good_S_M_D=[S,M,D]
 for S in list(range(1, range_S, 1)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -199,7 +199,7 @@ D=1
 D_step = 1
 step_upped = False
 while (D < range_D):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -235,7 +235,7 @@ D = good_S_M_D[2]
 
 size_increased_times = 0
 for M in list(range(0, range_M, 1)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -260,6 +260,7 @@ for M in list(range(0, range_M, 1)):
 M = good_S_M_D[1]
 
 
+# TODO: remove this? (no longer needed?)
 for N in list(range(0, range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif',  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
