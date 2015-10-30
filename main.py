@@ -149,7 +149,7 @@ for N in list(range(0, range_N)):
 		best_N_first=N
 		arr_index = 0
 	else:
-		size_increased_times_N += 1
+		size_increased_times_N_first += 1
 		showActivity()
 		if (size_increased_times_N_first >= 5):
 			break; # break out of loop, we have wasted enough time here
