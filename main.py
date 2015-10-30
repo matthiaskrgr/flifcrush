@@ -114,8 +114,8 @@ give_up_after = 200
 
 #defaults:
 S=40 # must at least be 1
-M=30 # can be 0
-D=50 # must at least be 1
+M=50 # can be 0
+D=30 # must at least be 1
 
 # if we did this many attempts without getting better results, give up
 giveUp_N = 5
@@ -155,7 +155,6 @@ for N in list(range(0, range_N)):
 			break; # break out of loop, we have wasted enough time here
 
 best_N = best_N_first
-
 
 
 #order: s, d, m, n
