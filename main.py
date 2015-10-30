@@ -108,7 +108,7 @@ size_increased_times_N = size_increased_times_D = size_increased_times_M = size_
 range_N = 20   # default: 3 // try: 0-20
 range_S = 600 # default: 40  // try: 1-100
 range_M = 600 # default: 30  // try: 1-100
-range_D = 1000 # default: 50  // try  1-100
+range_D = 5000 # default: 50  // try  1-100
 
 give_up_after = 200
 
@@ -185,7 +185,13 @@ for S in list(range(1, range_S, 1)):
 S = good_S_M_D[0]
 
 size_increased_times = 0
-for D in list(range(1, range_D, 1)):
+# we can't change step after entering the loop because list(range(1, var)) is precalculated
+# use different loop type
+
+D=1
+D_step = 1
+step_upped = False
+while (D < range_D):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
@@ -202,10 +208,19 @@ for D in list(range(1, range_D, 1)):
 		showActivity()
 #				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		size_increased_times += 1
+		if ((D >= 100) and (not step_upped)):
+			D_step = 10
+			step_upped = True
+
 		if (size_increased_times >= give_up_after):
 			break;
-D = good_S_M_D[2]
 
+	if (D >= range_D):
+		break
+	D += D_step
+
+
+D = good_S_M_D[2]
 
 
 size_increased_times = 0
