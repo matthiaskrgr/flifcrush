@@ -163,7 +163,7 @@ for N in list(range(0, range_N)):
 best_N = best_N_first
 
 
-#order: s, d, m, n
+#order: n, s, d, m, n
 N = 1
 
 size_increased_times = 0
@@ -187,7 +187,6 @@ for S in list(range(1, range_S, 1)):
 		arr_index = 0
 	else:
 		showActivity()
-#				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		size_increased_times += 1
 		if (size_increased_times >= give_up_after):
 			break;
@@ -219,7 +218,6 @@ while (D < range_D):
 		arr_index = 0
 	else:
 		showActivity()
-#				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		size_increased_times += 1
 		if ((D >= 100) and (not step_upped)):
 			D_step = 10
@@ -256,7 +254,6 @@ for M in list(range(0, range_M, 1)):
 		arr_index = 0
 	else:
 		showActivity()
-#				print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		size_increased_times += 1
 		if (size_increased_times >= give_up_after):
 			break;
@@ -308,4 +305,4 @@ else:
 
 if (DEBUG):
 	for index, val in enumerate(debug_array):
-		print("index:", index, "  val:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
+		print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
