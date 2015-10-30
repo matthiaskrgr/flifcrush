@@ -164,6 +164,7 @@ best_N = best_N_first
 
 #order: n, s, d, m, n
 N = best_N # was: 1 for performance
+# TODO: make this -O0 flag
 
 size_increased_times = 0
 good_S_M_D=[S,M,D]
@@ -260,7 +261,7 @@ for M in list(range(0, range_M, 1)):
 M = good_S_M_D[1]
 
 
-# TODO: remove this? (no longer needed?)
+# don't remove this, it still pays out here and there
 for N in list(range(0, range_N)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif',  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
@@ -301,7 +302,8 @@ if output_best != "none":
 	size_orig=os.path.getsize(INFILE)
 	print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)), end="\r",flush=True)
 else:
-	print("WARNING: could not reduce size")
+	print("WARNING: could not reduce size              ")
+	#quit()
 
 if (DEBUG):
 	for index, val in enumerate(debug_array):
