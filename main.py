@@ -31,15 +31,16 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--interlace", help="enable interlacing (default: false)", action='store_true')
 parser.add_argument("infile", help="file to be converted to flif", type=str)
+parser.add_argument("-i", "--interlace", help="enable interlacing (default: false)", action='store_true')
 args = parser.parse_args()
+
+INFILE=args.infile
 if args.interlace:
 	interlace_flag="--interlace"
 else:
 	interlace_flag="--no-interlace"
 
-INFILE=args.infile
 
 
 
@@ -60,7 +61,7 @@ def showActivity():
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + "     ", end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + ", " + "prev size: " + str(size_new), end="\r",flush=True)
 
 
 debug_array=[]
@@ -107,7 +108,7 @@ size_increased_times_N = size_increased_times_D = size_increased_times_M = size_
 range_N = 20   # default: 3 // try: 0-20
 range_S = 600 # default: 40  // try: 1-100
 range_M = 600 # default: 30  // try: 1-100
-range_D = 600 # default: 50  // try  1-100
+range_D = 1000 # default: 50  // try  1-100
 
 give_up_after = 200
 
