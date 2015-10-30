@@ -31,16 +31,19 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 parser = argparse.ArgumentParser()
 parser.add_argument("infile", help="file to be converted to flif", type=str)
 parser.add_argument("-i", "--interlace", help="enable interlacing (default: false)", action='store_true')
+parser.add_argument("-d", "--debug", help="print output of all runs at end", action='store_true')
 args = parser.parse_args()
+
+if args.debug:
+	DEBUG=True
+else:
+	DEBUG=False
 
 INFILE=args.infile
 if args.interlace:
 	interlace_flag="--interlace"
 else:
 	interlace_flag="--no-interlace"
-
-
-
 
 
 output_best="none"
@@ -61,10 +64,6 @@ def showActivity():
 		arr_index = 0
 	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + ", " + "size: " + str(size_new) + " b        ", end="\r",flush=True)
 
-
-debug_array=[]
-#debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'size':""}
-#debug_arry.append([{'N':N, 'S':S, 'M':M, 'D':D,'size': size}])
 
 
 
@@ -128,6 +127,13 @@ size_new = size_best = os.path.getsize(INFILE)
 
 size_increased_times_N_first=0
 
+if (DEBUG):
+	debug_array=[]
+	debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'size':""}
+
+
+
+
 first_best_N=best_N_first=0
 # MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(0, range_N)):
@@ -136,7 +142,9 @@ for N in list(range(0, range_N)):
 
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
-	debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
+	if (DEBUG):
+		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
 
 	if (((size_best > size_new) or ((N==0) and size_new < size_orig))) : # new file is smaller
 		size_increased_times_N_first = 0 # reset break-counter
@@ -165,6 +173,10 @@ for S in list(range(1, range_S, 1)):
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
+
+	if (DEBUG):
+		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
 	if (size_best > size_new): # new file is better
 		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		good_S_M_D[0]=S
@@ -193,6 +205,10 @@ while (D < range_D):
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
+
+	if (DEBUG):
+		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
 	if (size_best > size_new): # new file is better
 		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		good_S_M_D[2]=D
@@ -226,6 +242,10 @@ for M in list(range(0, range_M, 1)):
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
+
+	if (DEBUG):
+		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
 	if (size_best > size_new): # new file is better
 		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		good_S_M_D[1]=M
@@ -249,7 +269,10 @@ for N in list(range(0, range_N)):
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
-	debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
+
+	if (DEBUG):
+		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
 
 	if (size_best > size_new): # new file is smaller
 		size_increased_times_N = 0 # reset break-counter
@@ -283,6 +306,6 @@ if output_best != "none":
 else:
 	print("WARNING: could not reduce size")
 
-#			print debug information
-#for index, val in enumerate(debug_array):
-#		print("index:", index, "  val:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
+if (DEBUG):
+	for index, val in enumerate(debug_array):
+		print("index:", index, "  val:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
