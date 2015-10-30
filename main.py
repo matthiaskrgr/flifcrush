@@ -28,8 +28,6 @@ import argparse
 __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument("infile", help="file to be converted to flif", type=str)
 parser.add_argument("-i", "--interlace", help="enable interlacing (default: false)", action='store_true')
@@ -151,7 +149,7 @@ for N in list(range(0, range_N)):
 	else:
 		size_increased_times_N_first += 1
 		showActivity()
-		if (size_increased_times_N_first >= 5):
+		if (size_increased_times_N_first >= giveUp_N):
 			break; # break out of loop, we have wasted enough time here
 
 best_N = best_N_first
@@ -161,7 +159,7 @@ best_N = best_N_first
 N = 1
 
 size_increased_times = 0
-good_S_M_D=["40","30","50"]
+good_S_M_D=[S,M,D]
 for S in list(range(1, range_S, 1)):
 	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(1), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
