@@ -136,7 +136,7 @@ if (DEBUG):
 first_best_N=best_N_first=0
 # MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 for N in list(range(0, range_N)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif', '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen([flif_binary, '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 
 	output = proc.stdout.read()
@@ -169,7 +169,7 @@ N = best_N # was: 1 for performance
 size_increased_times = 0
 good_S_M_D=[S,M,D]
 for S in list(range(1, range_S, 1)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen([flif_binary,'-r', str(N), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -200,7 +200,7 @@ D=1
 D_step = 1
 step_upped = False
 while (D < range_D):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen([flif_binary,'-r', str(N),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -236,7 +236,7 @@ D = good_S_M_D[2]
 
 size_increased_times = 0
 for M in list(range(0, range_M, 1)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif','-r', str(N),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen([flif_binary,'-r', str(N),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
@@ -263,7 +263,7 @@ M = good_S_M_D[1]
 
 # don't remove this, it still pays out here and there
 for N in list(range(0, range_N)):
-	proc = subprocess.Popen(['/home/matthias/vcs/github/FLIF/flif',  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen([flif_binary,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 	count +=1
 	output = proc.stdout.read()
 	size_new = sys.getsizeof(output)
