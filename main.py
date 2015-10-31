@@ -293,7 +293,7 @@ bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S
 # write final best file
 
 if output_best != "none":
-	OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif"
+	OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif" extension
 	with open(OUTFILE, "w+b") as f:
 		f.write(output_best)
 		f.close
@@ -303,7 +303,7 @@ if output_best != "none":
 	print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=bestoptim, cnt=str(count)), end="\r",flush=True)
 else:
 	print("WARNING: could not reduce size              ")
-	#quit()
+	sys.exit(0)
 
 if (DEBUG):
 	for index, val in enumerate(debug_array):
