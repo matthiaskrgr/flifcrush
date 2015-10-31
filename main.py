@@ -169,123 +169,126 @@ N = best_N # was: 1 for performance
 
 size_increased_times = 0
 good_S_M_D=[S,M,D]
-for S in list(range(1, range_S, 1)):
-	proc = subprocess.Popen([flif_binary,'-r', str(N), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-	count +=1
-	output = proc.stdout.read()
-	size_new = sys.getsizeof(output)
 
-	if (DEBUG):
-		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+# if N== 0 / no maniac tree, skip the rest
+if N != 0:
+	for S in list(range(1, range_S, 1)):
+		proc = subprocess.Popen([flif_binary,'-r', str(N), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+		count +=1
+		output = proc.stdout.read()
+		size_new = sys.getsizeof(output)
 
-	if (size_best > size_new): # new file is better
-		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-		good_S_M_D[0]=S
-		output_best = output
-		size_best = size_new
-		best_count = count
-		size_increased_times = 0
-		arr_index = 0
-	else:
-		showActivity()
-		size_increased_times += 1
-		if (size_increased_times >= giveUp_S):
-			break;
-S = good_S_M_D[0]
+		if (DEBUG):
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
 
-size_increased_times = 0
-# we can't change step after entering the loop because list(range(1, var)) is precalculated
-# use different loop type
+		if (size_best > size_new): # new file is better
+			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			good_S_M_D[0]=S
+			output_best = output
+			size_best = size_new
+			best_count = count
+			size_increased_times = 0
+			arr_index = 0
+		else:
+			showActivity()
+			size_increased_times += 1
+			if (size_increased_times >= giveUp_S):
+				break;
+	S = good_S_M_D[0]
 
-D=1
-D_step = 1
-step_upped = False
-while (D < range_D):
-	proc = subprocess.Popen([flif_binary,'-r', str(N),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-	count +=1
-	output = proc.stdout.read()
-	size_new = sys.getsizeof(output)
+	size_increased_times = 0
+	# we can't change step after entering the loop because list(range(1, var)) is precalculated
+	# use different loop type
 
-	if (DEBUG):
-		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+	D=1
+	D_step = 1
+	step_upped = False
+	while (D < range_D):
+		proc = subprocess.Popen([flif_binary,'-r', str(N),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+		count +=1
+		output = proc.stdout.read()
+		size_new = sys.getsizeof(output)
 
-	if (size_best > size_new): # new file is better
-		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-		good_S_M_D[2]=D
-		output_best=output
-		size_best=size_new
-		best_count = count
-		size_increased_times = 0
-		arr_index = 0
-	else:
-		showActivity()
-		size_increased_times += 1
-		if ((D >= 100) and (not step_upped)):
-			D_step = 10
-			step_upped = True
+		if (DEBUG):
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
 
-		if (size_increased_times >= give_up_after):
-			break;
+		if (size_best > size_new): # new file is better
+			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			good_S_M_D[2]=D
+			output_best=output
+			size_best=size_new
+			best_count = count
+			size_increased_times = 0
+			arr_index = 0
+		else:
+			showActivity()
+			size_increased_times += 1
+			if ((D >= 100) and (not step_upped)):
+				D_step = 10
+				step_upped = True
 
-	if (D >= range_D):
-		break
-	D += D_step
+			if (size_increased_times >= give_up_after):
+				break;
 
-
-D = good_S_M_D[2]
-
-
-size_increased_times = 0
-for M in list(range(0, range_M, 1)):
-	proc = subprocess.Popen([flif_binary,'-r', str(N),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-	count +=1
-	output = proc.stdout.read()
-	size_new = sys.getsizeof(output)
-
-	if (DEBUG):
-		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
-
-	if (size_best > size_new): # new file is better
-		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-		good_S_M_D[1]=M
-		output_best=output
-		size_best=size_new
-		best_count = count
-		size_increased_times = 0
-		arr_index = 0
-	else:
-		showActivity()
-		size_increased_times += 1
-		if (size_increased_times >= give_up_after):
-			break;
-
-M = good_S_M_D[1]
+		if (D >= range_D):
+			break
+		D += D_step
 
 
-# don't remove this, it still pays out here and there
-for N in list(range(0, range_N)):
-	proc = subprocess.Popen([flif_binary,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-	count +=1
-	output = proc.stdout.read()
-	size_new = sys.getsizeof(output)
+	D = good_S_M_D[2]
 
 
-	if (DEBUG):
-		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+	size_increased_times = 0
+	for M in list(range(0, range_M, 1)):
+		proc = subprocess.Popen([flif_binary,'-r', str(N),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+		count +=1
+		output = proc.stdout.read()
+		size_new = sys.getsizeof(output)
 
-	if (size_best > size_new): # new file is smaller
-		size_increased_times_N = 0 # reset break-counter
-		output_best = output
-		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-		best_count=count
-		size_best = size_new
-		best_N=N
-		arr_index = 0
-	else:
-		size_increased_times_N += 1
-		showActivity()
-		if (size_increased_times_N >= giveUp_N):
-			break; # break out of loop, we have wasted enough time here
+		if (DEBUG):
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
+		if (size_best > size_new): # new file is better
+			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			good_S_M_D[1]=M
+			output_best=output
+			size_best=size_new
+			best_count = count
+			size_increased_times = 0
+			arr_index = 0
+		else:
+			showActivity()
+			size_increased_times += 1
+			if (size_increased_times >= give_up_after):
+				break;
+
+	M = good_S_M_D[1]
+
+
+	# don't remove this, it still pays out here and there
+	for N in list(range(0, range_N)):
+		proc = subprocess.Popen([flif_binary,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+		count +=1
+		output = proc.stdout.read()
+		size_new = sys.getsizeof(output)
+
+
+		if (DEBUG):
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+
+		if (size_best > size_new): # new file is smaller
+			size_increased_times_N = 0 # reset break-counter
+			output_best = output
+			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			best_count=count
+			size_best = size_new
+			best_N=N
+			arr_index = 0
+		else:
+			size_increased_times_N += 1
+			showActivity()
+			if (size_increased_times_N >= giveUp_N):
+				break; # break out of loop, we have wasted enough time here
 
 bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2])
 
