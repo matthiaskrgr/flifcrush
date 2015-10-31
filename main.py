@@ -108,6 +108,7 @@ range_D = 5000 # default: 50  // try  1-100
 
 # if we did this many attempts without getting better results, give up
 giveUp_N = 5
+giveUp_S = 100
 give_up_after = 200
 size_increased_times_N = 0
 size_increased_times_N_first = 0 # TODO: refactor this
@@ -188,7 +189,7 @@ for S in list(range(1, range_S, 1)):
 	else:
 		showActivity()
 		size_increased_times += 1
-		if (size_increased_times >= give_up_after):
+		if (size_increased_times >= giveUp_S):
 			break;
 S = good_S_M_D[0]
 
