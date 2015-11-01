@@ -30,7 +30,8 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 parser = argparse.ArgumentParser()
 parser.add_argument("infile", help="file to be converted to flif", type=str)
-parser.add_argument("-i", "--interlace", help="enable interlacing (default: false)", action='store_true')
+parser.add_argument("-i", "--interlace", help="force interlacing (default: find out best)", action='store_true')
+parser.add_argument("-n", "--nointerlace", help="force interlacing off (default: find out best)", action='store_true')
 parser.add_argument("-d", "--debug", help="print output of all runs at end", action='store_true')
 args = parser.parse_args()
 
@@ -40,10 +41,22 @@ else:
 	DEBUG=False
 
 INFILE=args.infile
+
+interlace_flag="--no-interlace" # default: false
+INTERLACE=False
+INTERLACE_FORCE=False
+
 if args.interlace:
 	interlace_flag="--interlace"
-else:
+	INTERLACE=True
+	INTERLACE_FORCE=True # do we force true or false?
+	best_interl = True
+
+if args.nointerlace:
 	interlace_flag="--no-interlace"
+	INTERLACE=False
+	INTERLACE_FORCE=True # do we force true or false?
+	best_interl = False
 
 
 output_best="none"
@@ -62,7 +75,7 @@ def showActivity():
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) +  " ACB:" + str(ACB) + ", " + "size: " + str(size_new) + " b        ", end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) +  " ACB:" + str(ACB) + " INTERLACE:" + str(INTERLACE) + ", " + "size: " + str(size_new) + " b        ", end="\r",flush=True)
 
 
 
@@ -326,7 +339,41 @@ for acb in "--acb", "--no-acb":
 			break; # break out of loop, we have wasted enough time here
 
 
-bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2]) + "  ACB=" + str(best_ACB)
+
+if not (INTERLACE_FORCE):
+	best_interl = False
+	for interl in "--no-interlace", "--interlace":
+		proc = subprocess.Popen([flif_binary, acb,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(best_N), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+		count +=1
+		output = proc.stdout.read()
+		size_new = sys.getsizeof(output)
+
+
+		if (interl == "--interlace"):
+			INTERL=True
+		elif (interl == "--no-interlace"):
+			INTERL=False
+
+		if (DEBUG):
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'INTERLACE':str(INTERL), 'size': size_new}])
+
+		if (size_best > size_new): # new file is smaller
+			size_increased_times_N = 0 # reset break-counter
+			output_best = output
+			print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, INTERLACE {INTERL}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), INTERL=INTERL, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			best_count=count
+			size_best = size_new
+			best_N=N
+			arr_index = 0
+			best_interl=INTERL
+		else:
+			size_increased_times_N += 1
+			showActivity()
+			if (size_increased_times_N >= giveUp_N):
+				break; # break out of loop, we have wasted enough time here
+
+
+bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2]) + "  ACB=" + str(best_ACB) + "  INTERLACE=" + str(best_interl)
 
 
 
