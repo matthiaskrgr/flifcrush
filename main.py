@@ -307,7 +307,7 @@ if N != 0:
 
 # auto color buckets:
 
-best_ACB=False
+best_ACB="Auto"
 
 for acb in "--acb", "--no-acb":
 	proc = subprocess.Popen([flif_binary, acb,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(best_N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -323,10 +323,11 @@ for acb in "--acb", "--no-acb":
 	if (DEBUG):
 		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'size': size_new}])
 
-	if (size_best > size_new): # new file is smaller
+	if (size_best >= size_new): # new file is smaller
 		size_increased_times_N = 0 # reset break-counter
 		output_best = output
-		print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, ACB=str(ACB), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+		if (size_best > size_new): # is actually better,  hack to avoid "-0 b"
+			print("{count}, N {N}, S {S}, M {M}, D {D}, ACB={ACB}, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, ACB=str(ACB), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		best_count=count
 		size_best = size_new
 		best_N=N
