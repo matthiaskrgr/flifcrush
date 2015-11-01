@@ -163,7 +163,7 @@ for N in list(range(0, range_N)):
 	if (((size_best > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
 		size_increased_times_N_first = 0 # reset break-counter
 		output_best = output
-		print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best="orig" if (count == 1) else best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+		print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D,INT=INTERLACE, size=size_new, run_best="orig" if (count == 1) else best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		best_count=count
 		size_best = size_new
 		best_N_first=N
@@ -196,7 +196,7 @@ if N != 0:
 			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 		if (size_best > size_new): # new file is better
-			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D,INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 			good_S_M_D[0]=S
 			output_best = output
 			size_best = size_new
@@ -227,7 +227,7 @@ if N != 0:
 			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 		if (size_best > size_new): # new file is better
-			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 			good_S_M_D[2]=D
 			output_best=output
 			size_best=size_new
@@ -263,7 +263,7 @@ if N != 0:
 			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 		if (size_best > size_new): # new file is better
-			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 			good_S_M_D[1]=M
 			output_best=output
 			size_best=size_new
@@ -293,7 +293,7 @@ if N != 0:
 		if (size_best > size_new): # new file is smaller
 			size_increased_times_N = 0 # reset break-counter
 			output_best = output
-			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+			print("{count}, N {N}, S {S}, M {M}, D {D},  ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 			best_count=count
 			size_best = size_new
 			best_N=N
@@ -326,7 +326,7 @@ for acb in "--acb", "--no-acb":
 	if (size_best > size_new): # new file is smaller
 		size_increased_times_N = 0 # reset break-counter
 		output_best = output
-		print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+		print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, ACB=str(ACB), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 		best_count=count
 		size_best = size_new
 		best_N=N
