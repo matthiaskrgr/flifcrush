@@ -62,7 +62,7 @@ def showActivity():
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + ", " + "size: " + str(size_new) + " b        ", end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) +  " ACB:" + str(ACB) + ", " + "size: " + str(size_new) + " b        ", end="\r",flush=True)
 
 
 
@@ -119,6 +119,7 @@ N = 0 # avoid undecl var
 S = 40 # must at least be 1
 M = 50 # can be 0
 D = 30 # must at least be 1
+ACB=False
 
 
 count = 0 # how many recompression attempts did we take?
@@ -129,7 +130,7 @@ size_new = size_best = os.path.getsize(INFILE)
 
 if (DEBUG):
 	debug_array=[]
-	debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'size':""}
+	debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'ACB': "", 'size':""}
 
 
 
@@ -144,7 +145,7 @@ for N in list(range(0, range_N)):
 	size_new = sys.getsizeof(output)
 
 	if (DEBUG):
-		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 	if (((size_best > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
 		size_increased_times_N_first = 0 # reset break-counter
@@ -179,7 +180,7 @@ if N != 0:
 		size_new = sys.getsizeof(output)
 
 		if (DEBUG):
-			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 		if (size_best > size_new): # new file is better
 			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
@@ -210,7 +211,7 @@ if N != 0:
 		size_new = sys.getsizeof(output)
 
 		if (DEBUG):
-			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 		if (size_best > size_new): # new file is better
 			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
@@ -246,7 +247,7 @@ if N != 0:
 		size_new = sys.getsizeof(output)
 
 		if (DEBUG):
-			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 		if (size_best > size_new): # new file is better
 			print("{count}, N {N}, S {S}, M {M}, D {D}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
@@ -274,7 +275,7 @@ if N != 0:
 
 
 		if (DEBUG):
-			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'size': size_new}])
+			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
 		if (size_best > size_new): # new file is smaller
 			size_increased_times_N = 0 # reset break-counter
@@ -290,7 +291,42 @@ if N != 0:
 			if (size_increased_times_N >= giveUp_N):
 				break; # break out of loop, we have wasted enough time here
 
-bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2])
+
+# auto color buckets:
+
+best_ACB=False
+
+for acb in "--acb", "--no-acb":
+	proc = subprocess.Popen([flif_binary, acb,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(best_N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+	count +=1
+	output = proc.stdout.read()
+	size_new = sys.getsizeof(output)
+
+	if (acb == "--acb"):
+		ACB=True
+	elif (acb == "--no-acb"):
+		ACB=False
+
+	if (DEBUG):
+		debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'size': size_new}])
+
+	if (size_best > size_new): # new file is smaller
+		size_increased_times_N = 0 # reset break-counter
+		output_best = output
+		print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+		best_count=count
+		size_best = size_new
+		best_N=N
+		arr_index = 0
+		best_ACB=ACB
+	else:
+		size_increased_times_N += 1
+		showActivity()
+		if (size_increased_times_N >= giveUp_N):
+			break; # break out of loop, we have wasted enough time here
+
+
+bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2]) + "  ACB=" + str(best_ACB)
 
 
 
@@ -311,4 +347,4 @@ else:
 
 if (DEBUG):
 	for index, val in enumerate(debug_array):
-		print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  size:", val[0]['size'] )
+		print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'], "ACB", val[0]['ACB'], "  size:", val[0]['size'] )
