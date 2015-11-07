@@ -134,40 +134,23 @@ size_increased_times_N_first = 0 # TODO: refactor this
 N = 0 # avoid undecl var
 S = 40 # must at least be 1
 M = 50 # can be 0
-D = 30 # must at 
+D = 30 # must at least be 1
+ACB=False
+#INTERLACE=False  # set above
 
+
+count = 0 # how many recompression attempts did we take?
+best_count = 0 # what was the smallest compression so far?
+
+size_new = size_best = os.path.getsize(INFILE)
+
+
+if (DEBUG):
+	debug_array=[]
+	debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'ACB': "", 'size':""}
 
 
 if not BRUTEFORCE:
-	# if we did this many attempts without getting better results, give up
-	giveUp_N = 5
-	giveUp_S = 100
-	give_up_after = 200
-	size_increased_times_N = 0
-	size_increased_times_N_first = 0 # TODO: refactor this
-
-
-	#defaults:
-	N = 0 # avoid undecl var
-	S = 40 # must at least be 1
-	M = 50 # can be 0
-	D = 30 # must at least be 1
-	ACB=False
-
-
-	count = 0 # how many recompression attempts did we take?
-	best_count = 0 # what was the smallest compression so far?
-
-	size_new = size_best = os.path.getsize(INFILE)
-
-
-	if (DEBUG):
-		debug_array=[]
-		debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'ACB': "", 'size':""}
-
-
-
-
 	first_best_N=best_N_first=0
 	# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 	for N in list(range(0, range_N)):
