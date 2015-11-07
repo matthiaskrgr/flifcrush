@@ -394,11 +394,15 @@ if not BRUTEFORCE:
 					break; # break out of loop, we have wasted enough time here
 
 else: # brutefoce == true
+	best_N=0
 	count = 0
+	good_S_M_D = [0, 0, 0]
+	best_ACB = True
+	best_interl = True
 	size_best=os.path.getsize(INFILE)
 # N, S, M, D, acb, interlacing
 	for N in list(range(0, range_N)):
-		for S in list(range(1, 200, 1)):
+		for S in list(range(1, range_S, 1)):
 			D=1
 			D_step = 1
 			step_upped = False
@@ -436,9 +440,10 @@ else: # brutefoce == true
 								size_best = size_new
 								best_N=N
 								best_interl=INTERLACE
-								best_S = S
-								best_M = M
-								best_D = D
+								good_S_M_D[0]=best_S = S
+								good_S_M_D[1]=best_M = M
+								good_S_M_D[2]=best_D = D
+								best_ACB = ACB
 							else:
 								showActivity()
 
