@@ -416,10 +416,10 @@ else: # brutefoce == true
 							output = proc.stdout.read()
 							size_new = sys.getsizeof(output)
 
-							if ("no" in interl):
-								INTERL=False
+							if (interl == "--no-interlace"):
+								INTERLACE=False
 							else:
-								INTERL=True
+								INTERLACE=True
 
 							if (acb == "--acb"):
 								ACB=True
@@ -427,19 +427,19 @@ else: # brutefoce == true
 								ACB=False
 
 							if (DEBUG):
-								debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'INTERLACE':str(INTERL), 'size': size_new}])
+								debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'INTERLACE':str(INTERLACE), 'size': size_new}])
 
 							if (size_new < size_best): # new file is smaller
 								output_best = output
 								best_count=count
 								size_best = size_new
 								best_N=N
-								best_interl=INTERL
+								best_interl=INTERLACE
 								best_S = S
 								best_M = M
 								best_D = D
 								print("yay\nyay")
-								print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, INTERLACE {INTERL}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), INTERL=str(INTERL), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
+								print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, interlace: {INTERLACE}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), INTERLACE=str(INTERLACE), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
 							else:
 								showActivity()
 
