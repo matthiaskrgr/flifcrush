@@ -300,7 +300,6 @@ if not BRUTEFORCE:
 
 			if (best_dict['size'] > size_new): # new file is better
 				print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
-				best_dict['M'] = M
 				output_best=output
 				best_dict['size']=size_new
 				best_dict['count'] = count
@@ -324,7 +323,7 @@ if not BRUTEFORCE:
 
 		# don't remove this, it still pays out here and there
 		for N in list(range(0, range_N)):
-			proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-P', str(best_dict['P']),  '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -352,7 +351,7 @@ if not BRUTEFORCE:
 
 	best_ACB="Auto"
 	for acb in "--acb", "--no-acb":
-		proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['N']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),   '-r', str(best_dict['N']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+		proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['N']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-P', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 		count +=1
 		output = proc.stdout.read()
 		size_new = sys.getsizeof(output)
@@ -384,7 +383,7 @@ if not BRUTEFORCE:
 	if not (INTERLACE_FORCE):
 		best_interl = False
 		for interl in "--no-interlace", "--interlace":
-			proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),   '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-P', str(best_dict['P']),  '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
