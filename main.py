@@ -335,7 +335,7 @@ if not BRUTEFORCE:
 			if (best_dict['size'] > size_new): # new file is smaller
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
-				print("{count}, N {N}, S {S}, M {M}, D {D}, P {P},  ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				print("{count}, N {N}, S {S}, M {M}, D {D}, P {P},  ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 				best_dict['count'] = count
 				best_dict['size'] = size_new
 				best_dict['N'] = N
@@ -369,7 +369,7 @@ if not BRUTEFORCE:
 			size_increased_times_N = 0 # reset break-counter
 			output_best = output
 			if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-				print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB={ACB}, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, INT=INTERLACE, ACB=str(ACB), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB={ACB}, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, ACB=str(ACB), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 			best_dict['count'] = count
 			best_dict['size'] = size_new
 			arr_index = 0
@@ -402,7 +402,7 @@ if not BRUTEFORCE:
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
 				if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-					print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB},P {P}, INTERLACE {INTERL}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, ACB=str(ACB), INTERL=INTERL, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB},P {P}, INTERLACE {INTERL}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], ACB=str(ACB), INTERL=INTERL, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 				best_dict['count'] = count
 				best_dict['size'] = size_new
 				best_dict['INT'] = INTERL
