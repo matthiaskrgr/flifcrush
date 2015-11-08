@@ -323,7 +323,7 @@ if not BRUTEFORCE:
 
 		# don't remove this, it still pays out here and there
 		for N in list(range(0, range_N)):
-			proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-P', str(best_dict['P']),  '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -351,7 +351,7 @@ if not BRUTEFORCE:
 
 	best_ACB="Auto"
 	for acb in "--acb", "--no-acb":
-		proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['N']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-P', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+		proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['N']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 		count +=1
 		output = proc.stdout.read()
 		size_new = sys.getsizeof(output)
@@ -383,7 +383,7 @@ if not BRUTEFORCE:
 	if not (INTERLACE_FORCE):
 		best_interl = False
 		for interl in "--no-interlace", "--interlace":
-			proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-P', str(best_dict['P']),  '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
