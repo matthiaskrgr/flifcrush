@@ -137,7 +137,7 @@ M = 50 # can be 0
 D = 30 # must at least be 1
 ACB=False
 #INTERLACE=False  # set above
-
+best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 512, 'ACB': False, 'INT': False, 'size': size_orig}
 
 count = 0 # how many recompression attempts did we take?
 best_count = 0 # what was the smallest compression so far?
@@ -151,7 +151,6 @@ if (DEBUG):
 
 
 if not BRUTEFORCE:
-	first_best_N=best_N_first=0
 	# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 	for N in list(range(0, range_N)):
 		proc = subprocess.Popen([flif_binary, '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -163,13 +162,13 @@ if not BRUTEFORCE:
 		if (DEBUG):
 			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
-		if (((size_best > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
+		if (((best_dict['size'] > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
 			size_increased_times_N_first = 0 # reset break-counter
 			output_best = output
-			print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D,INT=INTERLACE, size=size_new, run_best="orig" if (count == 1) else best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-			best_count=count
-			size_best = size_new
-			best_N_first=N
+			print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+			best_dict['size'] = size_new
+			best_dict['count'] = count
+			best_dict['N'] = N
 			arr_index = 0
 		else:
 			size_increased_times_N_first += 1
@@ -177,20 +176,13 @@ if not BRUTEFORCE:
 			if (size_increased_times_N_first >= giveUp_N):
 				break; # break out of loop, we have wasted enough time here
 
-	best_N = best_N_first 
-
-
-	#order: n, s, d, m, n
-	N = best_N # was: 1 for performance
-	# TODO: make this -O0 flag
-
+	N = best_dict['N']
 	size_increased_times = 0
-	good_S_M_D=[S,M,D]
 
 	# if N== 0 / no maniac tree, skip the rest
-	if N != 0:
+	if (best_dict['N'] != 0):
 		for S in list(range(1, range_S, 1)):
-			proc = subprocess.Popen([flif_binary,'-r', str(N), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -198,12 +190,12 @@ if not BRUTEFORCE:
 			if (DEBUG):
 				debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
-			if (size_best > size_new): # new file is better
-				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D,INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-				good_S_M_D[0]=S
+			if (best_dict['size'] > size_new): # new file is better
+				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D,INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				best_dict['S'] = S
 				output_best = output
-				size_best = size_new
-				best_count = count
+				best_dict['size'] = size_new
+				best_dict['count'] = count
 				size_increased_times = 0
 				arr_index = 0
 			else:
@@ -211,7 +203,6 @@ if not BRUTEFORCE:
 				size_increased_times += 1
 				if (size_increased_times >= giveUp_S):
 					break;
-		S = good_S_M_D[0]
 
 		size_increased_times = 0
 		# we can't change step after entering the loop because list(range(1, var)) is precalculated
@@ -219,9 +210,9 @@ if not BRUTEFORCE:
 
 		D=1
 		D_step = 1
-		step_upped = False
+		step_upped = False # if True; D_step == 10
 		while (D < range_D):
-			proc = subprocess.Popen([flif_binary,'-r', str(N),'-S', str(good_S_M_D[0]), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-S', str(best_dict['S']), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -229,12 +220,12 @@ if not BRUTEFORCE:
 			if (DEBUG):
 				debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
-			if (size_best > size_new): # new file is better
-				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-				good_S_M_D[2]=D
+			if (best_dict['size'] > size_new): # new file is better
+				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				best_dict['D'] = D
 				output_best=output
-				size_best=size_new
-				best_count = count
+				best_dict['size'] = size_new
+				best_dict['count'] = count
 				size_increased_times = 0
 				arr_index = 0
 			else:
@@ -252,12 +243,10 @@ if not BRUTEFORCE:
 			D += D_step
 
 
-		D = good_S_M_D[2]
-
 
 		size_increased_times = 0
 		for M in list(range(0, range_M, 1)):
-			proc = subprocess.Popen([flif_binary,'-r', str(N),'-M', str(M), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -265,12 +254,12 @@ if not BRUTEFORCE:
 			if (DEBUG):
 				debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
-			if (size_best > size_new): # new file is better
-				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-				good_S_M_D[1]=M
+			if (best_dict['size'] > size_new): # new file is better
+				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				best_dict['M'] = M
 				output_best=output
-				size_best=size_new
-				best_count = count
+				best_dict['size']=size_new
+				best_dict['count'] = count
 				size_increased_times = 0
 				arr_index = 0
 			else:
@@ -279,12 +268,11 @@ if not BRUTEFORCE:
 				if (size_increased_times >= give_up_after):
 					break;
 
-		M = good_S_M_D[1]
 
 
 		# don't remove this, it still pays out here and there
 		for N in list(range(0, range_N)):
-			proc = subprocess.Popen([flif_binary,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),   '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -293,13 +281,13 @@ if not BRUTEFORCE:
 			if (DEBUG):
 				debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB': ACB, 'size': size_new}])
 
-			if (size_best > size_new): # new file is smaller
+			if (best_dict['size'] > size_new): # new file is smaller
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
-				print("{count}, N {N}, S {S}, M {M}, D {D},  ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-				best_count=count
-				size_best = size_new
-				best_N=N
+				print("{count}, N {N}, S {S}, M {M}, D {D},  ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				best_dict['count'] = count
+				best_dict['size'] = size_new
+				best_dict['N'] = N
 				arr_index = 0
 			else:
 				size_increased_times_N += 1
@@ -313,7 +301,7 @@ if not BRUTEFORCE:
 	best_ACB="Auto"
 
 	for acb in "--acb", "--no-acb":
-		proc = subprocess.Popen([flif_binary, acb,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(best_N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+		proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['N']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),   '-r', str(best_dict['N']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 		count +=1
 		output = proc.stdout.read()
 		size_new = sys.getsizeof(output)
@@ -326,16 +314,15 @@ if not BRUTEFORCE:
 		if (DEBUG):
 			debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'size': size_new}])
 
-		if (size_best >= size_new): # new file is smaller
+		if (best_dict['size'] >= size_new): # new file is smaller
 			size_increased_times_N = 0 # reset break-counter
 			output_best = output
 			if (size_best > size_new): # is actually better,  hack to avoid "-0 b"
-				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB={ACB}, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, ACB=str(ACB), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-			best_count=count
-			size_best = size_new
-			best_N=N
+				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB={ACB}, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, INT=INTERLACE, ACB=str(ACB), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+			best_dict['count'] = count
+			best_dict['size'] = size_new
 			arr_index = 0
-			best_ACB=ACB
+			best_dict['ACB'] = ACB
 		else:
 			size_increased_times_N += 1
 			showActivity()
@@ -347,7 +334,7 @@ if not BRUTEFORCE:
 	if not (INTERLACE_FORCE):
 		best_interl = False
 		for interl in "--no-interlace", "--interlace":
-			proc = subprocess.Popen([flif_binary, acb,  '-M', str(good_S_M_D[1]), '-S', str(good_S_M_D[0]), '-D', str(good_S_M_D[2]),   '-r', str(best_N), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),   '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -361,13 +348,13 @@ if not BRUTEFORCE:
 			if (DEBUG):
 				debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'INTERLACE':str(INTERL), 'size': size_new}])
 
-			if (size_best > size_new): # new file is smaller
+			if (best_dict['size'] > size_new): # new file is smaller
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
-				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, INTERLACE {INTERL}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), INTERL=INTERL, size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-				best_count=count
-				size_best = size_new
-				best_N=N
+				print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, INTERLACE {INTERL}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), INTERL=INTERL, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				best_dict['count'] = count
+				best_dict['size'] = size_new
+				best_dict['INT'] = INTERL
 				arr_index = 0
 				best_interl=INTERL
 			else:
@@ -416,23 +403,23 @@ else: # brutefoce == true
 							if (DEBUG):
 								debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'ACB':str(ACB), 'INTERLACE':str(INTERLACE), 'size': size_new}])
 
-							if (size_new < size_best): # new file is smaller
+							if (size_new < best_dict['size']): # new file is smaller
 								output_best = output
-								best_count=count
-								print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, interlace: {INTERLACE}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), INTERLACE=str(INTERLACE), size=size_new, run_best=best_count, size_best=size_best, size_change=size_best-size_new, perc_change=str(((size_new-size_best) / size_best)*100)[:6]))
-								size_best = size_new
-								best_N=N
-								best_interl=INTERLACE
-								good_S_M_D[0]=best_S = S
-								good_S_M_D[1]=best_M = M
-								good_S_M_D[2]=best_D = D
-								best_ACB = ACB
+								best_dict['count']=count
+								print("{count}, N {N}, S {S}, M {M}, D {D}, ACB {ACB}, interlace: {INTERLACE}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, ACB=str(ACB), INTERLACE=str(INTERLACE), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+								best_dict['size'] = size_new
+								best_dict['N'] = N
+								best_dict['INT'] = INTERLACE
+								best_dict['S'] = S
+								best_dict['M'] = M
+								best_dict['D'] = D
+								best_dict['ACB'] = ACB
 							else:
 								showActivity()
 
 
 
-bestoptim="N=" + str(best_N) + "  S=" + str(good_S_M_D[0]) + "  M=" + str(good_S_M_D[1])+ "  D=" + str(good_S_M_D[2]) + "  ACB=" + str(best_ACB) + "  INTERLACE=" + str(best_interl)
+bestoptim="N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])
 
 
 
