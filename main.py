@@ -304,6 +304,7 @@ if not BRUTEFORCE:
 				output_best=output
 				best_dict['size']=size_new
 				best_dict['count'] = count
+				best_dict['P'] = P
 				size_increased_times = 0
 				arr_index = 0
 			else:
