@@ -205,7 +205,7 @@ if not BRUTEFORCE:
 				size_increased_times += 1
 				if (size_increased_times >= giveUp_S):
 					break;
-
+		S = best_dict['S']
 		size_increased_times = 0
 		# we can't change step after entering the loop because list(range(1, var)) is precalculated
 		# use different loop type
@@ -244,7 +244,7 @@ if not BRUTEFORCE:
 			if (D >= range_D):
 				break
 			D += D_step
-
+		D = best_dict['D']
 
 
 		size_increased_times = 0
@@ -271,7 +271,7 @@ if not BRUTEFORCE:
 				size_increased_times += 1
 				if (size_increased_times >= give_up_after):
 					break;
-
+		M = best_dict['M']
 
 
 		P=0
@@ -319,7 +319,7 @@ if not BRUTEFORCE:
 			if ((P >= range_P) and (P_step_beginning == 3)):
 				break
 			P += P_step
-
+		P = best_dict['P']
 
 		# don't remove this, it still pays out here and there
 		for N in list(range(0, range_N)):
@@ -345,7 +345,7 @@ if not BRUTEFORCE:
 				showActivity()
 				if (size_increased_times_N >= giveUp_N):
 					break; # break out of loop, we have wasted enough time here
-
+		N = best_dict['N']
 
 	# auto color buckets:
 
@@ -376,7 +376,7 @@ if not BRUTEFORCE:
 			best_dict['ACB'] = ACB
 		else:
 			showActivity()
-
+	ACB = best_dict['ACB']
 
 
 
@@ -410,7 +410,7 @@ if not BRUTEFORCE:
 				best_interl=INTERL
 			else:
 				showActivity()
-
+		INTERLACE = best_dict['INT']
 
 else: # brutefoce == true
 	best_N=0
