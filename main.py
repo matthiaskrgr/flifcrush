@@ -473,7 +473,7 @@ else: # brutefoce == true
 
 
 
-bestoptim="N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])
+bestoptim="N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  P=" + str(best_dict['P']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])
 
 
 
