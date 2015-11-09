@@ -24,6 +24,7 @@ import os
 from PIL import Image
 from collections import Counter
 import argparse
+from itertools import chain # combine ranges
 
 __author__ = 'Matthias "matthiaskrgr" Krüger'
 
@@ -274,21 +275,14 @@ if not BRUTEFORCE:
 		M = best_dict['M']
 
 
-		P=0
-		P_step = 1
-		P_step_upped = False # if True; P_step == 30
+
 		size_increased_times = 0
-		P_step_beginning = 0
-		while (P < range_P):
-			if (P_step_beginning == 0): # try 0 and 5000 at the beginning
-				P=0
-				P_step_beginning += 1
-			elif (P_step_beginning == 1):
-				P=4998 # must not conflict with "P < range_P"
-				P_step_beginning += 1
-			elif (P_step_beginning == 2):
-				P=2 # reset P ..
-				P_step_beginning = 3 # .. and make sure we don't reenter this branch
+
+		Prange = chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)) 
+		for P in Prange:
+			print("\n" + str(P) + "\n")
+			if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
+				continue
 			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
@@ -308,17 +302,7 @@ if not BRUTEFORCE:
 				arr_index = 0
 			else:
 				showActivity()
-				size_increased_times += 1
-				if ((P >= 200) and (not P_step_upped) and (P_step_beginning == 3)):
-					P_step = 10
-					P_step_upped = True
 
-				if (size_increased_times >= 300):
-					break;
-
-			if ((P >= range_P) and (P_step_beginning == 3)):
-				break
-			P += P_step
 		P = best_dict['P']
 
 		# don't remove this, it still pays out here and there
