@@ -120,7 +120,6 @@ range_N = 20   # default: 3 // try: 0-20
 range_S = 600 # default: 40  // try: 1-100
 range_M = 600 # default: 30  // try: 1-100
 range_D = 5000 # default: 50  // try  1-100
-range_P = 5000 # default 512
 
 
 # if we did this many attempts without getting better results, give up
@@ -136,10 +135,10 @@ N = 0 # avoid undecl var
 S = 40 # must at least be 1
 M = 50 # can be 0
 D = 30 # must at least be 1
-P = 512
+P = 1024
 ACB=False
 #INTERLACE=False  # set above
-best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 512, 'ACB': False, 'INT': False, 'size': size_orig}
+best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'ACB': False, 'INT': False, 'size': size_orig}
 
 
 count = 0 # how many recompression attempts did we take?
