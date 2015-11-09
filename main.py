@@ -108,11 +108,10 @@ img=[] # will contain pixel data
 for px in (im.getdata()):
 	img.append(px)
 
-unique_colors = len(Counter(img).items()) # get number of unique pixels
-size_orig = os.path.getsize(INFILE) # size of the png
-print("{inf}: {x}x{y}, {px} pixels, {uc} unique colors, {b} bytes".format(inf=INFILE, x=im.size[0], y=im.size[1], px=im.size[0]*im.size[1], uc=unique_colors, b=size_orig))
+inf={'path': INFILE, 'sizeByte': os.path.getsize(INFILE), 'colors': len(Counter(img).items()), 'sizeX': im.size[0], 'sizeY': im.size[1], 'px': im.size[0]*im.size[1]}
 
-
+print(inf['path'] + "; dimensions: "  + str(inf['sizeX']) +"×"+ str(inf['sizeY']) + ", " + str(inf['sizeX']*inf['sizeY']) + " px, " + str(inf['colors']) + " unique colors," + " " + str(inf['sizeByte']) + " b")
+size_orig = inf['sizeByte']
 
  
 # how many max attempts (in "best" case)?
@@ -140,6 +139,7 @@ P = 512
 ACB=False
 #INTERLACE=False  # set above
 best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 512, 'ACB': False, 'INT': False, 'size': size_orig}
+
 
 count = 0 # how many recompression attempts did we take?
 best_count = 0 # what was the smallest compression so far?
