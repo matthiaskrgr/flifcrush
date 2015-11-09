@@ -280,7 +280,6 @@ if not BRUTEFORCE:
 
 		Prange = chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)) 
 		for P in Prange:
-			print("\n" + str(P) + "\n")
 			if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 				continue
 			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
