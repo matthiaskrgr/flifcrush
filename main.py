@@ -35,7 +35,16 @@ parser.add_argument("-i", "--interlace", help="force interlacing (default: find 
 parser.add_argument("-n", "--nointerlace", help="force interlacing off (default: find out best)", action='store_true')
 parser.add_argument("-d", "--debug", help="print output of all runs at end", action='store_true')
 parser.add_argument("-b", "--bruteforce", help="bruteforce compression values, taking AGES", action='store_true')
+parser.add_argument("-c", "--compare", help="compare to default flif compression", action='store_true')
+
+
 args = parser.parse_args()
+
+
+if args.compare:
+	COMPARE=True
+else:
+	COMPARE=False
 
 if args.debug:
 	DEBUG=True
@@ -146,6 +155,11 @@ best_count = 0 # what was the smallest compression so far?
 
 size_new = size_best = os.path.getsize(INFILE)
 
+#do a default flif run:
+if (COMPARE):
+	proc = subprocess.Popen([flif_binary, INFILE,  '/dev/stdout'], stdout=subprocess.PIPE)
+	output_flifdefault = proc.stdout.read()
+	size_flifdefault = sys.getsizeof(output_flifdefault)
 
 if (DEBUG):
 	debug_array=[]
@@ -453,6 +467,10 @@ else: # brutefoce == true
 
 bestoptim="N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  P=" + str(best_dict['P']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])
 
+if COMPARE: # how does flifcrush compare to default flif conversion?
+	diff_to_flif_byte = best_dict['size'] - size_flifdefault
+	diff_to_flif_perc = (((size_flifdefault-best_dict['size']) / best_dict['size'])*100)
+	print("\n\nComparing flifcrush (" + str(best_dict['size']) +" b) to default flif (" + str(size_flifdefault)  + " b): " + str(diff_to_flif_byte) + " b which are " + str(diff_to_flif_perc)[:6] + " %")
 
 
 # write final best file
