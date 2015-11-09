@@ -291,7 +291,7 @@ if not BRUTEFORCE:
 
 		size_increased_times = 0
 
-		Prange = chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)) 
+		Prange = set(chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)))
 		for P in Prange:
 			if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 				continue
