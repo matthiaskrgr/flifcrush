@@ -169,9 +169,9 @@ if (DEBUG):
 if not BRUTEFORCE:
 	# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 	for N in list(range(0, range_N)):
+		showActivity()
 		proc = subprocess.Popen([flif_binary, '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 		count +=1
-
 		output = proc.stdout.read()
 		size_new = sys.getsizeof(output)
 
@@ -188,7 +188,6 @@ if not BRUTEFORCE:
 			arr_index = 0
 		else:
 			size_increased_times_N_first += 1
-			showActivity()
 			if (size_increased_times_N_first >= giveUp_N):
 				break; # break out of loop, we have wasted enough time here
 
@@ -198,6 +197,7 @@ if not BRUTEFORCE:
 	# if N== 0 / no maniac tree, skip the rest
 	if (best_dict['N'] != 0):
 		for S in list(range(1, range_S, 1)):
+			showActivity()
 			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
@@ -215,7 +215,6 @@ if not BRUTEFORCE:
 				size_increased_times = 0
 				arr_index = 0
 			else:
-				showActivity()
 				size_increased_times += 1
 				if (size_increased_times >= giveUp_S):
 					break;
@@ -228,6 +227,7 @@ if not BRUTEFORCE:
 		D_step = 1
 		D_step_upped = False # if True; D_step == 10
 		while (D < range_D):
+			showActivity()
 			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-S', str(best_dict['S']), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
@@ -246,7 +246,6 @@ if not BRUTEFORCE:
 				size_increased_times = 0
 				arr_index = 0
 			else:
-				showActivity()
 				size_increased_times += 1
 				if ((D >= 100) and (not D_step_upped)):
 					D_step = 10
@@ -263,6 +262,7 @@ if not BRUTEFORCE:
 
 		size_increased_times = 0
 		for M in list(range(0, range_M, 1)):
+			showActivity()
 			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
@@ -281,7 +281,6 @@ if not BRUTEFORCE:
 				size_increased_times = 0
 				arr_index = 0
 			else:
-				showActivity()
 				size_increased_times += 1
 				if (size_increased_times >= give_up_after):
 					break;
@@ -293,6 +292,7 @@ if not BRUTEFORCE:
 
 		Prange = set(chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)))
 		for P in Prange:
+			showActivity()
 			if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 				continue
 			proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -312,13 +312,13 @@ if not BRUTEFORCE:
 				best_dict['P'] = P
 				size_increased_times = 0
 				arr_index = 0
-			else:
-				showActivity()
+
 
 		P = best_dict['P']
 
 		# don't remove this, it still pays out here and there
 		for N in list(range(0, range_N)):
+			showActivity()
 			proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
@@ -338,7 +338,6 @@ if not BRUTEFORCE:
 				arr_index = 0
 			else:
 				size_increased_times_N += 1
-				showActivity()
 				if (size_increased_times_N >= giveUp_N):
 					break; # break out of loop, we have wasted enough time here
 		N = best_dict['N']
@@ -347,6 +346,7 @@ if not BRUTEFORCE:
 
 	best_ACB="Auto"
 	for acb in "--acb", "--no-acb":
+		showActivity()
 		proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['N']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 		count +=1
 		output = proc.stdout.read()
@@ -370,8 +370,6 @@ if not BRUTEFORCE:
 			best_dict['size'] = size_new
 			arr_index = 0
 			best_dict['ACB'] = ACB
-		else:
-			showActivity()
 	ACB = best_dict['ACB']
 
 
@@ -379,6 +377,7 @@ if not BRUTEFORCE:
 	if not (INTERLACE_FORCE):
 		best_interl = False
 		for interl in "--no-interlace", "--interlace":
+			showActivity()
 			proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
@@ -404,8 +403,6 @@ if not BRUTEFORCE:
 				best_dict['INT'] = INTERL
 				arr_index = 0
 				best_interl=INTERL
-			else:
-				showActivity()
 		INTERLACE = best_dict['INT']
 
 else: # brutefoce == true
@@ -430,6 +427,7 @@ else: # brutefoce == true
 					for acb in "--acb", "--no-acb":
 						for interl in "--no-interlace", "--interlace":
 							#print(str(N) + " " + str(S) + " " + str(D) + " " + str(M) + " " + str(acb) + " " + str(interl))
+							showActivity()
 							proc = subprocess.Popen([flif_binary, acb,  '-M', str(M), '-S', str(S), '-D', str(D),   '-r', str(N), str(INFILE), str(interl), '/dev/stdout'], stdout=subprocess.PIPE)
 							count +=1
 							output = proc.stdout.read()
@@ -460,8 +458,6 @@ else: # brutefoce == true
 								best_dict['M'] = M
 								best_dict['D'] = D
 								best_dict['ACB'] = ACB
-							else:
-								showActivity()
 
 
 
