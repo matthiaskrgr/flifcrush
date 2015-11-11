@@ -345,6 +345,36 @@ try: # catch KeyboardInterrupt
 					if (size_increased_times_N >= giveUp_N):
 						break; # break out of loop, we have wasted enough time here
 			N = best_dict['N']
+		else: #   (best_dict['N'] == 0),  still try P
+			size_increased_times = 0
+
+			Prange = set(chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)))
+			for P in Prange:
+				showActivity()
+				if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
+					continue
+				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				count +=1
+				output = proc.stdout.read()
+				size_new = sys.getsizeof(output)
+
+				if (DEBUG):
+					debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+
+				if (best_dict['size'] > size_new): # new file is better
+					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, INT=INTERLACE, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					output_best=output
+					best_dict['size']=size_new
+					best_dict['count'] = count
+					best_dict['P'] = P
+					size_increased_times = 0
+					arr_index = 0
+
+
+			P = best_dict['P']
+
+
 
 		# auto color buckets:
 
