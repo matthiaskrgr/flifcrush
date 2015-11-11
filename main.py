@@ -493,7 +493,7 @@ try: # catch KeyboardInterrupt
 			print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  P:", val[0]['P'], "ACB", val[0]['ACB'],"INT", val[0]['INT'], "  size:", val[0]['size'] )
 except KeyboardInterrupt:
 	try: # double ctrl+c shall quit immediately
-		print("Saving file..")
+		print("\nSaving file..")
 		if output_best != "none":
 			OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif" extension
 			with open(OUTFILE, "w+b") as f:
