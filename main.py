@@ -199,6 +199,8 @@ try: # catch KeyboardInterrupt
 		# if N== 0 / no maniac tree, skip the rest
 		if (best_dict['N'] != 0):
 			for S in list(range(1, range_S, 1)):
+				if (S <= 4):  # skip S 1-4, it takes too much ram.
+					continue
 				showActivity()
 				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 				count +=1
