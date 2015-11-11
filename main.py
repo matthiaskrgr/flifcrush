@@ -136,7 +136,6 @@ giveUp_N = 5
 giveUp_S = 100
 give_up_after = 200
 size_increased_times_N = 0
-size_increased_times_N_first = 0 # TODO: refactor this
 
 
 #defaults:
@@ -181,7 +180,7 @@ try: # catch KeyboardInterrupt
 				debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 			if (((best_dict['size'] > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
-				size_increased_times_N_first = 0 # reset break-counter
+				size_increased_times_N = 0 # reset break-counter
 				output_best = output
 				print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, INT=INTERLACE, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 				best_dict['size'] = size_new
@@ -189,12 +188,12 @@ try: # catch KeyboardInterrupt
 				best_dict['N'] = N
 				arr_index = 0
 			else:
-				size_increased_times_N_first += 1
-				if (size_increased_times_N_first >= giveUp_N):
+				size_increased_times_N += 1
+				if (size_increased_times_N >= giveUp_N):
 					break; # break out of loop, we have wasted enough time here
 
 		N = best_dict['N']
-		size_increased_times = 0
+		size_increased_times = size_increased_times_N = 0
 
 		# if N== 0 / no maniac tree, skip the rest
 		if (best_dict['N'] != 0):
@@ -321,6 +320,7 @@ try: # catch KeyboardInterrupt
 			P = best_dict['P']
 
 			# don't remove this, it still pays out here and there
+			size_increased_times_N = 0 # reset since first run
 			for N in list(range(0, range_N)):
 				showActivity()
 				proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -329,7 +329,7 @@ try: # catch KeyboardInterrupt
 				size_new = sys.getsizeof(output)
 
 				if (DEBUG):
-					debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':str(best_dict['P']), 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+					debug_array.append([{'Nr':count, 'N':str(N), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':str(best_dict['P']), 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 				if (best_dict['size'] > size_new): # new file is smaller
@@ -342,7 +342,7 @@ try: # catch KeyboardInterrupt
 					arr_index = 0
 				else:
 					size_increased_times_N += 1
-					if (size_increased_times_N >= giveUp_N):
+					if (size_increased_times_N >= best_dict['N'] + 4):
 						break; # break out of loop, we have wasted enough time here
 			N = best_dict['N']
 		else: #   (best_dict['N'] == 0),  still try P
