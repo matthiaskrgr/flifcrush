@@ -92,6 +92,21 @@ def showActivity():
 		arr_index = 0
 	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + " P" + str(P)  + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
+# save the best crushed file as .flif
+def save_file():
+	if output_best != "none":
+		OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif" extension
+		with open(OUTFILE, "w+b") as f:
+			f.write(output_best)
+			f.close
+
+		size_flif=os.path.getsize(OUTFILE)
+		size_orig=os.path.getsize(INFILE)
+		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  P=" + str(best_dict['P']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])), cnt=str(count)), end="\r",flush=True)
+	else:
+		print("WARNING: could not reduce size              ")
+		sys.exit(0)
+
 
 
 
@@ -558,38 +573,19 @@ try: # catch KeyboardInterrupt
 
 
 	# write final best file
-
-	if output_best != "none":
-		OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif" extension
-		with open(OUTFILE, "w+b") as f:
-			f.write(output_best)
-			f.close
-
-		size_flif=os.path.getsize(OUTFILE)
-		size_orig=os.path.getsize(INFILE)
-		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  P=" + str(best_dict['P']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])), cnt=str(count)), end="\r",flush=True)
-	else:
-		print("WARNING: could not reduce size              ")
-		sys.exit(0)
+	save_file()
 
 	if (DEBUG):
 		for index, val in enumerate(debug_array):
 			print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  P:", val[0]['P'], "ACB", val[0]['ACB'],"INT", val[0]['INT'], "  size:", val[0]['size'] )
 except KeyboardInterrupt:
+	print("\033[K", end="") # clear previous line
+	print("\rTermination requested, saving best file so far...\n")
 	try: # double ctrl+c shall quit immediately
-		print("\nSaving file..")
-		if output_best != "none":
-			OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif" extension
-			with open(OUTFILE, "w+b") as f:
-				f.write(output_best)
-				f.close
-
-			size_flif=os.path.getsize(OUTFILE)
-			size_orig=os.path.getsize(INFILE)
-			print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  P=" + str(best_dict['P']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])), cnt=str(count)), end="\r",flush=True)
-		else:
-			print("WARNING: could not reduce size              ")
-			sys.exit(0)
+		save_file()
 	except KeyboardInterrupt: # double ctrl+c
-		print("Terminated by user")
+		print("\033[K", end="") # clear previous line
+		print("Terminated by user.")
+
+
 
