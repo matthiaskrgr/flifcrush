@@ -569,7 +569,8 @@ try: # catch KeyboardInterrupt
 		if (diff_to_flif_byte > 0):
 			print("WARNING, FLIFCRUSH FAILED reducing size, please report!")
 		diff_to_flif_perc = (((size_flifdefault-best_dict['size']) / best_dict['size'])*100)
-		print("\n\nComparing flifcrush (" + str(best_dict['size']) +" b) to default flif (" + str(size_flifdefault)  + " b): " + str(diff_to_flif_byte) + " b which are " + str(diff_to_flif_perc)[:6] + " %")
+		print("\033[K", end="") # clear previous line
+		print("\nComparing flifcrush (" + str(best_dict['size']) +" b) to default flif (" + str(size_flifdefault)  + " b): " + str(diff_to_flif_byte) + " b which are " + str(diff_to_flif_perc)[:6] + " %")
 
 
 	# write final best file
