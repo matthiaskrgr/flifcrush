@@ -208,7 +208,7 @@ try: # catch KeyboardInterrupt
 			if (((best_dict['size'] > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
-				print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 				best_dict['size'] = size_new
 				best_dict['count'] = count
 				best_dict['N'] = N
@@ -236,7 +236,7 @@ try: # catch KeyboardInterrupt
 					debug_array.append([{'Nr':count, 'N':best_dict['N'], 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, \033[04mS {S}\033[0m, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=S, M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, \033[04mS {S}\033[0m, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=S, M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['S'] = S
 					output_best = output
 					best_dict['size'] = size_new
@@ -267,7 +267,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, M {M}, \033[04mD {D}\033[0m, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, \033[04mD {D}\033[0m, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['D'] = D
 					output_best=output
 					best_dict['size'] = size_new
@@ -313,7 +313,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, \033[04mM {M}\033[0m, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, \033[04mM {M}\033[0m, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['M'] = M
 					output_best=output
 					best_dict['size']=size_new
@@ -345,7 +345,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					output_best=output
 					best_dict['size']=size_new
 					best_dict['count'] = count
@@ -372,7 +372,7 @@ try: # catch KeyboardInterrupt
 				if (best_dict['size'] > size_new): # new file is smaller
 					size_increased_times_N = 0 # reset break-counter
 					output_best = output
-					print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['count'] = count
 					best_dict['size'] = size_new
 					best_dict['N'] = N
@@ -400,7 +400,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					output_best=output
 					best_dict['size']=size_new
 					best_dict['count'] = count
@@ -436,7 +436,7 @@ try: # catch KeyboardInterrupt
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
 				if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, ACB=str(ACB), RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, ACB=str(ACB), RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 				best_dict['count'] = count
 				best_dict['size'] = size_new
 				arr_index = 0
@@ -472,7 +472,7 @@ try: # catch KeyboardInterrupt
 				if (DEBUG):
 					debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 				if (best_dict['size'] > size_new): # new file is smaller
-					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					size_increased_times_N = 0 # reset break-counter
 					output_best = output
 					best_dict['count'] = count
@@ -505,7 +505,7 @@ try: # catch KeyboardInterrupt
 					size_increased_times_N = 0 # reset break-counter
 					output_best = output
 					if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-						print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, , size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], ACB=str(ACB), INT=INTERL, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+						print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, , size {size} b, better than {run_best}, {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], ACB=str(ACB), INT=INTERL, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['count'] = count
 					best_dict['size'] = size_new
 					best_dict['INT'] = INTERL
