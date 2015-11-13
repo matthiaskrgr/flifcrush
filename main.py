@@ -143,7 +143,7 @@ size_orig = inf['sizeByte']
 range_N = 20   # default: 3 // try: 0-20
 range_S = 600 # default: 40  // try: 1-100
 range_M = 600 # default: 30  // try: 1-100
-range_D = 5000 # default: 50  // try  1-100
+range_D = 268435455 # default: 50  // try  1-100
 
 
 # if we did this many attempts without getting better results, give up
@@ -254,7 +254,7 @@ try: # catch KeyboardInterrupt
 
 			D=1
 			D_step = 1
-			D_step_upped = False # if True; D_step == 10
+			D_step_upped = 0 # if True; D_step == 10
 			while (D < range_D):
 				showActivity()
 				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-S', str(best_dict['S']), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
@@ -276,11 +276,22 @@ try: # catch KeyboardInterrupt
 					arr_index = 0
 				else:
 					size_increased_times += 1
-					if ((D >= 100) and (not D_step_upped)):
+					if ((D >= 100) and (D_step_upped == 0)):
 						D_step = 10
-						D_step_upped = True
-
+						D_step_upped = 1
+					if ((D >= 1000) and (D_step_upped == 1)):
+						D_step = 100
+						D_step_upped = 2
+					if ((D >= 5000) and (D_step_upped == 2)):
+						D_step = 1000
+						D_step_upped = 3
+					if ((D >= 13000) and (D_step_upped == 3)):
+						D_step = 10000
+						D_step_upped = 4
 					if (size_increased_times >= give_up_after):
+						if (D < 268435453): # try max D
+							D = 268435454
+							continue
 						break;
 
 				if (D >= range_D):
