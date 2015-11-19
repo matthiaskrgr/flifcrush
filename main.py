@@ -90,7 +90,7 @@ def showActivity():
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + " P" + str(P)  + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + " P" + str(P)  + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + " A:" + str(A) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
 # save the best crushed file as .flif
 def save_file():
@@ -102,7 +102,7 @@ def save_file():
 
 		size_flif=os.path.getsize(OUTFILE)
 		size_orig=os.path.getsize(INFILE)
-		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N=" + str(best_dict['N']) + "  S=" + str(best_dict['S']) + "  M=" + str(best_dict['M'])+ "  D=" + str(best_dict['D']) + "  P=" + str(best_dict['P']) + "  ACB=" + str(best_dict['ACB']) + "  INTERLACE=" + str(best_dict['INT'])), cnt=str(count)), end="\r",flush=True)
+		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r",flush=True)
 	else:
 		print("WARNING: could not reduce size              ")
 		sys.exit(0)
@@ -162,6 +162,7 @@ P = 1024
 ACB=False
 PLC=True
 RGB=False
+A=False # --keep-alpha-zero
 #INTERLACE=False  # set above
 
 # colors for stdout
@@ -172,7 +173,7 @@ txt_res = '\033[0m' #reset
 
 # PLC == false : passed -C or --no-plc
 # RGB == True : passed -R or --rgb
-best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'size': size_orig}
+best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, 'size': size_orig}
 
 
 count = 0 # how many recompression attempts did we take?
@@ -182,8 +183,7 @@ size_new = size_best = os.path.getsize(INFILE)
 
 try: # catch KeyboardInterrupt
 
-	#do a default flif run:
-	if (COMPARE):
+	if (COMPARE):  #do a default flif run:
 		proc = subprocess.Popen([flif_binary, INFILE,  '/dev/stdout'], stdout=subprocess.PIPE)
 		output_flifdefault = proc.stdout.read()
 		size_flifdefault = sys.getsizeof(output_flifdefault)
@@ -208,7 +208,7 @@ try: # catch KeyboardInterrupt
 			if (((best_dict['size'] > size_new) or (((count==1) and (size_new < size_orig))))): # new file is smaller
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
-				print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+				print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 				best_dict['size'] = size_new
 				best_dict['count'] = count
 				best_dict['N'] = N
@@ -236,7 +236,7 @@ try: # catch KeyboardInterrupt
 					debug_array.append([{'Nr':count, 'N':best_dict['N'], 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, \033[04mS {S}\033[0m, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=S, M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, \033[04mS {S}\033[0m, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['S'] = S
 					output_best = output
 					best_dict['size'] = size_new
@@ -267,7 +267,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, M {M}, \033[04mD {D}\033[0m, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=D, P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, \033[04mD {D}\033[0m, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['D'] = D
 					output_best=output
 					best_dict['size'] = size_new
@@ -303,7 +303,7 @@ try: # catch KeyboardInterrupt
 			size_increased_times = 0
 			for M in list(range(0, range_M, 1)):
 				showActivity()
-				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				proc = subprocess.Popen([flif_binary, '-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -313,7 +313,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, \033[04mM {M}\033[0m, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, \033[04mM {M}\033[0m, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['M'] = M
 					output_best=output
 					best_dict['size']=size_new
@@ -327,6 +327,38 @@ try: # catch KeyboardInterrupt
 			M = best_dict['M']
 
 
+			size_increased_times = 0
+			for A in True, False:
+				showActivity()
+				if (A):
+					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				else:
+					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				count +=1
+				output = proc.stdout.read()
+				size_new = sys.getsizeof(output)
+
+				if (DEBUG):
+					debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+
+				if (best_dict['size'] > size_new): # new file is better
+					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, \033[04mA={A}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, A=str(A), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					best_dict['A'] = A
+					output_best=output
+					best_dict['size']=size_new
+					best_dict['count'] = count
+					size_increased_times = 0
+					arr_index = 0
+				else:
+					size_increased_times += 1
+					if (size_increased_times >= give_up_after):
+						break;
+			A = best_dict['A']
+
+
+
+
 
 			size_increased_times = 0
 
@@ -335,7 +367,10 @@ try: # catch KeyboardInterrupt
 				showActivity()
 				if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 					continue
-				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				if (best_dict['A']):
+					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				else:
+					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -345,7 +380,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					output_best=output
 					best_dict['size']=size_new
 					best_dict['count'] = count
@@ -360,7 +395,10 @@ try: # catch KeyboardInterrupt
 			size_increased_times_N = 0 # reset since first run
 			for N in list(range(0, range_N)):
 				showActivity()
-				proc = subprocess.Popen([flif_binary,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				if (best_dict['A']):
+					proc = subprocess.Popen([flif_binary, '-r', str(N),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(best_dict['P']), '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				else:
+					proc = subprocess.Popen([flif_binary, '-r', str(N),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(best_dict['P']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -372,7 +410,7 @@ try: # catch KeyboardInterrupt
 				if (best_dict['size'] > size_new): # new file is smaller
 					size_increased_times_N = 0 # reset break-counter
 					output_best = output
-					print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['count'] = count
 					best_dict['size'] = size_new
 					best_dict['N'] = N
@@ -390,7 +428,12 @@ try: # catch KeyboardInterrupt
 				showActivity()
 				if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 					continue
-				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				if (best_dict['A']):
+					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+				else:
+					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -400,7 +443,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					output_best=output
 					best_dict['size']=size_new
 					best_dict['count'] = count
@@ -418,7 +461,10 @@ try: # catch KeyboardInterrupt
 		best_ACB="Auto"
 		for acb in "--acb", "--no-acb":
 			showActivity()
-			proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['N']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			if (best_dict['A']):
+				proc = subprocess.Popen([flif_binary, acb, '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			else:
+				proc = subprocess.Popen([flif_binary, acb, '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -436,7 +482,7 @@ try: # catch KeyboardInterrupt
 				size_increased_times_N = 0 # reset break-counter
 				output_best = output
 				if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], INT=INTERLACE, ACB=str(ACB), RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, ACB=str(ACB), RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 				best_dict['count'] = count
 				best_dict['size'] = size_new
 				arr_index = 0
@@ -457,14 +503,26 @@ try: # catch KeyboardInterrupt
 				else: # reset
 					RGB = False
 
+
 				if (plc_option == rgb_option == ""): # none, skip
 					continue
-				elif (plc_option != "") and (rgb_option == ""): # only plc
-					proc = subprocess.Popen([flif_binary, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
-				elif (rgb_option != "") and (plc_option == ""): # only rgb
-					proc = subprocess.Popen([flif_binary, rgb_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
-				elif (plc_option != "") and (rgb_option != ""): # both
-					proc = subprocess.Popen([flif_binary, rgb_option, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				if (best_dict['A']): # I hate doing this .. 
+
+					if (plc_option != "") and (rgb_option == ""): # only plc
+						proc = subprocess.Popen([flif_binary, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']), '--keep-alpha-zero', '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+					elif (rgb_option != "") and (plc_option == ""): # only rgb
+						proc = subprocess.Popen([flif_binary, rgb_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '--keep-alpha-zero', '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+					elif (plc_option != "") and (rgb_option != ""): # both
+						proc = subprocess.Popen([flif_binary, rgb_option, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']), '--keep-alpha-zero', '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+				else: # no A / --keep-alpha-zero
+					if (plc_option != "") and (rgb_option == ""): # only plc
+						proc = subprocess.Popen([flif_binary, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']) , '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+					elif (rgb_option != "") and (plc_option == ""): # only rgb
+						proc = subprocess.Popen([flif_binary, rgb_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']), '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+					elif (plc_option != "") and (rgb_option != ""): # both
+						proc = subprocess.Popen([flif_binary, rgb_option, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+
 				showActivity()
 				count +=1
 				output = proc.stdout.read()
@@ -472,7 +530,7 @@ try: # catch KeyboardInterrupt
 				if (DEBUG):
 					debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 				if (best_dict['size'] > size_new): # new file is smaller
-					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					size_increased_times_N = 0 # reset break-counter
 					output_best = output
 					best_dict['count'] = count
@@ -486,7 +544,11 @@ try: # catch KeyboardInterrupt
 			best_interl = False
 			for interl in "--no-interlace", "--interlace":
 				showActivity()
-				proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+				if (best_dict['A']):
+					proc = subprocess.Popen([flif_binary, acb, '--keep-alpha-zero', '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+				else:
+					proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -505,7 +567,7 @@ try: # catch KeyboardInterrupt
 					size_increased_times_N = 0 # reset break-counter
 					output_best = output
 					if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-						print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], ACB=str(ACB), INT=INTERL, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+						print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERL, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
 					best_dict['count'] = count
 					best_dict['size'] = size_new
 					best_dict['INT'] = INTERL
