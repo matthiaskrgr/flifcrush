@@ -171,9 +171,12 @@ txt_res = '\033[0m' #reset
 
 
 
+
+
+
 # PLC == false : passed -C or --no-plc
 # RGB == True : passed -R or --rgb
-best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, 'size': size_orig}
+best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, "A_arg": "",  'size': size_orig}
 
 
 count = 0 # how many recompression attempts did we take?
@@ -197,7 +200,11 @@ try: # catch KeyboardInterrupt
 		# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 		for N in list(range(0, range_N)):
 			showActivity()
-			proc = subprocess.Popen([flif_binary, '-r', str(N), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+			raw_command = [flif_binary, '-r', str(N), INFILE, interlace_flag, '/dev/stdout']
+			sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+			proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
@@ -227,7 +234,11 @@ try: # catch KeyboardInterrupt
 				if (S <= 4):  # skip S 1-4, it takes too much ram.
 					continue
 				showActivity()
-				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				raw_command = [flif_binary,'-r', str(best_dict['N']), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout']
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -257,7 +268,11 @@ try: # catch KeyboardInterrupt
 			D_step_upped = 0 # if True; D_step == 10
 			while (D < range_D):
 				showActivity()
-				proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-S', str(best_dict['S']), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				raw_command = [flif_binary,'-r', str(best_dict['N']),'-S', str(best_dict['S']), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout']
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -276,7 +291,7 @@ try: # catch KeyboardInterrupt
 					arr_index = 0
 				else:
 					size_increased_times += 1
-					if ((D >= 100) and (D_step_upped == 0)):
+					if ((D >= 100) and (D_step_upped == 0)): # increase the loop stepping to speed things up
 						D_step = 10
 						D_step_upped = 1
 					if ((D >= 1000) and (D_step_upped == 1)):
@@ -303,7 +318,12 @@ try: # catch KeyboardInterrupt
 			size_increased_times = 0
 			for M in list(range(0, range_M, 1)):
 				showActivity()
-				proc = subprocess.Popen([flif_binary, '-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+
+				raw_command = [flif_binary, '-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout']
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -328,12 +348,13 @@ try: # catch KeyboardInterrupt
 
 
 			size_increased_times = 0
-			for A in True, False:
+			for A in '--keep-alpha-zero', "":
 				showActivity()
-				if (A):
-					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-				else:
-					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				raw_command =  [flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']), A,  INFILE, interlace_flag, '/dev/stdout']
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -343,8 +364,9 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] > size_new): # new file is better
-					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, \033[04mA={A}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, A=str(A), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
-					best_dict['A'] = A
+					print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, \033[04mA={A}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, A=str(True if (A == "--keep-alpha-zero") else False), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+					best_dict['A'] = (A == "--keep-alpha-zero") # boolean
+					best_dict['A_arg'] = "--keep-alpha-zero" if (A) else "" # tring
 					output_best=output
 					best_dict['size']=size_new
 					best_dict['count'] = count
@@ -367,10 +389,11 @@ try: # catch KeyboardInterrupt
 				showActivity()
 				if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 					continue
-				if (best_dict['A']):
-					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-				else:
-					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				raw_command = [flif_binary,'-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -395,10 +418,11 @@ try: # catch KeyboardInterrupt
 			size_increased_times_N = 0 # reset since first run
 			for N in list(range(0, range_N)):
 				showActivity()
-				if (best_dict['A']):
-					proc = subprocess.Popen([flif_binary, '-r', str(N),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(best_dict['P']), '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-				else:
-					proc = subprocess.Popen([flif_binary, '-r', str(N),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(best_dict['P']), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				raw_command =  [flif_binary, '-r', str(N),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(best_dict['P']),  best_dict['A_arg'] ,  INFILE, interlace_flag, '/dev/stdout'] 
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
@@ -429,10 +453,11 @@ try: # catch KeyboardInterrupt
 				if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 					continue
 
-				if (best_dict['A']):
-					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-				else:
-					proc = subprocess.Popen([flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				raw_command =  [flif_binary,'-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 
 				count +=1
 				output = proc.stdout.read()
@@ -461,18 +486,17 @@ try: # catch KeyboardInterrupt
 		best_ACB="Auto"
 		for acb in "--acb", "--no-acb":
 			showActivity()
-			if (best_dict['A']):
-				proc = subprocess.Popen([flif_binary, acb, '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  '--keep-alpha-zero',  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
-			else:
-				proc = subprocess.Popen([flif_binary, acb, '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  INFILE, interlace_flag, '/dev/stdout'], stdout=subprocess.PIPE)
+			
+			raw_command = [flif_binary, acb, '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+			sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+			proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
+
 			count +=1
 			output = proc.stdout.read()
 			size_new = sys.getsizeof(output)
 
-			if (acb == "--acb"):
-				ACB=True
-			elif (acb == "--no-acb"):
-				ACB=False
+			ACB = (acb == "--acb")
+
 
 			if (DEBUG):
 				debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
@@ -487,41 +511,22 @@ try: # catch KeyboardInterrupt
 				best_dict['size'] = size_new
 				arr_index = 0
 				best_dict['ACB'] = ACB
-		ACB = best_dict['ACB']
 
 
 		# check -C and -R and -C -R
 		for plc_option in "--no-plc", "":
-			for rgb_option in "--rgb", "":  # TODO fix this crap
-				if "--no-plc" == plc_option:
-					PLC = False
-				else: # reset
-					PLC = True
-
-				if  "--rgb" == rgb_option:
-					RGB = True
-				else: # reset
-					RGB = False
-
+			for rgb_option in "--rgb", "":
 
 				if (plc_option == rgb_option == ""): # none, skip
 					continue
 
-				if (best_dict['A']): # I hate doing this .. 
+				PLC = ("--no-plc" == plc_option)
+				RGB = ("--rgb" == rgb_option)
 
-					if (plc_option != "") and (rgb_option == ""): # only plc
-						proc = subprocess.Popen([flif_binary, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']), '--keep-alpha-zero', '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
-					elif (rgb_option != "") and (plc_option == ""): # only rgb
-						proc = subprocess.Popen([flif_binary, rgb_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '--keep-alpha-zero', '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
-					elif (plc_option != "") and (rgb_option != ""): # both
-						proc = subprocess.Popen([flif_binary, rgb_option, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']), '--keep-alpha-zero', '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
-				else: # no A / --keep-alpha-zero
-					if (plc_option != "") and (rgb_option == ""): # only plc
-						proc = subprocess.Popen([flif_binary, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']) , '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
-					elif (rgb_option != "") and (plc_option == ""): # only rgb
-						proc = subprocess.Popen([flif_binary, rgb_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']), '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
-					elif (plc_option != "") and (rgb_option != ""): # both
-						proc = subprocess.Popen([flif_binary, rgb_option, plc_option, '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(N), interlace_flag, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+
+				raw_command  = [flif_binary, acb, '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), plc_option, rgb_option,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
 				showActivity()
 				count +=1
@@ -544,20 +549,18 @@ try: # catch KeyboardInterrupt
 			best_interl = False
 			for interl in "--no-interlace", "--interlace":
 				showActivity()
-				if (best_dict['A']):
-					proc = subprocess.Popen([flif_binary, acb, '--keep-alpha-zero', '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
-				else:
-					proc = subprocess.Popen([flif_binary, acb,  '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),  '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'], stdout=subprocess.PIPE)
+
+
+				raw_command  =  [flif_binary, acb, best_dict['A_arg'], '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'] 
+				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
 				count +=1
 				output = proc.stdout.read()
 				size_new = sys.getsizeof(output)
 
 
-				if (interl == "--interlace"):
-					INTERL=True
-				elif (interl == "--no-interlace"):
-					INTERL=False
+				INRERL = (interl == "--interlace")
 
 				if (DEBUG):
 					debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
