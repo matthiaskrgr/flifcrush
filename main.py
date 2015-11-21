@@ -576,7 +576,7 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 
-					INRERL = (interl == "--interlace")
+					INTERL = (interl == "--interlace")
 
 					if (DEBUG):
 						debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
