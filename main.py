@@ -17,7 +17,6 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA  02110-1301 USA
 
-
 import subprocess
 import sys
 import os
@@ -28,7 +27,6 @@ from itertools import chain # combine ranges
 
 __author__ = 'Matthias "matthiaskrgr" Krüger'
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("inpath", help="file or path (recursively) to be converted to flif", metavar='N', nargs='+', type=str)
 parser.add_argument("-i", "--interlace", help="force interlacing (default: find out best)", action='store_true')
@@ -36,21 +34,10 @@ parser.add_argument("-n", "--nointerlace", help="force interlacing off (default:
 parser.add_argument("-d", "--debug", help="print output of all runs at end", action='store_true')
 parser.add_argument("-b", "--bruteforce", help="bruteforce compression values, takes AGES and might be outdated", action='store_true')
 parser.add_argument("-c", "--compare", help="compare to default flif compression", action='store_true')
-
-
 args = parser.parse_args()
 
-
-if args.compare:
-	COMPARE=True
-else:
-	COMPARE=False
-
-if args.debug:
-	DEBUG=True
-else:
-	DEBUG=False
-
+COMPARE = (args.compare)
+DEBUG = (args.debug)
 INPATHS=args.inpath
 
 interlace_flag="--no-interlace" # default: false
@@ -69,10 +56,8 @@ if args.nointerlace:
 	INTERLACE_FORCE=True # do we force true or false?
 	best_interl = False
 
-if args.bruteforce:
-	BRUTEFORCE=True
-else:
-	BRUTEFORCE=False
+BRUTEFORCE = (args.bruteforce)
+
 
 output_best="none"
 global arr_index
@@ -102,7 +87,7 @@ def save_file():
 
 		size_flif=os.path.getsize(OUTFILE)
 		size_orig=os.path.getsize(INFILE)
-		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r",flush=True)
+		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r",flush=True)
 	else:
 		print("WARNING: could not reduce size              ")
 		sys.exit(0)
@@ -182,18 +167,14 @@ try: # catch KeyboardInterrupt
 		RGB=False
 		A=False # --keep-alpha-zero
 		#INTERLACE=False  # set above
+		# PLC == false : passed -C or --no-plc
+		# RGB == True : passed -R or --rgb
 
 		# colors for stdout
 		txt_ul = '\033[04m' # underline
 		txt_res = '\033[0m' #reset
 
 
-
-
-
-
-		# PLC == false : passed -C or --no-plc
-		# RGB == True : passed -R or --rgb
 		best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, "A_arg": "",  'size': size_orig}
 
 
@@ -502,7 +483,7 @@ try: # catch KeyboardInterrupt
 			best_ACB="Auto"
 			for acb in "--acb", "--no-acb":
 				showActivity()
-				
+
 				raw_command = [flif_binary, acb, '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
@@ -595,16 +576,8 @@ try: # catch KeyboardInterrupt
 				INTERLACE = best_dict['INT']
 
 
-	# PLC == False : passed -C or --no-plc
-	# RGB == True : passed -R or --rgb
 
-
-
-
-
-
-
-		else: # brutefoce == true
+		else: # bruteforce == true
 			best_N=0
 			count = 0
 			good_S_M_D = [0, 0, 0]
@@ -663,8 +636,8 @@ try: # catch KeyboardInterrupt
 
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
 			diff_to_flif_byte = best_dict['size'] - size_flifdefault
-			if (diff_to_flif_byte > 0):
-				print("WARNING, FLIFCRUSH FAILED reducing size, please report!")
+			if (best_dict['size'] > size_flifdefault):
+				print("WARNING: flifcrush failed reducing reducing size better than default flif, please report!")
 			diff_to_flif_perc = (((size_flifdefault-best_dict['size']) / best_dict['size'])*100)
 			print("\033[K", end="") # clear previous line
 			print("\nComparing flifcrush (" + str(best_dict['size']) +" b) to default flif (" + str(size_flifdefault)  + " b): " + str(diff_to_flif_byte) + " b which are " + str(diff_to_flif_perc)[:6] + " %")
