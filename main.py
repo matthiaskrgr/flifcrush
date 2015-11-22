@@ -44,6 +44,11 @@ interlace_flag="--no-interlace" # default: false
 INTERLACE=False
 INTERLACE_FORCE=False
 
+global size_before_glob, size_after_glob, files_count_glob
+size_before_glob = 0 # size of all images we process
+size_after_glob = 0 # size of all flifs we generated
+files_count_glob = 0  # number of files
+
 if args.interlace:
 	interlace_flag="--interlace"
 	INTERLACE=True
@@ -87,6 +92,10 @@ def save_file():
 
 		size_flif=os.path.getsize(OUTFILE)
 		size_orig=os.path.getsize(INFILE)
+
+		global size_after_glob
+		size_after_glob += size_flif
+
 		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r",flush=True)
 	else:
 		print("WARNING: could not reduce size              ")
@@ -127,8 +136,9 @@ try: # catch KeyboardInterrupt
 
 # generation of input_files list is done:
 
-	for INFILE in input_files:
 
+	for INFILE in input_files:
+		files_count_glob += 1
 		#output some metrics about the png that we are about to convert
 
 		im=Image.open(INFILE)
@@ -140,7 +150,7 @@ try: # catch KeyboardInterrupt
 
 		print(inf['path'] + "; dimensions: "  + str(inf['sizeX']) +"×"+ str(inf['sizeY']) + ", " + str(inf['sizeX']*inf['sizeY']) + " px, " + str(inf['colors']) + " unique colors," + " " + str(inf['sizeByte']) + " b")
 		size_orig = inf['sizeByte']
-
+		size_before_glob  += size_orig
 		 
 		# how many max attempts (in "best" case)?
 		range_N = 20   # default: 3 // try: 0-20
@@ -649,6 +659,8 @@ try: # catch KeyboardInterrupt
 		if (DEBUG):
 			for index, val in enumerate(debug_array):
 				print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  P:", val[0]['P'], "ACB", val[0]['ACB'],"INT", val[0]['INT'], "  size:", val[0]['size'] )
+	if (files_count_glob > 1):
+		print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 except KeyboardInterrupt:
 	print("\033[K", end="") # clear previous line
 	print("\rTermination requested, saving best file so far...\n")
