@@ -226,7 +226,6 @@ try: # catch KeyboardInterrupt
 			proc = subprocess.Popen([flif_binary, INFILE,  '/dev/stdout'], stdout=subprocess.PIPE)
 			output_flifdefault = proc.stdout.read()
 			size_flifdefault = sys.getsizeof(output_flifdefault)
-			global size_flifdefault_glob
 			size_flifdefault_glob += size_flifdefault
 
 		if (DEBUG):
