@@ -46,10 +46,11 @@ interlace_flag="--no-interlace" # default: false
 INTERLACE=False
 INTERLACE_FORCE=False
 
-global size_before_glob, size_after_glob, files_count_glob
+global size_before_glob, size_after_glob, files_count_glob, size_flifdefault_glob
 size_before_glob = 0 # size of all images we process
 size_after_glob = 0 # size of all flifs we generated
 files_count_glob = 0  # number of files
+size_flifdefault_glob = 0
 
 if args.interlace:
 	interlace_flag="--interlace"
@@ -225,6 +226,8 @@ try: # catch KeyboardInterrupt
 			proc = subprocess.Popen([flif_binary, INFILE,  '/dev/stdout'], stdout=subprocess.PIPE)
 			output_flifdefault = proc.stdout.read()
 			size_flifdefault = sys.getsizeof(output_flifdefault)
+			global size_flifdefault_glob
+			size_flifdefault_glob += size_flifdefault
 
 		if (DEBUG):
 			debug_array=[]
@@ -687,7 +690,11 @@ try: # catch KeyboardInterrupt
 			for index, val in enumerate(debug_array):
 				print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  P:", val[0]['P'], "ACB", val[0]['ACB'],"INT", val[0]['INT'], "  size:", val[0]['size'] )
 	if (files_count_glob > 1):
-		print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
+		if (COMPARE):
+			print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
+			print("Flif default would have been: " + str(size_flifdefault_glob) + " b")
+		else:
+			print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 except KeyboardInterrupt:
 	print("\033[K", end="") # clear previous line
 	print("\rTermination requested, saving best file so far...\n")
