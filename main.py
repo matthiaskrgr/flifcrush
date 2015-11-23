@@ -109,8 +109,8 @@ def save_file():
 
 		global size_after_glob
 		size_after_glob += size_flif
-
-		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r",flush=True)
+		print("\033[K", end="")
+		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " X:" + str(best_dict['X'])  + " Y:" + str(best_dict['Y']) +  " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r")
 	else:
 		print("WARNING: could not reduce size              ")
 
