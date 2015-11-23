@@ -86,8 +86,14 @@ def showActivity():
 
 # save the best crushed file as .flif
 def save_file():
+	flif2flif = False
 	if output_best != "none":
 		OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif" extension
+
+		if (OUTFILE == INFILE): # most likely flif fo flif crushing
+			flif2flif = True
+			OUTFILE=get_rand_filename()
+
 		with open(OUTFILE, "w+b") as f:
 			f.write(output_best)
 			f.close
@@ -95,13 +101,17 @@ def save_file():
 		size_flif=os.path.getsize(OUTFILE)
 		size_orig=os.path.getsize(INFILE)
 
+		if (flif2flif): # overwrite INFILE with OUTFILE
+			os.remove(INFILE)
+			os.rename(OUTFILE, INFILE) # rename outfile to infile
+
+
 		global size_after_glob
 		size_after_glob += size_flif
 
 		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r",flush=True)
 	else:
 		print("WARNING: could not reduce size              ")
-		sys.exit(0)
 
 def get_rand_filename(): # generates a name for a file that does not exist in current directory
 	# this prevents accidentally overwriting a preexisting file
