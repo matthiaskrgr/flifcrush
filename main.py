@@ -25,6 +25,8 @@ from collections import Counter
 import argparse
 from itertools import chain # combine ranges
 
+import random # getrandomfilename
+import string # getrandomfilename
 __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 parser = argparse.ArgumentParser()
@@ -101,7 +103,12 @@ def save_file():
 		print("WARNING: could not reduce size              ")
 		sys.exit(0)
 
-
+def get_rand_filename(): # generates a name for a file that does not exist in current directory
+	# this prevents accidentally overwriting a preexisting file
+	filename =''.join(random.choice(string.ascii_uppercase) for i in range(9))
+	while (os.path.isfile(filename)): # if the name already exists, try again
+		filename =''.join(random.choice(string.ascii_uppercase) for i in range(9))
+	return filename
 
 
 # make sure we know where flif binary is
@@ -145,7 +152,7 @@ try: # catch KeyboardInterrupt
 
 		if (inf['filetype'] == "flif"): # PIL does not know flif (yet...?), so we convert the .flif to .png and catch it and get the amount of pixels
 			flif_to_flif = "-t" # flif needs -t flag in case of flif to flif
-			FIFO='./fakeFile.png' # @TODO make sure path does not exist before
+			FIFO=get_rand_filename() + ".png" # make sure path does not exist before
 			os.mkfifo(FIFO) # create named pipe
 			subprocess.Popen([flif_binary, INFILE, FIFO])  # convert flif to png to get pixel data
 			im = Image.open(FIFO) # <- png data
