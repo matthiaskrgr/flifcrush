@@ -767,6 +767,12 @@ except KeyboardInterrupt:
 	print("\rTermination requested, saving best file so far...\n")
 	try: # double ctrl+c shall quit immediately
 		save_file()
+		if (files_count_glob > 1):
+			if (COMPARE):
+				print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
+				print("Flif default would have been: " + str(size_flifdefault_glob) + " b")
+			else:
+				print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 	except KeyboardInterrupt: # double ctrl+c
 		print("\033[K", end="") # clear previous line
 		print("Terminated by user.")
