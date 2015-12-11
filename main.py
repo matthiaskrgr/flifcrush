@@ -191,7 +191,7 @@ try: # catch KeyboardInterrupt
 		# how many attempts to try in worst case? ( check flif.cpp:400 and config.h)
 		range_N = 20   # default: 3 // try: 0-20
 		range_S = 600 # default: 40   // max: 100000
-		range_M = 512 # default: 30   
+		range_M = 3000 # default: 30   // 0-inf
 		range_D = 268435455 # default: 50  // try  1-100
 		range_X = 128 # default: 2 //  range: 1 - 128  
 		range_Y = 128 # default: 19  // range: 4 - 128
