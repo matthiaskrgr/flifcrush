@@ -17,6 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA  02110-1301 USA
 
+
 import subprocess
 import sys
 import os
@@ -46,11 +47,12 @@ interlace_flag="--no-interlace" # default: false
 INTERLACE=False
 INTERLACE_FORCE=False
 
+# make these global to access them easily inside functions 
 global size_before_glob, size_after_glob, files_count_glob, size_flifdefault_glob
 size_before_glob = 0 # size of all images we process
 size_after_glob = 0 # size of all flifs we generated
 files_count_glob = 0  # number of files
-size_flifdefault_glob = 0
+size_flifdefault_glob = 0 # size of all images converted with flif default parameters
 
 if args.interlace:
 	interlace_flag="--interlace"
@@ -76,18 +78,19 @@ arr_index = 0
 progress_array=[" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃", "▁"]
 arrlen=len(progress_array)
 
-# prints activity indicator (some kind of ascii animation)
+# prints activity indicator (some kind of ascii 'animation')
 def showActivity():
-	#return
+#	return
 	global arr_index
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
 	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + " P" + str(P)  + " X" + str(X) + " Y" + str(Y) + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + " A:" + str(A) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
-# save the best crushed file as .flif
+# save .flif file that had the best combination of parameters 
 def save_file():
-	flif2flif = False
+	flif2flif = False # default, we need extra parameter if we convert .flif to -clif
+	# if the condition is false, we didn't manage to reduce size
 	if output_best != "none":
 		OUTFILE=".".join(INFILE.split(".")[:-1])+".flif" # split by ".", rm last elm, join by "." and add "flif" extension
 
@@ -106,15 +109,17 @@ def save_file():
 			os.remove(INFILE)
 			os.rename(OUTFILE, INFILE) # rename outfile to infile
 
-
+		# print some numbers
 		global size_after_glob
 		size_after_glob += size_flif
 		print("\033[K", end="")
 		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " X:" + str(best_dict['X'])  + " Y:" + str(best_dict['Y']) +  " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r")
 	else:
-		print("WARNING: could not reduce size              ")
+		print("\033[K", end="")
+		print("WARNING: could not reduce size!")
 
-def get_rand_filename(): # generates a name for a file that does not exist in current directory
+# generates a name for a file that does not exist in current directory, used for tmp files
+def get_rand_filename(): 
 	# this prevents accidentally overwriting a preexisting file
 	filename =''.join(random.choice(string.ascii_uppercase) for i in range(9))
 	while (os.path.isfile(filename)): # if the name already exists, try again
@@ -124,9 +129,9 @@ def get_rand_filename(): # generates a name for a file that does not exist in cu
 
 # make sure we know where flif binary is
 flif_binary = ""
-try:
+try: # search for "FLIF" enviromental variable first
 	flif_path = os.environ['FLIF']
-	if os.path.isfile(flif_path):
+	if os.path.isfile(flif_path): # the variable actually points to a file
 		flif_binary = flif_path
 except KeyError: # env var not set, check if /usr/bin/flif exists
 	if (flif_binary == ""):
@@ -136,15 +141,15 @@ except KeyError: # env var not set, check if /usr/bin/flif exists
 			flif_binary = "/usr/share/bin/flif"
 		else:
 			print("Error: no flif binary found, please use 'export FLIF=/path/to/flif'")
-			quit()
+			os.exit(1)
 
 
-SUPPORTED_FILE_EXTENSIONS=['png', 'flif']
+SUPPORTED_FILE_EXTENSIONS=['png', 'flif'] # @TODO add some more
 input_files = []
 try: # catch KeyboardInterrupt
 
 	for path in INPATHS: # iterate over arguments
-		if (os.path.isfile(path)): # inpath == file?
+		if (os.path.isfile(path)): # inpath is not a directory but a file
 			input_files.append(path) # add to list
 		else:  # else walk recursively 
 			for root, directories, filenames in os.walk(path): 
@@ -155,24 +160,26 @@ try: # catch KeyboardInterrupt
 # generation of input_files list is done:
 
 
-	for INFILE in input_files:
+	for INFILE in input_files: # iterate over every file that we go
 		flif_to_flif = ""
 		files_count_glob += 1
 		#output some metrics about the png that we are about to convert
 		inf={'path': INFILE, 'sizeByte': 0, 'colors': 0, 'sizeX': 0, 'sizeY':0, 'px':0, 'filetype': INFILE.split('.')[-1]}
 
-		if (inf['filetype'] == "flif"): # PIL does not know flif (yet...?), so we convert the .flif to .png and catch it and get the amount of pixels
+		if (inf['filetype'] == "flif"): # PIL does not know flif (yet...?), so we convert the .flif to .png, catch it, and get the amount of pixels
 			flif_to_flif = "-t" # flif needs -t flag in case of flif to flif
 			FIFO=get_rand_filename() + ".png" # make sure path does not exist before
 			os.mkfifo(FIFO) # create named pipe
 			subprocess.Popen([flif_binary, INFILE, FIFO])  # convert flif to png to get pixel data
 			im = Image.open(FIFO) # <- png data
-			os.remove(FIFO)
+			os.remove(FIFO) # remove named pipe
 		else:
 			im = Image.open(INFILE)
 
-		img=[] # will contain pixel data
-		for px in (im.getdata()):
+		# @TODO: can we speed this up?
+		# just for fun:
+		img=[] # will contain px data
+		for px in (im.getdata()): # iterate over the pixels of the input image so we can count the number of different colors
 			img.append(px)
 
 		inf={'path': INFILE, 'sizeByte': os.path.getsize(INFILE), 'colors': len(Counter(img).items()), 'sizeX': im.size[0], 'sizeY': im.size[1], 'px': im.size[0]*im.size[1], 'filetype': INFILE.split('.')[-1]}
@@ -181,7 +188,7 @@ try: # catch KeyboardInterrupt
 		size_orig = inf['sizeByte']
 		size_before_glob  += size_orig
 
-		# how many max attempts (in "best" case)?
+		# how many attempts to try in worst case?
 		range_N = 20   # default: 3 // try: 0-20
 		range_S = 600 # default: 40  // try: 1-100
 		range_M = 600 # default: 30  // try: 1-100
