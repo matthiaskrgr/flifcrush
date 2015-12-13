@@ -262,7 +262,9 @@ try: # catch KeyboardInterrupt
 					size_increased_times_N = 0 # reset break-counter
 					output_best = output
 					if (size_orig > size_new):
-						print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
+						perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+						perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
+						print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 					best_dict['size'] = size_new
 					best_dict['count'] = count
 					best_dict['N'] = N
@@ -295,8 +297,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, \033[04mS {S}\033[0m, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['S'] = S
 						output_best = output
@@ -333,8 +335,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, \033[04mD {D}\033[0m, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['D'] = D
 						output_best=output
@@ -387,8 +389,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, \033[04mM {M}\033[0m, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['M'] = M
 						output_best=output
@@ -421,8 +423,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early  [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mX {X}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, X=X, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['X'] = X
 						output_best=output
@@ -454,8 +456,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, X {X}, \033[04mY {Y}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, X=X, Y=Y, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['Y'] = Y
 						output_best=output
@@ -492,8 +494,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, \033[04mA={A}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, A=str(True if (A == "--keep-alpha-zero") else False), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['A'] = (A == "--keep-alpha-zero") # boolean
 						best_dict['A_arg'] = "--keep-alpha-zero" if (A) else "" # tring
@@ -534,8 +536,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
@@ -568,8 +570,8 @@ try: # catch KeyboardInterrupt
 						size_increased_times_N = 0 # reset break-counter
 						output_best = output
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['count'] = count
 						best_dict['size'] = size_new
@@ -605,8 +607,8 @@ try: # catch KeyboardInterrupt
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
@@ -646,8 +648,8 @@ try: # catch KeyboardInterrupt
 					output_best = output
 					if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, ACB=str(ACB), RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 					best_dict['count'] = count
 					best_dict['size'] = size_new
@@ -678,8 +680,8 @@ try: # catch KeyboardInterrupt
 						debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 					if (best_dict['size'] > size_new): # new file is smaller
 						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-							perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+							perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						size_increased_times_N = 0 # reset break-counter
 						output_best = output
@@ -716,8 +718,8 @@ try: # catch KeyboardInterrupt
 						output_best = output
 						if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
 							if (size_orig > size_new):
-								perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]
-								perc_change = "0.000" if ("e" in perc_change) else perc_change # due to [:6], '8.509566454608271e-07' would become "8.509"
+								perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
+								perc_change = "0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 								print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERL, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['count'] = count
 						best_dict['size'] = size_new
