@@ -277,7 +277,7 @@ try: # catch KeyboardInterrupt
 			maniac_repeats = best_dict['maniac_repeats']
 			size_increased_times = size_increased_times_maniac_repeats = 0
 
-			# if N== 0 / no maniac tree, skip the rest
+			# if maniac_repeats== 0 / no maniac tree, skip the rest
 			if (best_dict['maniac_repeats'] != 0):
 				for S in list(range(1, range_S, 1)):
 					if (S <= 4):  # skip S 1-4, it takes too much ram.
@@ -538,7 +538,7 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -567,7 +567,7 @@ try: # catch KeyboardInterrupt
 
 
 					if (best_dict['size'] > size_new): # new file is smaller
-						size_increased_times_N = 0 # reset break-counter
+						size_increased_times_maniac_repeats = 0 # reset break-counter
 						output_best = output
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
@@ -578,11 +578,11 @@ try: # catch KeyboardInterrupt
 						best_dict['manic_repeats'] = maniac_repeats
 						arr_index = 0
 					else:
-						size_increased_times_N += 1
-						if (size_increased_times_N >= best_dict['N'] + 4):
+						size_increased_times_maniac_repeats += 1
+						if (size_increased_times_maniac_repeats >= best_dict['maniac_repeats'] + 4):
 							break; # break out of loop, we have wasted enough time here
 				manic_repeats = best_dict['maniac_repeats']
-			else: #   (best_dict['N'] == 0),  still try P
+			else: #   (best_dict['maniac_repeats'] == 0),  still try P
 				size_increased_times = 0
 
 				Prange = set(chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)))
@@ -609,7 +609,7 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {manic_repeats}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {manic_repeats}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -644,7 +644,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (best_dict['size'] >= size_new): # new file is smaller
-					size_increased_times_N = 0 # reset break-counter
+					size_increased_times_maniac_repeats = 0 # reset break-counter
 					output_best = output
 					if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
 						if (size_orig > size_new):
@@ -683,7 +683,7 @@ try: # catch KeyboardInterrupt
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						size_increased_times_N = 0 # reset break-counter
+						size_increased_times_maniac_repeats = 0 # reset break-counter
 						output_best = output
 						best_dict['count'] = count
 						best_dict['size'] = size_new
