@@ -729,7 +729,7 @@ try: # catch KeyboardInterrupt
 				INTERLACE = best_dict['INT']
 
 
-
+"""
 		else: # bruteforce == true
 			best_N=0
 			count = 0
@@ -784,7 +784,7 @@ try: # catch KeyboardInterrupt
 										best_dict['D'] = D
 										best_dict['ACB'] = ACB
 
-
+"""
 
 
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
