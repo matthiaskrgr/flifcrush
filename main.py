@@ -247,7 +247,7 @@ try: # catch KeyboardInterrupt
 			for maniac_repeats in list(range(0, range_maniac_repeats)):
 				showActivity()
 
-				raw_command = [flif_binary, flif_to_flif,  '--maniac_repeats=', str(maniac_repeats), INFILE, interlace_flag, '/dev/stdout']
+				raw_command = [flif_binary, flif_to_flif,  '--maniac-repeats=', str(maniac_repeats), INFILE, interlace_flag, '/dev/stdout']
 				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
