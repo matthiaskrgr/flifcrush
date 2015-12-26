@@ -531,7 +531,7 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats'])', 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
@@ -698,7 +698,7 @@ try: # catch KeyboardInterrupt
 					showActivity()
 
 
-					raw_command  =  [flif_binary,flif_to_flif, acb, '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),   best_dict['A_arg'], '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   ('--maniac-repeats=' + str(maniac_repeats))), INFILE, interl, '/dev/stdout'] 
+					raw_command  =  [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(maniac_repeats)), acb, '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),   best_dict['A_arg'], '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']), INFILE, interl, '/dev/stdout'] 
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -729,7 +729,6 @@ try: # catch KeyboardInterrupt
 				INTERLACE = best_dict['INT']
 
 
-"""
 		else: # bruteforce == true
 			best_N=0
 			count = 0
@@ -784,7 +783,6 @@ try: # catch KeyboardInterrupt
 										best_dict['D'] = D
 										best_dict['ACB'] = ACB
 
-"""
 
 
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
