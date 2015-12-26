@@ -35,7 +35,7 @@ parser.add_argument("inpath", help="file or path (recursively) to be converted t
 parser.add_argument("-i", "--interlace", help="force interlacing (default: find out best)", action='store_true')
 parser.add_argument("-n", "--nointerlace", help="force interlacing off (default: find out best)", action='store_true')
 parser.add_argument("-d", "--debug", help="print output of all runs at end", action='store_true')
-parser.add_argument("-b", "--bruteforce", help="bruteforce compression values, takes AGES and might be outdated", action='store_true')
+#parser.add_argument("-b", "--bruteforce", help="bruteforce compression values, takes AGES and might be outdated", action='store_true')
 parser.add_argument("-c", "--compare", help="compare to default flif compression", action='store_true')
 args = parser.parse_args()
 
@@ -66,8 +66,8 @@ if args.nointerlace:
 	INTERLACE_FORCE=True # do we force true or false?
 	best_interl = False
 
-BRUTEFORCE = (args.bruteforce)
-
+#BRUTEFORCE = (args.bruteforce)
+BRUTEFORCE = False
 
 output_best="none"
 global arr_index
