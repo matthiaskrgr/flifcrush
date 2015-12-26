@@ -85,7 +85,7 @@ def showActivity():
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count) + " N" + str(N) + " S" + str(S) + " M" + str(M) + " D" + str(D) + " P" + str(P)  + " X" + str(X) + " Y" + str(Y) + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + " A:" + str(A) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + " maniac_repeats" + str(maniac_repeats) + " S" + str(S) + " M" + str(M) + " D" + str(D) + " P" + str(P)  + " X" + str(X) + " Y" + str(Y) + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + " A:" + str(A) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
 # save .flif file that had the best combination of parameters 
 def save_file():
@@ -113,7 +113,7 @@ def save_file():
 		global size_after_glob
 		size_after_glob += size_flif
 		print("\033[K", end="")
-		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("N:" + str(best_dict['N']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " X:" + str(best_dict['X'])  + " Y:" + str(best_dict['Y']) +  " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r")
+		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("maniac repeats:" + str(best_dict['maniac_repeats']) + " S:" + str(best_dict['S']) + " M:" + str(best_dict['M'])+ " D:" + str(best_dict['D']) + " P:" + str(best_dict['P']) + " X:" + str(best_dict['X'])  + " Y:" + str(best_dict['Y']) +  " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r")
 	else:
 		print("\033[K", end="")
 		print("WARNING: could not reduce size!")
@@ -189,7 +189,7 @@ try: # catch KeyboardInterrupt
 		size_before_glob  += size_orig
 
 		# how many attempts to try in worst case? ( check flif.cpp:400 and config.h)
-		range_N = 20   # default: 3 // try: 0-20
+		range_maniac_repeats = 20   # default: 3 // try: 0-20
 		range_S = 600 # default: 40   // max: 100000
 		range_M = 3000 # default: 30   // 0-inf
 		range_D = 268435455 # default: 50  // try  1-100
@@ -197,14 +197,14 @@ try: # catch KeyboardInterrupt
 		range_Y = 128 # default: 19  // range: 4 - 128
 
 		# if we did this many attempts without getting better results, give up
-		giveUp_N = 5
+		giveUp_maniac_repeats = 5
 		giveUp_S = 100
 		give_up_after = 200
 		size_increased_times_N = 0
 
 
 		#defaults:
-		N = 0 # avoid undecl var
+		maniac_repeats = 0 # avoid undecl var
 		S = 40 # must at least be 1
 		M = 50 # can be 0
 		D = 30 # must at least be 1
@@ -224,7 +224,7 @@ try: # catch KeyboardInterrupt
 		txt_res = '\033[0m' #reset
 
 
-		best_dict={'count': -1, 'N': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'X': 2, 'Y': 19, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, "A_arg": "",  'size': size_orig}
+		best_dict={'count': -1, 'maniac_repeats': 0, 'S': 40, 'M': 50, 'D': 30, 'P': 1024, 'X': 2, 'Y': 19, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, "A_arg": "",  'size': size_orig}
 
 
 		count = 0 # how many recompression attempts did we take?
@@ -240,14 +240,14 @@ try: # catch KeyboardInterrupt
 
 		if (DEBUG):
 			debug_array=[]
-			debug_dict = {'Nr': '', 'N':'', 'S':"", 'M':"", 'D':"", 'P': "", 'ACB': "", 'INT':"", 'size':""}
+			debug_dict = {'Nr': '', 'maniac_repeats':'', 'S':"", 'M':"", 'D':"", 'P': "", 'ACB': "", 'INT':"", 'size':""}
 
 		if (not BRUTEFORCE):
 			# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
-			for N in list(range(0, range_N)):
+			for maniac_repeats in list(range(0, range_maniac_repeats)):
 				showActivity()
 
-				raw_command = [flif_binary, flif_to_flif,  '-r', str(N), INFILE, interlace_flag, '/dev/stdout']
+				raw_command = [flif_binary, flif_to_flif,  '--maniac_repeats=', str(maniac_repeats), INFILE, interlace_flag, '/dev/stdout']
 				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -256,35 +256,35 @@ try: # catch KeyboardInterrupt
 				size_new = sys.getsizeof(output)
 
 				if (DEBUG):
-					debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+					debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 				if ((best_dict['size'] > size_new) or (count==1)): # new file is smaller // count==1: make sure best_dict is filled with first values we obtain. this way we still continue crushing even if initial N-run does not reduce size smaller than size_orig
-					size_increased_times_N = 0 # reset break-counter
+					size_increased_times_maniac_repeats = 0 # reset break-counter
 					output_best = output
 					if (size_orig > size_new):
 						perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 						perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-						print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+						print("{count}, \033[04mmaniac_repeats {maniac_repeats}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=maniac_repeats, S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best="orig" if (count == 1) else best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 					best_dict['size'] = size_new
 					best_dict['count'] = count
-					best_dict['N'] = N
+					best_dict['maniac_repeats'] = maniac_repeats
 					arr_index = 0
 				else:
-					size_increased_times_N += 1
-					if (size_increased_times_N >= giveUp_N):
+					size_increased_times_maniac_repeats += 1
+					if (size_increased_times_maniac_repeats >= giveUp_maniac_repeats):
 						break; # break out of loop, we have wasted enough time here
 
-			N = best_dict['N']
-			size_increased_times = size_increased_times_N = 0
+			maniac_repeats = best_dict['maniac_repeats']
+			size_increased_times = size_increased_times_maniac_repeats = 0
 
 			# if N== 0 / no maniac tree, skip the rest
-			if (best_dict['N'] != 0):
+			if (best_dict['maniac_repeats'] != 0):
 				for S in list(range(1, range_S, 1)):
 					if (S <= 4):  # skip S 1-4, it takes too much ram.
 						continue
 					showActivity()
 
-					raw_command = [flif_binary, flif_to_flif, '-r', str(best_dict['N']), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary, flif_to_flif, ('--maniac-repeats=' + str(best_dict['maniac_repeats'])), '-S', str(S),  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -293,13 +293,13 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':best_dict['N'], 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'manic_repeats':best_dict['maniac_repeats'], 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, \033[04mS {S}\033[0m, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, \033[04mS {S}\033[0m, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], S=S, M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['S'] = S
 						output_best = output
 						best_dict['size'] = size_new
@@ -321,7 +321,7 @@ try: # catch KeyboardInterrupt
 				while (D < range_D):
 					showActivity()
 
-					raw_command = [flif_binary, flif_to_flif, '-r', str(best_dict['N']),'-S', str(best_dict['S']), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary, flif_to_flif, ('--maniac-repeats=' + str(best_dict['maniac_repeats'])),'-S', str(best_dict['S']), '-D', str(D),  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -330,14 +330,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'S':str(best_dict['S']), 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, \033[04mD {D}\033[0m, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, \033[04mD {D}\033[0m, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), S=str(best_dict['S']), M=M, D=D, P=P, A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['D'] = D
 						output_best=output
 						best_dict['size'] = size_new
@@ -375,7 +375,7 @@ try: # catch KeyboardInterrupt
 					showActivity()
 
 
-					raw_command = [flif_binary, flif_to_flif, '-r', str(best_dict['N']),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary, flif_to_flif, ('--maniac-repeats=' + str(best_dict['maniac_repeats'])),'-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -384,14 +384,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, \033[04mM {M}\033[0m, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, \033[04mM {M}\033[0m, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['M'] = M
 						output_best=output
 						best_dict['size']=size_new
@@ -409,7 +409,7 @@ try: # catch KeyboardInterrupt
 				size_increased_times = 0
 				for X in list(range(1, range_X, 1)):
 					showActivity()
-					raw_command = [flif_binary, flif_to_flif,'-X', str(X),     '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary, flif_to_flif,'-X', str(X), ('--maniac-repeats=' + str(best_dict['maniac_repeats'])), '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -418,14 +418,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early  [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mX {X}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, X=X, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, P {P}, \033[04mX {X}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, X=X, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['X'] = X
 						output_best=output
 						best_dict['size']=size_new
@@ -442,7 +442,7 @@ try: # catch KeyboardInterrupt
 				size_increased_times = 0
 				for Y in list(range(4, range_Y, 1)):
 					showActivity()
-					raw_command = [flif_binary, flif_to_flif, '-Z', str(Y),  '-X', str(best_dict['X']),     '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary, flif_to_flif, '-Z', str(Y),  '-X', str(best_dict['X']),       ('--maniac-repeats=' + str(best_dict['maniac_repeats']))  ,'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -451,14 +451,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, X {X}, \033[04mY {Y}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, X=X, Y=Y, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, P {P}, X {X}, \033[04mY {Y}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P,  A=A, X=X, Y=Y, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['Y'] = Y
 						output_best=output
 						best_dict['size']=size_new
@@ -480,7 +480,7 @@ try: # catch KeyboardInterrupt
 				for A in '--keep-alpha-zero', "":
 					showActivity()
 
-					raw_command =  [flif_binary,flif_to_flif,'-r', str(best_dict['N']), '-Z', str(best_dict['Y']), '-X', str(best_dict['X']), '-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']), A,  INFILE, interlace_flag, '/dev/stdout']
+					raw_command =  [flif_binary,flif_to_flif,   ('--maniac-repeats=' + str(best_dict['maniac_repeats']))   , '-Z', str(best_dict['Y']), '-X', str(best_dict['X']), '-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']), A,  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -489,14 +489,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'S':str(best_dict['S']), 'M':M, 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, \033[04mA={A}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, A=str(True if (A == "--keep-alpha-zero") else False), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, \033[04mA={A}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), S=str(best_dict['S']), M=M, D=str(best_dict['D']), P=P, INT=INTERLACE, RGB=RGB, PLC=PLC, A=str(True if (A == "--keep-alpha-zero") else False), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['A'] = (A == "--keep-alpha-zero") # boolean
 						best_dict['A_arg'] = "--keep-alpha-zero" if (A) else "" # tring
 						output_best=output
@@ -522,7 +522,7 @@ try: # catch KeyboardInterrupt
 					if ((P < 0) or (P > 30000)) : # in case inf['colors']  is >5
 						continue
 
-					raw_command = [flif_binary,flif_to_flif,'-r', str(best_dict['N']), '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']), '-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(best_dict['maniac_repeats'])) , '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']), '-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -531,14 +531,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats'])', 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -550,11 +550,11 @@ try: # catch KeyboardInterrupt
 				P = best_dict['P']
 
 				# don't remove this, it still pays out here and there
-				size_increased_times_N = 0 # reset since first run
-				for N in list(range(0, range_N)):
+				size_increased_times_maniac_repeats = 0 # reset since first run
+				for maniac_repeats in list(range(0, range_maniac_repeats)):
 					showActivity()
 
-					raw_command =  [flif_binary,flif_to_flif,  '-r', str(N),  '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),  '-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(best_dict['P']),  best_dict['A_arg'] ,  INFILE, interlace_flag, '/dev/stdout'] 
+					raw_command =  [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(maniac_repeats)),  '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),  '-M', str(M), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(best_dict['P']),  best_dict['A_arg'] ,  INFILE, interlace_flag, '/dev/stdout'] 
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -563,7 +563,7 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(N), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':str(best_dict['P']), 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(maniac_repeats), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':str(best_dict['P']), 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is smaller
@@ -572,16 +572,16 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, \033[04mN {N}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, \033[04mmaniac_repeats {maniac_repeats}\033[0m, S {S}, M {M}, D {D}, P {P}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=maniac_repeats, S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['count'] = count
 						best_dict['size'] = size_new
-						best_dict['N'] = N
+						best_dict['manic_repeats'] = maniac_repeats
 						arr_index = 0
 					else:
 						size_increased_times_N += 1
 						if (size_increased_times_N >= best_dict['N'] + 4):
 							break; # break out of loop, we have wasted enough time here
-				N = best_dict['N']
+				manic_repeats = best_dict['maniac_repeats']
 			else: #   (best_dict['N'] == 0),  still try P
 				size_increased_times = 0
 
@@ -592,7 +592,7 @@ try: # catch KeyboardInterrupt
 						continue
 
 
-					raw_command =  [flif_binary,flif_to_flif,'-r', str(best_dict['N']),  '-X', str(best_dict['X']), '-M',  str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+					raw_command =  [flif_binary,flif_to_flif, ('--maniac-repeats=' + str(maniac_repeats))  ,  '-X', str(best_dict['X']), '-M',  str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -602,14 +602,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':str(best_dict['N']), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'S':str(best_dict['S']), 'M':str(best_dict['M']), 'D':str(best_dict['D']), 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {manic_repeats}, S {S}, M {M}, D {D}, \033[04mP {P}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=str(best_dict['N']), S=str(best_dict['S']), M=str(best_dict['M']), D=str(best_dict['D']), P=P, A=best_dict['A'], INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -628,7 +628,7 @@ try: # catch KeyboardInterrupt
 			for acb in "--acb", "--no-acb":
 				showActivity()
 
-				raw_command = [flif_binary,flif_to_flif, acb,  '-r',  str(best_dict['N']), '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']),    '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+				raw_command = [flif_binary,flif_to_flif, acb,  ('--maniac-repeats=' + str(maniac_repeats)), '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']),    '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P),  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -640,7 +640,7 @@ try: # catch KeyboardInterrupt
 
 
 				if (DEBUG):
-					debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+					debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 				if (best_dict['size'] >= size_new): # new file is smaller
@@ -650,7 +650,7 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, ACB=str(ACB), RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, P {P}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], INT=INTERLACE, ACB=str(ACB), RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 					best_dict['count'] = count
 					best_dict['size'] = size_new
 					arr_index = 0
@@ -668,7 +668,7 @@ try: # catch KeyboardInterrupt
 					RGB = ("--rgb" == rgb_option)
 
 
-					raw_command  = [flif_binary,flif_to_flif, acb, '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']),  '-r', str(best_dict['N']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), plc_option, rgb_option,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+					raw_command  = [flif_binary,flif_to_flif, acb, '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']),  ('--maniac-repeats=' + str(maniac_repeats)), '-Z', str(best_dict['Y']),'-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']),'-p', str(P), plc_option, rgb_option,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -677,12 +677,12 @@ try: # catch KeyboardInterrupt
 					output = proc.stdout.read()
 					size_new = sys.getsizeof(output)
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 					if (best_dict['size'] > size_new): # new file is smaller
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERLACE, RGB=str(RGB), PLC=str(PLC), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						size_increased_times_N = 0 # reset break-counter
 						output_best = output
 						best_dict['count'] = count
@@ -698,7 +698,7 @@ try: # catch KeyboardInterrupt
 					showActivity()
 
 
-					raw_command  =  [flif_binary,flif_to_flif, acb, '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),   best_dict['A_arg'], '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   '-r', str(best_dict['N']), INFILE, interl, '/dev/stdout'] 
+					raw_command  =  [flif_binary,flif_to_flif, acb, '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),   best_dict['A_arg'], '-M', str(best_dict['M']), '-S', str(best_dict['S']), '-D', str(best_dict['D']), '-p', str(best_dict['P']),   ('--maniac-repeats=' + str(maniac_repeats))), INFILE, interl, '/dev/stdout'] 
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -710,7 +710,7 @@ try: # catch KeyboardInterrupt
 					INTERL = (interl == "--interlace")
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'N':N, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'S':S, 'M':M, 'D':D, 'P':P, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is smaller
@@ -720,7 +720,7 @@ try: # catch KeyboardInterrupt
 							if (size_orig > size_new):
 								perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 								perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-								print("{count}, N {N}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, N=best_dict['N'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERL, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+								print("{count}, maniac_repeats {maniac_repeats}, S {S}, M {M}, D {D}, P {P}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['manic_repeats'], S=best_dict['S'], M=best_dict['M'], D=best_dict['D'], P=best_dict['P'], A=best_dict['A'], ACB=str(ACB), INT=INTERL, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['count'] = count
 						best_dict['size'] = size_new
 						best_dict['INT'] = INTERL
@@ -801,7 +801,7 @@ try: # catch KeyboardInterrupt
 
 		if (DEBUG):
 			for index, val in enumerate(debug_array):
-				print("run:", val[0]['Nr'], "  N:", val[0]['N'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  P:", val[0]['P'], "ACB", val[0]['ACB'],"INT", val[0]['INT'], "  size:", val[0]['size'] )
+				print("run:", val[0]['Nr'], "  maniac_repeats:", val[0]['maniac_repeats'],"  S:",  val[0]['S'],"   M:",  val[0]['M'],"  D:", val[0]['D'],"  P:", val[0]['P'], "ACB", val[0]['ACB'],"INT", val[0]['INT'], "  size:", val[0]['size'] )
 	if (files_count_glob > 1):
 		if (COMPARE):
 			print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
