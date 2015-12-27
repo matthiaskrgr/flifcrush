@@ -42,7 +42,7 @@ args = parser.parse_args()
 
 COMPARE = (args.compare)
 DEBUG = (args.debug)
-INPATHS=args.inpath
+INPATHS = args.inpath
 
 interlace_flag="--no-interlace" # default: false
 INTERLACE=False
@@ -346,7 +346,7 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'manic_repeats':best_dict['maniac_repeats'], 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':best_dict['maniac_repeats'], 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
@@ -368,10 +368,10 @@ try: # catch KeyboardInterrupt
 				# we can't change step after entering the loop because list(range(1, var)) is precalculated
 				# use different loop type
 
-				manic_divisor = 1
-				manic_divisor_step = 1
-				manic_divisor_step_upped = 0 # if True; manic_divisor_step == 10
-				while (manic_divisor < range_manic_divisor):
+				maniac_divisor = 1
+				maniac_divisor_step = 1
+				maniac_divisor_step_upped = 0 # if True; maniac_divisor_step == 10
+				while (maniac_divisor < range_maniac_divisor):
 					showActivity()
 
 					raw_command = [flif_binary, flif_to_flif, ('--maniac-repeats=' + str(best_dict['maniac_repeats'])),   ('--maniac-threshold=' + str(best_dict['maniac_threshold'])),   ('--maniac-divisor=' + str(maniac_divisor)),  INFILE, interlace_flag, '/dev/stdout']
@@ -391,7 +391,7 @@ try: # catch KeyboardInterrupt
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
 							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, \033[04mmaniac_divisor {maniac_divisor}\033[0m, max_palette_size: {max_palette_size}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=maniac_divisor, max_palette_size=max_palette_size, A="", INT="", RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						best_dict['manic_divisor'] = manic_divisor
+						best_dict['maniac_divisor'] = maniac_divisor
 						output_best=output
 						best_dict['size'] = size_new
 						best_dict['count'] = count
@@ -399,28 +399,28 @@ try: # catch KeyboardInterrupt
 						arr_index = 0
 					else:
 						size_increased_times += 1
-						if ((manic_divisor >= 100) and (manic_divisor_step_upped == 0)): # increase the loop stepping to speed things up
-							manic_divisor_step = 10
-							manic_divisor_step_upped = 1
-						if ((manic_divisor >= 1000) and (manic_divisor_step_upped == 1)):
-							manic_divisor_step = 100
-							manic_divisor_step_upped = 2
-						if ((manic_divisor >= 5000) and (manic_divisor_step_upped == 2)):
-							manic_divisor_step = 1000
-							manic_divisor_step_upped = 3
-						if ((manic_divisor >= 13000) and (manic_divisor_step_upped == 3)):
-							manic_divisor_step = 10000
-							manic_divisor_step_upped = 4
+						if ((maniac_divisor >= 100) and (maniac_divisor_step_upped == 0)): # increase the loop stepping to speed things up
+							maniac_divisor_step = 10
+							maniac_divisor_step_upped = 1
+						if ((maniac_divisor >= 1000) and (maniac_divisor_step_upped == 1)):
+							maniac_divisor_step = 100
+							maniac_divisor_step_upped = 2
+						if ((maniac_divisor >= 5000) and (maniac_divisor_step_upped == 2)):
+							maniac_divisor_step = 1000
+							maniac_divisor_step_upped = 3
+						if ((maniac_divisor >= 13000) and (maniac_divisor_step_upped == 3)):
+							maniac_divisor_step = 10000
+							maniac_divisor_step_upped = 4
 						if (size_increased_times >= give_up_after):
-							if (manic_divisor < 268435453): # try max manic_divisor
-								manic_divisor = 268435454
+							if (maniac_divisor < 268435453): # try max maniac_divisor
+								maniac_divisor = 268435454
 								continue
 							break;
 
-					if (manic_divisor >= range_manic_divisor):
+					if (maniac_divisor >= range_maniac_divisor):
 						break
-					manic_divisor += manic_divisor_step
-				manic_divisor = best_dict['maniac_divisor']
+					maniac_divisor += maniac_divisor_step
+				maniac_divisor = best_dict['maniac_divisor']
 
 
 				size_increased_times = 0
@@ -444,8 +444,8 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, \033[04mmanic_min_size {manic_min_size}\033[0m, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=str(best_dict['manic_divisor']), max_palette_size=max_palette_size,  A="", INT="", RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						best_dict['manic_min_size'] = manic_min_size
+							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, \033[04mmaniac_min_size {maniac_min_size}\033[0m, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size,  A="", INT="", RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+						best_dict['maniac_min_size'] = maniac_min_size
 						output_best=output
 						best_dict['size'] = size_new
 						best_dict['count'] = count
@@ -584,14 +584,14 @@ try: # catch KeyboardInterrupt
 					size_new = sys.getsizeof(output)
 
 					if (DEBUG):
-						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['manic_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
 					if (best_dict['size'] > size_new): # new file is better
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, \033[04mmax_palette_size {max_palette_size}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), manic_min_size=str(best_dict['manic_min_size']), maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size, A=best_dict['A'], INT=INTERLACE, RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, \033[04mmax_palette_size {max_palette_size}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=str(best_dict['maniac_min_size']), maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size, A=best_dict['A'], INT=INTERLACE, RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -628,13 +628,13 @@ try: # catch KeyboardInterrupt
 							print("{count}, \033[04mmaniac_repeats {maniac_repeats}\033[0m, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=maniac_repeats, maniac_threshold=best_dict['maniac_threshold'], maniac_min_size=best_dict['maniac_min_size'], maniac_divisor=best_dict['maniac_divisor'], max_palette_size=best_dict['max_palette_size'], A=best_dict['A'], INT=INTERLACE, RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['count'] = count
 						best_dict['size'] = size_new
-						best_dict['manic_repeats'] = maniac_repeats
+						best_dict['maniac_repeats'] = maniac_repeats
 						arr_index = 0
 					else:
 						size_increased_times_maniac_repeats += 1
 						if (size_increased_times_maniac_repeats >= best_dict['maniac_repeats'] + 4):
 							break; # break out of loop, we have wasted enough time here
-				manic_repeats = best_dict['maniac_repeats']
+				maniac_repeats = best_dict['maniac_repeats']
 			else: #   (best_dict['maniac_repeats'] == 0),  still try P
 				size_increased_times = 0
 
@@ -662,7 +662,7 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {manic_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, \033[04mmax_palette_size {max_palette_size}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), manic_min_size=str(best_dict['maniac_min_size']), maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size, A=best_dict['A'], INT=INTERLACE, RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, \033[04mmax_palette_size {max_palette_size}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=str(best_dict['maniac_min_size']), maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size, A=best_dict['A'], INT=INTERLACE, RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -773,7 +773,7 @@ try: # catch KeyboardInterrupt
 							if (size_orig > size_new):
 								perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 								perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-								print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['manic_repeats'], maniac_threshold=best_dict['maniac_threshold'], umaniac_min_size=best_dict['maniac_min_size'], maniac_divisor=best_dict['maniac_divisor'], max_palette_size=best_dict['max_palette_size'], A=best_dict['A'], ACB="", INT="", RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+								print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], maniac_threshold=best_dict['maniac_threshold'], umaniac_min_size=best_dict['maniac_min_size'], maniac_divisor=best_dict['maniac_divisor'], max_palette_size=best_dict['max_palette_size'], A=best_dict['A'], ACB="", INT="", RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
 						best_dict['count'] = count
 						best_dict['size'] = size_new
 						best_dict['INT'] = INTERL
