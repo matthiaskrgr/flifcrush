@@ -85,7 +85,7 @@ def showActivity():
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count) + " maniac_repeats" + str(maniac_repeats) + " maniac_threshold" + str(maniac_threshold) + " maniac_min_size" + str(maniac_min_size) + " maniac_divisor" + str(maniac_divisor) + " max_palette_size" + str(max_palette_size)  + " X" + str(X) + " Y" + str(Y) + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + " A:" + str(A) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + " maniac_repeats" + str(maniac_repeats) + " maniac_threshold" + str(maniac_threshold) + " maniac_min_size" + str(maniac_min_size) + " maniac_divisor" + str(maniac_divisor) + " max_palette_size" + str(max_palette_size)  + " chance-cutoff" + str(chance_cutoff) + " chance-alpha" + str(chance_alpha) + " ACB:" + str(ACB) + " interlace:" + str(INTERLACE) + " PLC:" + str(PLC) + " RGB:" + str(RGB) + " A:" + str(A) + ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
 # save .flif file that had the best combination of parameters 
 def save_file():
@@ -113,7 +113,7 @@ def save_file():
 		global size_after_glob
 		size_after_glob += size_flif
 		print("\033[K", end="")
-		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("maniac repeats:" + str(best_dict['maniac_repeats']) + " maniac_threshold:" + str(best_dict['maniac_threshold']) + " maniac_min_size:" + str(best_dict['maniac_min_size'])+ " maniac_divisor:" + str(best_dict['maniac_divisor']) + " max_palette_size:" + str(best_dict['max_palette_size']) + " X:" + str(best_dict['X'])  + " Y:" + str(best_dict['Y']) +  " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r")
+		print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("maniac repeats:" + str(best_dict['maniac_repeats']) + " maniac_threshold:" + str(best_dict['maniac_threshold']) + " maniac_min_size:" + str(best_dict['maniac_min_size'])+ " maniac_divisor:" + str(best_dict['maniac_divisor']) + " max_palette_size:" + str(best_dict['max_palette_size']) + " chance-cutoff:" + str(best_dict['chance_cutoff'])  + " chance-alpha:" + str(best_dict['chance_alpha']) +  " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r")
 	else:
 		print("\033[K", end="")
 		print("WARNING: could not reduce size!")
@@ -193,8 +193,8 @@ try: # catch KeyboardInterrupt
 		range_maniac_threshold = 600 # default: 40   // max: 100000
 		range_maniac_min_size = 3000 # default: 30   // 0-inf
 		range_maniac_divisor = 268435455 # default: 50  // try  1-100
-		range_X = 128 # default: 2 //  range: 1 - 128  
-		range_Y = 128 # default: 19  // range: 4 - 128
+		range_chance_cutoff = 128 # default: 2 //  range: 1 - 128  
+		range_chance_alpha = 128 # default: 19  // range: 4 - 128
 
 		# if we did this many attempts without getting better results, give up
 		giveUp_maniac_repeats = 5
@@ -209,8 +209,8 @@ try: # catch KeyboardInterrupt
 		maniac_min_size = 50 # can be 0
 		maniac_divisor = 30 # must at least be 1
 		max_palette_size = 1024
-		X = 2 # must at least be 1
-		Y = 19 # must at least be 4, is float
+		chance_cutoff = 2 # must at least be 1
+		chance_alpha = 19 # must at least be 4, is float
 		ACB=False
 		PLC=True
 		RGB=False
@@ -224,7 +224,7 @@ try: # catch KeyboardInterrupt
 		txt_res = '\033[0m' #reset
 
 
-		best_dict={'count': -1, 'maniac_repeats': 0, 'maniac_threshold': 40, 'maniac_min_size': 50, 'maniac_divisor': 30, 'max_palette_size': 1024, 'X': 2, 'Y': 19, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, "A_arg": "",  'size': size_orig}
+		best_dict={'count': -1, 'maniac_repeats': 0, 'maniac_threshold': 40, 'maniac_min_size': 50, 'maniac_divisor': 30, 'max_palette_size': 1024, 'chance_cutoff': 2, 'chance_alpha': 19, 'ACB': False, 'INT': False, 'PLC': True, 'RGB':False, 'A': False, "A_arg": "",  'size': size_orig}
 
 
 		count = 0 # how many recompression attempts did we take?
@@ -407,9 +407,9 @@ try: # catch KeyboardInterrupt
 
 
 				size_increased_times = 0
-				for X in list(range(1, range_X, 1)):
+				for chance_cutoff in list(range(1, range_chance_cutoff, 1)):
 					showActivity()
-					raw_command = [flif_binary, flif_to_flif,'-X', str(X), ('--maniac-repeats=' + str(best_dict['maniac_repeats'])), ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])),  ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary, flif_to_flif,  ('--chance-cutoff=' + str(chance_cutoff)), ('--maniac-repeats=' + str(best_dict['maniac_repeats'])), ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])),  ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -425,8 +425,8 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early  [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, \033[04mX {X}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size,  A=A, X=X, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						best_dict['X'] = X
+							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, \033[04mchance_cutoff {chance_cutoff}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size,  A=A, chance_cutoff=chance_cutoff, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+						best_dict['chance_cutoff'] = chance_cutoff
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -436,13 +436,13 @@ try: # catch KeyboardInterrupt
 						size_increased_times += 1
 						if (size_increased_times >= give_up_after):
 							break;
-				X = best_dict['X']
+				chance_cutoff = best_dict['chance_cutoff']
 
 
 				size_increased_times = 0
-				for Y in list(range(4, range_Y, 1)):
+				for chance_alpha in list(range(4, range_chance_alpha, 1)):
 					showActivity()
-					raw_command = [flif_binary, flif_to_flif, '-Z', str(Y),  '-X', str(best_dict['X']),       ('--maniac-repeats=' + str(best_dict['maniac_repeats'])), ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary, flif_to_flif, ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(chance_alpha)),         ('--maniac-repeats=' + str(best_dict['maniac_repeats'])), ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -458,8 +458,8 @@ try: # catch KeyboardInterrupt
 						if (size_orig > size_new):
 							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
 							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, X {X}, \033[04mY {Y}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size,  A=A, X=X, Y=Y, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						best_dict['Y'] = Y
+							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, chance_cutoff {chance_cutoff}, \033[04mchance_alpha {chance_alpha}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size,  A=A, chance_cutoff=chance_cutoff, chance_alpha=chance_alpha, INT=INTERLACE, RGB=RGB, PLC=PLC, size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
+						best_dict['chance_alpha'] = chance_alpha
 						output_best=output
 						best_dict['size']=size_new
 						best_dict['count'] = count
@@ -469,7 +469,7 @@ try: # catch KeyboardInterrupt
 						size_increased_times += 1
 						if (size_increased_times >= give_up_after):
 							break;
-				Y = best_dict['Y']
+				chance_alpha = best_dict['chance_alpha']
 
 
 
@@ -480,7 +480,7 @@ try: # catch KeyboardInterrupt
 				for A in '--keep-alpha-zero', "":
 					showActivity()
 
-					raw_command =  [flif_binary,flif_to_flif,   ('--maniac-repeats=' + str(best_dict['maniac_repeats']))   , '-Z', str(best_dict['Y']), '-X', str(best_dict['X']), ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])), A,  INFILE, interlace_flag, '/dev/stdout']
+					raw_command =  [flif_binary,flif_to_flif,   ('--maniac-repeats=' + str(best_dict['maniac_repeats'])),    ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha']))   , ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])), A,  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -522,7 +522,7 @@ try: # catch KeyboardInterrupt
 					if ((max_palette_size < 0) or (max_palette_size > 30000)) : # in case inf['colors']  is >5
 						continue
 
-					raw_command = [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(best_dict['maniac_repeats'])) , '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']), ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),('--max-palette-size=' + str(max_palette_size)), best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+					raw_command = [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(best_dict['maniac_repeats'])) ,('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])), ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),('--max-palette-size=' + str(max_palette_size)), best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -554,7 +554,7 @@ try: # catch KeyboardInterrupt
 				for maniac_repeats in list(range(0, range_maniac_repeats)):
 					showActivity()
 
-					raw_command =  [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(maniac_repeats)),  '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),   ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),('--max-palette-size=' + str(best_dict['max_palette_size'])),  best_dict['A_arg'] ,  INFILE, interlace_flag, '/dev/stdout'] 
+					raw_command =  [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(maniac_repeats)),  ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),   ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),('--max-palette-size=' + str(best_dict['max_palette_size'])),  best_dict['A_arg'] ,  INFILE, interlace_flag, '/dev/stdout'] 
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -592,7 +592,7 @@ try: # catch KeyboardInterrupt
 						continue
 
 
-					raw_command =  [flif_binary,flif_to_flif, ('--maniac-repeats=' + str(maniac_repeats))  ,  '-X', str(best_dict['X']),  ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),    ('--max-palette-size=' + str(max_palette_size))   ,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+					raw_command =  [flif_binary,flif_to_flif, ('--maniac-repeats=' + str(maniac_repeats))  , ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),  ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),    ('--max-palette-size=' + str(max_palette_size))   ,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -628,7 +628,7 @@ try: # catch KeyboardInterrupt
 			for acb in "--acb", "--no-acb":
 				showActivity()
 
-				raw_command = [flif_binary,flif_to_flif, acb,  ('--maniac-repeats=' + str(maniac_repeats)), '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']),     ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),  ('--max-palette-size=' + str(max_palette_size)) ,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+				raw_command = [flif_binary,flif_to_flif, acb,  ('--maniac-repeats=' + str(maniac_repeats)),('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),     ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),  ('--max-palette-size=' + str(max_palette_size)) ,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -668,7 +668,7 @@ try: # catch KeyboardInterrupt
 					RGB = ("--rgb" == rgb_option)
 
 
-					raw_command  = [flif_binary,flif_to_flif, acb, '-Z', str(best_dict['Y']),  '-X', str(best_dict['X']),  ('--maniac-repeats=' + str(maniac_repeats)), '-Z', str(best_dict['Y']),  ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),('--max-palette-size=' + str(max_palette_size)), plc_option, rgb_option,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
+					raw_command  = [flif_binary,flif_to_flif, acb, ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),  ('--maniac-repeats=' + str(maniac_repeats)),   ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),('--max-palette-size=' + str(max_palette_size)), plc_option, rgb_option,  best_dict['A_arg'],  INFILE, interlace_flag, '/dev/stdout']
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
@@ -698,7 +698,7 @@ try: # catch KeyboardInterrupt
 					showActivity()
 
 
-					raw_command  =  [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(maniac_repeats)), acb, '-Z', str(best_dict['Y']), '-X', str(best_dict['X']),   best_dict['A_arg'],  ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])), '-p', ('--max-palette-size=' + str(best_dict['max_palette_size'])), INFILE, interl, '/dev/stdout'] 
+					raw_command  =  [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(maniac_repeats)), acb, ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),   best_dict['A_arg'],  ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])), '-p', ('--max-palette-size=' + str(best_dict['max_palette_size'])), INFILE, interl, '/dev/stdout'] 
 					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
 
