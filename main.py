@@ -784,6 +784,416 @@ def crush_max_palette_size():
 
 
 
+def crush_keep_invisible_rgb():
+	# globals
+	global best_dict
+	global count
+	global arr_index
+
+	for keep_invisible_rgb in True, False:
+		showActivity()
+		count +=1
+
+		flagstr = ("--keep-invisible-rgb" if (keep_invisible_rgb) else "")
+
+		raw_command = [
+			flif_binary,
+			flif_to_flif,
+
+			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
+			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
+
+			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
+			('--chance-alpha=' + str(best_dict['chance_alpha'])),
+			('--max-palette-size=' + str(best_dict['max_palette_size'])),
+
+			best_dict['interlace'].flag,
+			best_dict['no_channel_compact'].flag,
+			best_dict['force_color_buckets'].flag,
+			best_dict['no_ycocg'].flag,
+			flagstr,
+
+			INFILE,
+			interlace_flag,
+			'/dev/stdout',
+		] # = raw_command 
+
+		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
+		size_new = sys.getsizeof(output)
+
+
+		#if (DEBUG):
+		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+		if (best_dict['size'] > size_new): # new file is smaller 
+			output_best = output
+			size_change = best_dict['size']-size_new
+			perc_change = pct_of_best(size_new)
+
+			best_dict['keep_invisible_rgb'] = best_dict['keep_invisible_rgb']._replace(flag=flagstr)
+			best_dict['keep_invisible_rgb'] = best_dict['keep_invisible_rgb']._replace(bool=keep_invisible_rgb)
+
+			print("\033[K", end="")
+			print(
+				 str(count) +
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " min_size: " + str(best_dict['maniac_min_size'])  + 
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+				 " palette: " + str(best_dict['max_palette_size']) + 
+
+				 " itlc: " + str(best_dict['interlace'].bool) +
+				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
+				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
+				 " " +  TXT_UL + "inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) + TXT_RES + #    < ------
+
+				 " size " + str(size_new) + " b " +
+				 "-" + str(size_change) + " b " +
+				 perc_change + " %")
+
+			best_dict['size'] = size_new
+			best_dict['count'] = count
+			arr_index = 0
+
+
+
+
+
+
+
+
+
+
+
+def crush_force_color_buckets():
+	# globals
+	global best_dict
+	global count
+	global arr_index
+
+	for force_color_buckets in True, False:
+		showActivity()
+		count +=1
+
+		flagstr = ("--force-color-buckets" if (force_color_buckets) else "--no-color-buckets")
+
+		raw_command = [
+			flif_binary,
+			flif_to_flif,
+
+			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
+			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
+
+			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
+			('--chance-alpha=' + str(best_dict['chance_alpha'])),
+			('--max-palette-size=' + str(best_dict['max_palette_size'])),
+
+			best_dict['interlace'].flag,
+			best_dict['no_channel_compact'].flag,
+			best_dict['force_color_buckets'].flag,
+			flagstr,
+			best_dict['keep_invisible_rgb'].flag,
+
+			INFILE,
+			interlace_flag,
+			'/dev/stdout',
+		] # = raw_command 
+
+		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
+		size_new = sys.getsizeof(output)
+
+
+		#if (DEBUG):
+		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+		if (best_dict['size'] > size_new): # new file is smaller 
+			output_best = output
+			size_change = best_dict['size']-size_new
+			perc_change = pct_of_best(size_new)
+
+			best_dict['no_ycocg'] = best_dict['no_ycocg']._replace(flag=flagstr)
+			best_dict['no_ycocg'] = best_dict['no_ycocg']._replace(bool=keep_invisible_rgb)
+
+			print("\033[K", end="")
+			print(
+				 str(count) +
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " min_size: " + str(best_dict['maniac_min_size'])  + 
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+				 " palette: " + str(best_dict['max_palette_size']) + 
+
+				 " itlc: " + str(best_dict['interlace'].bool) +
+				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " " +  TXT_UL + " Cbuck: " + str(best_dict['force_color_buckets'].bool) + TXT_RES + # <-
+				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
+				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+
+				 " size " + str(size_new) + " b " +
+				 "-" + str(size_change) + " b " +
+				 perc_change + " %")
+
+			best_dict['size'] = size_new
+			best_dict['count'] = count
+			arr_index = 0
+
+
+
+def crush_no_ycocg():
+	# globals
+	global best_dict
+	global count
+	global arr_index
+
+	for force_no_ycocg in True, False:
+		showActivity()
+		count +=1
+
+		flagstr = ("--no-ycocg" if (force_no_ycocg) else "")
+
+		raw_command = [
+			flif_binary,
+			flif_to_flif,
+
+			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
+			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
+
+			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
+			('--chance-alpha=' + str(best_dict['chance_alpha'])),
+			('--max-palette-size=' + str(best_dict['max_palette_size'])),
+
+			best_dict['interlace'].flag,
+			best_dict['no_channel_compact'].flag,
+			best_dict['force_color_buckets'].flag,
+			flagstr,
+			best_dict['keep_invisible_rgb'].flag,
+
+			INFILE,
+			interlace_flag,
+			'/dev/stdout',
+		] # = raw_command 
+
+		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
+		size_new = sys.getsizeof(output)
+
+
+		#if (DEBUG):
+		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+		if (best_dict['size'] > size_new): # new file is smaller 
+			output_best = output
+			size_change = best_dict['size']-size_new
+			perc_change = pct_of_best(size_new)
+
+			best_dict['no_ycocg'] = best_dict['no_ycocg']._replace(flag=flagstr)
+			best_dict['no_ycocg'] = best_dict['no_ycocg']._replace(bool=force_no_ycocg)
+
+			print("\033[K", end="")
+			print(
+				 str(count) +
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " min_size: " + str(best_dict['maniac_min_size'])  + 
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+				 " palette: " + str(best_dict['max_palette_size']) + 
+
+				 " itlc: " + str(best_dict['interlace'].bool) +
+				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + # <-
+				 " " +  TXT_UL + " no_ycocg: " + str(best_dict['no_ycocg'].bool) + TXT_RES + # <-
+				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+
+				 " size " + str(size_new) + " b " +
+				 "-" + str(size_change) + " b " +
+				 perc_change + " %")
+
+			best_dict['size'] = size_new
+			best_dict['count'] = count
+			arr_index = 0
+
+def crush_no_channel_compact():
+	# globals
+	global best_dict
+	global count
+	global arr_index
+
+	for no_channel_compact in True, False:
+		showActivity()
+		count +=1
+
+		flagstr = ("--no-channel-compact" if (no_channel_compact) else "")
+
+		raw_command = [
+			flif_binary,
+			flif_to_flif,
+
+			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
+			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
+
+			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
+			('--chance-alpha=' + str(best_dict['chance_alpha'])),
+			('--max-palette-size=' + str(best_dict['max_palette_size'])),
+
+
+			best_dict['interlace'].flag,
+			flagstr,
+			best_dict['force_color_buckets'].flag,
+			best_dict['no_ycocg'].flag,
+			best_dict['keep_invisible_rgb'].flag,
+
+			INFILE,
+			interlace_flag,
+			'/dev/stdout',
+		] # = raw_command 
+
+		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
+		size_new = sys.getsizeof(output)
+
+
+		#if (DEBUG):
+		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+		if (best_dict['size'] > size_new): # new file is smaller 
+			output_best = output
+			size_change = best_dict['size']-size_new
+			perc_change = pct_of_best(size_new)
+
+			best_dict['no_compact_channel'] = best_dict['no_compact_channel']._replace(flag=flagstr)
+			best_dict['no_compact_channel'] = best_dict['no_compact_channel']._replace(bool=no_channel_compact)
+
+			print("\033[K", end="")
+			print(
+				 str(count) +
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " min_size: " + str(best_dict['maniac_min_size'])  + 
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+				 " palette: " + str(best_dict['max_palette_size']) + 
+
+				 " itlc: " + str(best_dict['interlace'].bool) +
+				 " " +  TXT_UL + " no_CC: " + str(best_dict['no_channel_compact'].bool) + TXT_RES +  # <- 
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + 
+				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
+				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+
+				 " size " + str(size_new) + " b " +
+				 "-" + str(size_change) + " b " +
+				 perc_change + " %")
+
+			best_dict['size'] = size_new
+			best_dict['count'] = count
+			arr_index = 0
+
+
+
+
+def crush_interlace():
+	# globals
+	global best_dict
+	global count
+	global arr_index
+
+	for interlace in True, False:
+		showActivity()
+		count +=1
+
+		flagstr = ("--interlace" if (interlace) else "--no-interlace")
+
+		raw_command = [
+			flif_binary,
+			flif_to_flif,
+
+			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
+			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
+
+			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
+			('--chance-alpha=' + str(best_dict['chance_alpha'])),
+			('--max-palette-size=' + str(best_dict['max_palette_size'])),
+
+			flagstr,
+			best_dict['no_channel_compact'].flag,
+			best_dict['force_color_buckets'].flag,
+			best_dict['no_ycocg'].flag,
+			best_dict['keep_invisible_rgb'].flag,
+
+
+
+
+
+			INFILE,
+			interlace_flag,
+			'/dev/stdout',
+		] # = raw_command 
+
+		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
+		size_new = sys.getsizeof(output)
+
+
+		#if (DEBUG):
+		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+		if (best_dict['size'] > size_new): # new file is smaller 
+			output_best = output
+			size_change = best_dict['size']-size_new
+			perc_change = pct_of_best(size_new)
+
+			best_dict['interlace'] = best_dict['interlace']._replace(flag=flagstr)
+			best_dict['interlace'] = best_dict['interlace']._replace(bool=interlace)
+
+			print("\033[K", end="")
+			print(
+				 str(count) +
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " min_size: " + str(best_dict['maniac_min_size'])  + 
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+				 " palette: " + str(best_dict['max_palette_size']) + 
+
+				" " +  TXT_UL + " itlc: " + str(best_dict['interlace'].bool) + TXT_RES  + # <<---
+				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + 
+				 + " no_ycocg: " + str(best_dict['no_ycocg'].bool) +  
+				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+
+				 " size " + str(size_new) + " b " +
+				 "-" + str(size_change) + " b " +
+				 perc_change + " %")
+
+			best_dict['size'] = size_new
+			best_dict['count'] = count
+			arr_index = 0
+
 
 
 
@@ -965,173 +1375,12 @@ try: # catch KeyboardInterrupt
 			crush_chance_cutoff()
 			crush_chance_alpha()
 			crush_max_palette_size()
-
+			crush_keep_invisible_rgb()
+			crush_force_color_buckets()
+			crush_no_ycocg()
+			crush_no_channel_compact()
+			crush_interlace()
 			print("left functions")
-
-
-
-				# we can't change step after entering the loop because list(range(1, var)) is precalculated
-				# use different loop type
-			if (True): #delete this
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				size_increased_times = 0
-				for A in '--keep-alpha-zero', "":
-					showActivity()
-
-					raw_command =  [flif_binary,flif_to_flif,   ('--maniac-repeats=' + str(best_dict['maniac_repeats'])),    ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha']))   , ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])), A,  INFILE, interlace_flag, '/dev/stdout']
-					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
-					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
-
-					count +=1
-					output = proc.stdout.read()
-					size_new = sys.getsizeof(output)
-
-					if (DEBUG):
-						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
-
-
-					if (best_dict['size'] > size_new): # new file is better
-						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
-							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, \033[04mA={A}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=maniac_min_size, maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size, INT="", RGB="", PLC="", A=str(True if (A == "--keep-alpha-zero") else False), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						best_dict['A'] = (A == "--keep-alpha-zero") # boolean
-						#best_dict['A_arg'] = "--keep-alpha-zero" if (A) else "" # tring
-						output_best=output
-						best_dict['size']=size_new
-						best_dict['count'] = count
-						size_increased_times = 0
-						arr_index = 0
-					else:
-						size_increased_times += 1
-						if (size_increased_times >= give_up_after):
-							break;
-				A = best_dict['A']
-
-
-
-
-
-			# auto color buckets:
-
-			best_ACB="Auto"
-			for acb in "--acb", "--no-acb":
-				showActivity()
-
-				raw_command = [flif_binary,flif_to_flif, acb,  ('--maniac-repeats=' + str(maniac_repeats)),('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),     ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),  ('--max-palette-size=' + str(max_palette_size)) ,  INFILE, interlace_flag, '/dev/stdout']
-				sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
-				proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
-
-				count +=1
-				output = proc.stdout.read()
-				size_new = sys.getsizeof(output)
-
-				ACB = (acb == "--acb")
-
-
-				if (DEBUG):
-					debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
-
-
-				if (best_dict['size'] >= size_new): # new file is smaller
-					size_increased_times_maniac_repeats = 0 # reset break-counter
-					output_best = output
-					if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
-							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, \033[04mACB={ACB}\033[0m, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], maniac_threshold=best_dict['maniac_threshold'], maniac_min_size=best_dict['maniac_min_size'], maniac_divisor=best_dict['maniac_divisor'], max_palette_size=best_dict['max_palette_size'], A=best_dict['A'], INT="", ACB=str(ACB), RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-					best_dict['count'] = count
-					best_dict['size'] = size_new
-					arr_index = 0
-					best_dict['ACB'] = ACB
-
-
-			# check -C and -R and -C -R
-			for plc_option in "--no-plc", "":
-				for rgb_option in "--rgb", "":
-
-					if (plc_option == rgb_option == ""): # none, skip
-						continue
-
-					PLC = ("--no-plc" == plc_option)
-					RGB = ("--rgb" == rgb_option)
-
-
-					raw_command  = [flif_binary,flif_to_flif, acb, ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),  ('--maniac-repeats=' + str(maniac_repeats)),   ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),('--max-palette-size=' + str(max_palette_size)), plc_option, rgb_option,  INFILE, interlace_flag, '/dev/stdout']
-					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
-					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
-
-					showActivity()
-					count +=1
-					output = proc.stdout.read()
-					size_new = sys.getsizeof(output)
-					if (DEBUG):
-						debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
-					if (best_dict['size'] > size_new): # new file is smaller
-						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
-							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB {ACB}, INTERLACE={INT}, \033[04mPLC={PLC}, RGB={RGB}\033[0m, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], maniac_threshold=best_dict['maniac_threshold'], maniac_min_size=best_dict['maniac_min_size'], maniac_divisor=best_dict['maniac_divisor'], max_palette_size=best_dict['max_palette_size'], A=best_dict['A'], ACB=str(ACB), INT="", RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						size_increased_times_maniac_repeats = 0 # reset break-counter
-						output_best = output
-						best_dict['count'] = count
-						best_dict['size'] = size_new
-						best_dict['PLC'] = PLC
-						best_dict['RGB'] = RGB
-
-
-
-			if not (INTERLACE_FORCE):
-				best_interl = False
-				for interl in "--no-interlace", "--interlace":
-					showActivity()
-
-
-					raw_command  =  [flif_binary,flif_to_flif,  ('--maniac-repeats=' + str(maniac_repeats)), acb, ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),     ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])), '-p', ('--max-palette-size=' + str(best_dict['max_palette_size'])), INFILE, interl, '/dev/stdout'] 
-					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
-					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
-
-					count +=1
-					output = proc.stdout.read()
-					size_new = sys.getsizeof(output)
-
-
-					INTERL = (interl == "--interlace")
-
-					if (DEBUG):
-						debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
-
-
-					if (best_dict['size'] > size_new): # new file is smaller
-						size_increased_times_maniac_repeats = 0 # reset break-counter
-						output_best = output
-						if (best_dict['size'] > size_new): # is actually better,  hack to avoid "-0 b"
-							if (size_orig > size_new):
-								perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
-								perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-								print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB {ACB}, \033[04mINTERLACE={INT} \033[0m, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=best_dict['maniac_repeats'], maniac_threshold=best_dict['maniac_threshold'], umaniac_min_size=best_dict['maniac_min_size'], maniac_divisor=best_dict['maniac_divisor'], max_palette_size=best_dict['max_palette_size'], A=best_dict['A'], ACB="", INT="", RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						best_dict['count'] = count
-						best_dict['size'] = size_new
-						best_dict['INT'] = INTERL
-						arr_index = 0
-						best_interl=INTERL
-				#INTERLACE = best_dict['INT']
-
 
 		else: # bruteforce == true
 			best_N=0
