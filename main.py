@@ -1026,46 +1026,6 @@ try: # catch KeyboardInterrupt
 
 
 
-			else: #   (best_dict['maniac_repeats'] == 0),  still try P
-				size_increased_times = 0
-
-				max_palette_size_range = set(chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)))
-				for max_palette_size in max_palette_size_range:
-					showActivity()
-					if ((max_palette_size < 0) or (max_palette_size > 30000)) : # in case inf['colors']  is >5
-						continue
-
-
-					raw_command =  [flif_binary,flif_to_flif, ('--maniac-repeats=' + str(maniac_repeats))  , ('--chance-cutoff=' + str(best_dict['chance_cutoff'])),  ('--chance-alpha=' + str(best_dict['chance_alpha'])),  ('--maniac-min-size=' + str(best_dict['maniac_min_size'])), ('--maniac-threshold=' + str(best_dict['maniac_threshold'])), ('--maniac-divisor=' + str(best_dict['maniac_divisor'])),    ('--max-palette-size=' + str(max_palette_size))   ,  INFILE, interlace_flag, '/dev/stdout']
-					sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
-					proc = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE)
-
-
-					count +=1
-					output = proc.stdout.read()
-					size_new = sys.getsizeof(output)
-
-					if (DEBUG):
-						debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
-
-
-					if (best_dict['size'] > size_new): # new file is better
-						if (size_orig > size_new):
-							perc_change = str(((size_new-best_dict['size']) / best_dict['size'])*100)
-							perc_change = "-0.000" if ("e" in perc_change) else perc_change[:6] # due to too-early [:6], '8.509566454608271e-07' would become "8.509"
-							print("{count}, maniac_repeats {maniac_repeats}, maniac_threshold {maniac_threshold}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, \033[04mmax_palette_size {max_palette_size}\033[0m, ACB=Auto, INTERLACE={INT}, PLC={PLC}, RGB={RGB}, A={A}, size {size} b, (-{size_change} b, {perc_change}%)".format(count=count, maniac_repeats=str(best_dict['maniac_repeats']), maniac_threshold=str(best_dict['maniac_threshold']), maniac_min_size=str(best_dict['maniac_min_size']), maniac_divisor=str(best_dict['maniac_divisor']), max_palette_size=max_palette_size, A=best_dict['A'], INT=INTERLACE, RGB="", PLC="", size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=perc_change))
-						output_best=output
-						best_dict['size']=size_new
-						best_dict['count'] = count
-						best_dict['max_palette_site'] = max_palette_size
-						size_increased_times = 0
-						arr_index = 0
-
-
-				max_palette_size = best_dict['max_palette_size']
-
-
-
 			# auto color buckets:
 
 			best_ACB="Auto"
