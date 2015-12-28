@@ -1079,8 +1079,8 @@ def crush_no_channel_compact():
 			size_change = best_dict['size']-size_new
 			perc_change = pct_of_best(size_new)
 
-			best_dict['no_compact_channel'] = best_dict['no_compact_channel']._replace(flag=flagstr)
-			best_dict['no_compact_channel'] = best_dict['no_compact_channel']._replace(bool=no_channel_compact)
+			best_dict['no_channel_compact'] = best_dict['no_channel_compact']._replace(flag=flagstr)
+			best_dict['no_channel_compact'] = best_dict['no_channel_compact']._replace(bool=no_channel_compact)
 
 			print("\033[K", end="")
 			print(
