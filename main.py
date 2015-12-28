@@ -1280,7 +1280,7 @@ try: # catch KeyboardInterrupt
 		global best_dict
 		# these have to be the flif default values
 		best_dict={'count': -1,
-				'maniac_repeats': 0,
+				'maniac_repeats': 0, # 3
 				'maniac_threshold': 40,
 				'maniac_min_size': 50,
 				'maniac_divisor': 30,
@@ -1289,8 +1289,8 @@ try: # catch KeyboardInterrupt
 				'chance_alpha': 19,
 				'interlace':  Boolflag("--no-interlace", False),
 				'no_channel_compact': Boolflag('--no-channel-compact', True),
-				'force_color_buckets': Boolflag('--force-color-buckets', True),
-				'no_ycocg': Boolflag("--no-ycocg", True),
+				'force_color_buckets': Boolflag('', False), #--force-color-buckets
+				'no_ycocg': Boolflag("", False), # --no-ycocg
 				'keep_invisible_rgb':  Boolflag("--keep-invisible-rgb", False),
 				'size': size_orig,
 				}
@@ -1312,20 +1312,19 @@ try: # catch KeyboardInterrupt
 			debug_array=[]
 			debug_dict = {'Nr': '', 'maniac_repeats':'', 'maniac_threshold':"", 'maniac_min_size':"", 'maniac_divisor':"", 'max_palette_size': "", 'ACB': "", 'INT':"", 'size':""}
 
-
+		crush_maniac_repeats()
+		crush_maniac_threshold()
+		crush_maniac_divisor()
+		crush_maniac_min_size()
 		crush_max_palette_size()
 		crush_keep_invisible_rgb()
 		crush_force_color_buckets()
 		crush_no_ycocg()
 		crush_no_channel_compact()
 		crush_interlace()
-		crush_maniac_repeats()
-		crush_maniac_threshold()
-		crush_maniac_divisor()
-		crush_maniac_min_size()
 		crush_chance_cutoff()
 		crush_chance_alpha()
-
+		
 
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
 			diff_to_flif_byte = best_dict['size'] - size_flifdefault
