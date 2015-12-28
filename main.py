@@ -73,7 +73,6 @@ if args.nointerlace:
 	best_interl = False
 
 #BRUTEFORCE = (args.bruteforce)
-BRUTEFORCE = False
 
 output_best="none"
 global arr_index
@@ -1018,7 +1017,7 @@ def crush_no_ycocg():
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
-				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + # <-
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " " +  TXT_UL + " no_ycocg: " + str(best_dict['no_ycocg'].bool) + TXT_RES + # <-
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
 
@@ -1364,77 +1363,25 @@ try: # catch KeyboardInterrupt
 			debug_array=[]
 			debug_dict = {'Nr': '', 'maniac_repeats':'', 'maniac_threshold':"", 'maniac_min_size':"", 'maniac_divisor':"", 'max_palette_size': "", 'ACB': "", 'INT':"", 'size':""}
 
-		if (not BRUTEFORCE):
 			# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
 
 
-			crush_maniac_repeats()
-			crush_maniac_threshold()
-			crush_maniac_divisor()
-			crush_maniac_min_size()
-			crush_chance_cutoff()
-			crush_chance_alpha()
-			crush_max_palette_size()
-			crush_keep_invisible_rgb()
-			crush_force_color_buckets()
-			crush_no_ycocg()
-			crush_no_channel_compact()
-			crush_interlace()
-			print("left functions")
 
-		else: # bruteforce == true
-			best_N=0
-			count = 0
-			good_S_M_D = [0, 0, 0]
-			best_ACB = True
-			best_interl = True
-			size_best=os.path.getsize(INFILE)
-		# N, S, M, D, acb, interlacing
-			for N in list(range(0, range_N)):
-				for S in list(range(1, range_S, 1)):
-					D=1
-					D_step = 1
-					step_upped = False
-					while (D < range_D):
-						if (D >= 100):
-							D += 100
-						else:
-							D += 1
-						for M in list(range(0, range_M, 1)):
-							for acb in "--acb", "--no-acb":
-								for interl in "--no-interlace", "--interlace":
-									#print(str(N) + " " + str(S) + " " + str(D) + " " + str(M) + " " + str(acb) + " " + str(interl))
-									showActivity()
-									proc = subprocess.Popen([flif_binary, flif_to_flif, acb,  '-M', str(M), '-S', str(S), '-D', str(D),   '-r', str(N), str(INFILE), str(interl), '/dev/stdout'], stdout=subprocess.PIPE)
-									count +=1
-									output = proc.stdout.read()
-									size_new = sys.getsizeof(output)
-
-									if (interl == "--no-interlace"):
-										INTERLACE=False
-									else:
-										INTERLACE=True
-
-									if (acb == "--acb"):
-										ACB=True
-									elif (acb == "--no-acb"):
-										ACB=False
-
-									if (DEBUG):
-										debug_array.append([{'Nr':count, 'N':N, 'S':S, 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+		crush_max_palette_size()
+		crush_keep_invisible_rgb()
+		crush_force_color_buckets()
+		crush_no_ycocg()
+		crush_no_channel_compact()
+		crush_interlace()
+		crush_maniac_repeats()
+		crush_maniac_threshold()
+		crush_maniac_divisor()
+		crush_maniac_min_size()
+		crush_chance_cutoff()
+		crush_chance_alpha()
+		print("left functions")
 
 
-									if (size_new < best_dict['size']): # new file is smaller
-										output_best = output
-										best_dict['count']=count
-										print("{count}, N {N}, S {S}, maniac_min_size {maniac_min_size}, maniac_divisor {maniac_divisor}, max_palette_size: {max_palette_size}, ACB {ACB}, interlace: {INTERLACE}, size {size} b, better than {run_best} which was {size_best} b (-{size_change} b, {perc_change}%)".format(count=count, N=N, S=S, maniac_min_size=maniac_min_size, maniac_divisor=maniac_divisor, max_palette_size=max_palette_size, ACB=str(ACB), INTERLACE=str(INTERLACE), size=size_new, run_best=best_dict['count'], size_best=best_dict['size'], size_change=best_dict['size']-size_new, perc_change=str(((size_new-best_dict['size']) / best_dict['size'])*100)[:6]))
-										best_dict['size'] = size_new
-										best_dict['N'] = N
-										best_dict['INT'] = INTERLACE
-										best_dict['S'] = S
-										best_dict['M'] = M
-										best_dict['D'] = D
-										best_dict['ACB'] = ACB
 
 
 
