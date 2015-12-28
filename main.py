@@ -288,7 +288,7 @@ def crush_maniac_threshold():
 			print("\033[K", end="")
 			print(
 				 str(count) +
-				 " maniac [ repeat: " + str(maniac_repeats) +
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
 				 " " + TXT_UL + "threshold: " + str(maniac_threshold) + TXT_RES +
 				 " min_size: " + str(best_dict['maniac_min_size']) +
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
@@ -375,8 +375,8 @@ def crush_maniac_divisor():
 			print("\033[K", end="")
 			print(
 				 str(count) +
-				 " maniac [ repeat: " + str(maniac_repeats) +
-				 "threshold: " + str(maniac_threshold) + 
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 "threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size']) +
 				" " + TXT_UL +  " divisor: " + str(maniac_divisor) + " ] " + TXT_RES + # ] maniac      <----
 
@@ -493,8 +493,8 @@ def crush_maniac_min_size():
 			print("\033[K", end="")
 			print(
 				 str(count) +
-				 " maniac [ repeat: " + str(maniac_repeats) +
-				 "threshold: " + str(maniac_threshold) + 
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 "threshold: " + str(best_dict['maniac_threshold']) + 
 				 " " + TXT_UL + " min_size: " + str(maniac_min_size)  + TXT_RES +                           #  <----
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -695,12 +695,16 @@ try: # catch KeyboardInterrupt
 
 
 			crush_maniac_repeats()
-
-
 			crush_maniac_threshold()
-
 			crush_maniac_divisor()
-
+			crush_maniac_min_size()
+			crush_maniac_repeats()
+			crush_maniac_threshold()
+			crush_maniac_divisor()
+			crush_maniac_min_size()
+			crush_maniac_repeats()
+			crush_maniac_threshold()
+			crush_maniac_divisor()
 			crush_maniac_min_size()
 			print("left functions")
 
