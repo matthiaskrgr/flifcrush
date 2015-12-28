@@ -84,12 +84,13 @@ progress_array=[" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "�
 arrlen=len(progress_array)
 
 # prints activity indicator (some kind of ascii 'animation')
-def showActivity(func_arg):
-#	return
+def showActivity(func_arg, size_new):
 	global arr_index
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
+	diff_best = best_dict['size'] - size_new
+	
 	print(progress_array[arr_index] + " " + str(count) + ": "  + str(func_arg) +  ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
 # save .flif file that had the best combination of parameters 
@@ -154,7 +155,6 @@ def crush_maniac_repeats(): # -N
 
 	for maniac_repeats in list(range(0, range_maniac_repeats)):
 		count += 1
-		showActivity("maniac repeats: " + str(maniac_repeats))
 		raw_command = [
 			flif_binary,
 			flif_to_flif,
@@ -182,6 +182,7 @@ def crush_maniac_repeats(): # -N
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("maniac repeats: " + str(maniac_repeats), size_new)
 
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':maniac_divisor, 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
@@ -246,7 +247,6 @@ def crush_maniac_threshold(): # -T
 			continue
 
 		count += 1
-		showActivity("maniac threshold: " + str(maniac_threshold))
 
 		raw_command = [
 			flif_binary,
@@ -276,6 +276,7 @@ def crush_maniac_threshold(): # -T
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity(("maniac threshold: " + str(maniac_threshold)), size_new)
 
 
 
@@ -335,7 +336,6 @@ def crush_maniac_divisor(): # -D
 	max_attempts = 200
 	while (maniac_divisor < range_maniac_divisor):
 		count +=1
-		showActivity("maniac divisor: " + str(maniac_divisor))
 
 
 		raw_command = [
@@ -365,6 +365,7 @@ def crush_maniac_divisor(): # -D
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("maniac divisor: " + str(maniac_divisor), size_new)
 
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
@@ -440,7 +441,6 @@ def crush_maniac_min_size(): # -M
 
 
 	for maniac_min_size in list(range(0, range_maniac_min_size, 1)):
-		showActivity("maniac min size: " + str(maniac_min_size))
 		count +=1
 
 		#if (DEBUG):
@@ -473,6 +473,7 @@ def crush_maniac_min_size(): # -M
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("maniac min size: " + str(maniac_min_size), size_new)
 
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
@@ -530,7 +531,6 @@ def crush_chance_cutoff():
 	max_attempts=200
 
 	for chance_cutoff in list(range(1, range_chance_cutoff, 1)):
-		showActivity("chance cutoff: " + str(chance_cutoff))
 		count += 1
 
 		raw_command = [
@@ -560,6 +560,7 @@ def crush_chance_cutoff():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("chance cutoff: " + str(chance_cutoff), size_new)
 
 
 		#if (DEBUG):
@@ -620,7 +621,6 @@ def crush_chance_alpha():
 	max_attempts=200
 
 	for chance_alpha in list(range(4, range_chance_alpha, 1)):
-		showActivity("chance alpha: " + str(chance_alpha))
 		count += 1
 
 		raw_command = [
@@ -650,6 +650,7 @@ def crush_chance_alpha():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("chance alpha: " + str(chance_alpha), size_new)
 
 
 		#if (DEBUG):
@@ -712,7 +713,6 @@ def crush_max_palette_size():
 		if ((max_palette_size < 0) or (max_palette_size > 30000)) : # in case inf['colors']  is >5
 			continue
 
-		showActivity("max palette size: " + str(max_palette_size))
 		count +=1
 
 
@@ -743,6 +743,7 @@ def crush_max_palette_size():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity(("max palette size: " + str(max_palette_size)), size_new)
 
 
 		#if (DEBUG):
@@ -799,7 +800,6 @@ def crush_keep_invisible_rgb():
 	global output_best
 
 	for keep_invisible_rgb in True, False:
-		showActivity("keep invisibler rgb: " + str(keep_invisible_rgb))
 		count +=1
 
 		flagstr = ("--keep-invisible-rgb" if (keep_invisible_rgb) else "")
@@ -831,6 +831,7 @@ def crush_keep_invisible_rgb():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("keep invisibler rgb: " + str(keep_invisible_rgb), size_new)
 
 
 		#if (DEBUG):
@@ -888,7 +889,6 @@ def crush_force_color_buckets():
 	global output_best
 
 	for force_color_buckets in True, False:
-		showActivity("force color buckets: " + str(force_color_buckets))
 		count +=1
 
 		flagstr = ("--force-color-buckets" if (force_color_buckets) else "--no-color-buckets")
@@ -920,6 +920,7 @@ def crush_force_color_buckets():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("force color buckets: " + str(force_color_buckets), size_new)
 
 
 		#if (DEBUG):
@@ -969,7 +970,6 @@ def crush_no_ycocg():
 	global output_best
 
 	for force_no_ycocg in True, False:
-		showActivity("no ycocg " + str(force_no_ycocg))
 		count +=1
 
 		flagstr = ("--no-ycocg" if (force_no_ycocg) else "")
@@ -1001,6 +1001,7 @@ def crush_no_ycocg():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("no ycocg " + str(force_no_ycocg), size_new)
 
 
 		#if (DEBUG):
@@ -1048,7 +1049,6 @@ def crush_no_channel_compact():
 	global output_best
 
 	for no_channel_compact in True, False:
-		showActivity("no channel compact: " + str(no_channel_compact))
 		count +=1
 
 		flagstr = ("--no-channel-compact" if (no_channel_compact) else "")
@@ -1081,6 +1081,7 @@ def crush_no_channel_compact():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("no channel compact: " + str(no_channel_compact), size_new)
 
 
 		#if (DEBUG):
@@ -1131,7 +1132,6 @@ def crush_interlace():
 	global output_best
 
 	for interlace in True, False:
-		showActivity("interlace: " + str(interlace))
 		count +=1
 
 		flagstr = ("--interlace" if (interlace) else "--no-interlace")
@@ -1167,6 +1167,7 @@ def crush_interlace():
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
 		size_new = sys.getsizeof(output)
+		showActivity("interlace: " + str(interlace), size_new)
 
 
 		#if (DEBUG):
@@ -1323,10 +1324,6 @@ try: # catch KeyboardInterrupt
 		crush_maniac_min_size()
 		crush_chance_cutoff()
 		crush_chance_alpha()
-		print("left functions")
-
-
-
 
 
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
