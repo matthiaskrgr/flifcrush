@@ -73,7 +73,7 @@ if args.nointerlace:
 	best_interl = False
 
 #BRUTEFORCE = (args.bruteforce)
-
+global output_best
 output_best="none"
 global arr_index
 global progress_array
@@ -84,16 +84,17 @@ progress_array=[" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "�
 arrlen=len(progress_array)
 
 # prints activity indicator (some kind of ascii 'animation')
-def showActivity():
+def showActivity(func_arg):
 #	return
 	global arr_index
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	print(progress_array[arr_index] + " " + str(count) + " maniac_repeats" + str(maniac_repeats) + " maniac_threshold" + str(maniac_threshold) + " maniac_min_size" + str(maniac_min_size) + " maniac_divisor" + str(maniac_divisor) + " max_palette_size" + str(max_palette_size)  + " chance-cutoff" + str(chance_cutoff) + " chance-alpha" + str(chance_alpha) +  " interlace:" + str(INTERLACE) +  " force-color-buckets:" + str(force_color_buckets) + " no-channel-compact:" + str(no_channel_compact) +  "no-ycocg" + str(no_ycocg)   + " keep-invisible-rgb:" + str(keep_invisible_rgb) +  ", size: " + str(size_new) + " b        ", end="\r",flush=True)
+	print(progress_array[arr_index] + " " + str(count) + ": "  + str(func_arg) +  ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
 # save .flif file that had the best combination of parameters 
 def save_file():
+	global output_best
 	flif2flif = False # default, we need extra parameter if we convert .flif to -clif
 	# if the condition is false, we didn't manage to reduce size
 	if output_best != "none":
@@ -144,6 +145,7 @@ def crush_maniac_repeats(): # -N
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	# locals
 	range_maniac_repeats = 20 # try 0 -20
@@ -152,7 +154,7 @@ def crush_maniac_repeats(): # -N
 
 	for maniac_repeats in list(range(0, range_maniac_repeats)):
 		count += 1
-		showActivity()
+		showActivity("maniac repeats: " + str(maniac_repeats))
 		raw_command = [
 			flif_binary,
 			flif_to_flif,
@@ -230,6 +232,7 @@ def crush_maniac_threshold(): # -T
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	#locals
 	range_maniac_threshold = 40
@@ -243,7 +246,7 @@ def crush_maniac_threshold(): # -T
 			continue
 
 		count += 1
-		showActivity()
+		showActivity("maniac threshold: " + str(maniac_threshold))
 
 		raw_command = [
 			flif_binary,
@@ -321,6 +324,7 @@ def crush_maniac_divisor(): # -D
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	#locals
 	range_maniac_divisor = 268435455
@@ -331,7 +335,7 @@ def crush_maniac_divisor(): # -D
 	max_attempts = 200
 	while (maniac_divisor < range_maniac_divisor):
 		count +=1
-		showActivity()
+		showActivity("maniac divisor: " + str(maniac_divisor))
 
 
 		raw_command = [
@@ -427,6 +431,7 @@ def crush_maniac_min_size(): # -M
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	#locals
 	range_maniac_min_size = 3000
@@ -435,7 +440,7 @@ def crush_maniac_min_size(): # -M
 
 
 	for maniac_min_size in list(range(0, range_maniac_min_size, 1)):
-		showActivity()
+		showActivity("maniac min size: " + str(maniac_min_size))
 		count +=1
 
 		#if (DEBUG):
@@ -517,6 +522,7 @@ def crush_chance_cutoff():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	#locals
 	range_chance_cutoff = 128
@@ -524,7 +530,7 @@ def crush_chance_cutoff():
 	max_attempts=200
 
 	for chance_cutoff in list(range(1, range_chance_cutoff, 1)):
-		showActivity()
+		showActivity("chance cutoff: " + str(chance_cutoff))
 		count += 1
 
 		raw_command = [
@@ -606,14 +612,15 @@ def crush_chance_alpha():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	#locals
 	range_chance_alpha = 128
 	failed_attempts = 0
 	max_attempts=200
 
-	for chance_cutoff in list(range(4, range_chance_alpha, 1)):
-		showActivity()
+	for chance_alpha in list(range(4, range_chance_alpha, 1)):
+		showActivity("chance alpha: " + str(chance_alpha))
 		count += 1
 
 		raw_command = [
@@ -692,6 +699,7 @@ def crush_max_palette_size():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	#locals
 	range_chance_alpha = 128
@@ -704,7 +712,7 @@ def crush_max_palette_size():
 		if ((max_palette_size < 0) or (max_palette_size > 30000)) : # in case inf['colors']  is >5
 			continue
 
-		showActivity()
+		showActivity("max palette size: " + str(max_palette_size))
 		count +=1
 
 
@@ -788,9 +796,10 @@ def crush_keep_invisible_rgb():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	for keep_invisible_rgb in True, False:
-		showActivity()
+		showActivity("keep invisibler rgb: " + str(keep_invisible_rgb))
 		count +=1
 
 		flagstr = ("--keep-invisible-rgb" if (keep_invisible_rgb) else "")
@@ -876,9 +885,10 @@ def crush_force_color_buckets():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	for force_color_buckets in True, False:
-		showActivity()
+		showActivity("force color buckets: " + str(force_color_buckets))
 		count +=1
 
 		flagstr = ("--force-color-buckets" if (force_color_buckets) else "--no-color-buckets")
@@ -920,8 +930,8 @@ def crush_force_color_buckets():
 			size_change = best_dict['size']-size_new
 			perc_change = pct_of_best(size_new)
 
-			best_dict['no_ycocg'] = best_dict['no_ycocg']._replace(flag=flagstr)
-			best_dict['no_ycocg'] = best_dict['no_ycocg']._replace(bool=keep_invisible_rgb)
+			best_dict['force_color_buckets'] = best_dict['force_color_buckets']._replace(flag=flagstr)
+			best_dict['force_color_buckets'] = best_dict['force_color_buckets']._replace(bool=force_color_buckets)
 
 			print("\033[K", end="")
 			print(
@@ -956,9 +966,10 @@ def crush_no_ycocg():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	for force_no_ycocg in True, False:
-		showActivity()
+		showActivity("no ycocg " + str(force_no_ycocg))
 		count +=1
 
 		flagstr = ("--no-ycocg" if (force_no_ycocg) else "")
@@ -1034,9 +1045,10 @@ def crush_no_channel_compact():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	for no_channel_compact in True, False:
-		showActivity()
+		showActivity("no channel compact: " + str(no_channel_compact))
 		count +=1
 
 		flagstr = ("--no-channel-compact" if (no_channel_compact) else "")
@@ -1116,9 +1128,10 @@ def crush_interlace():
 	global best_dict
 	global count
 	global arr_index
+	global output_best
 
 	for interlace in True, False:
-		showActivity()
+		showActivity("interlace: " + str(interlace))
 		count +=1
 
 		flagstr = ("--interlace" if (interlace) else "--no-interlace")
@@ -1258,70 +1271,6 @@ try: # catch KeyboardInterrupt
 		size_orig = inf['sizeByte']
 		size_before_glob  += size_orig
 
-		# how many attempts to try in worst case? ( check flif.cpp:400 and config.h)
-		range_maniac_repeats = 20   # default: 3 // try: 0-20
-		range_maniac_threshold = 600 # default: 40   // max: 100000
-		range_maniac_min_size = 3000 # default: 30   // 0-inf
-		range_maniac_divisor = 268435455 # default: 50  // try  1-100
-		range_chance_cutoff = 128 # default: 2 //  range: 1 - 128  
-		range_chance_alpha = 128 # default: 19  // range: 4 - 128
-
-		# if we did this many attempts without getting better results, give up
-		giveUp_maniac_repeats = 5
-		giveUp_maniac_threshold = 100
-		give_up_after = 200
-		size_increased_times_maniac_repeats = 0
-
-
-		#defaults:
-		maniac_repeats = 0 # avoid undecl var
-		maniac_threshold = 40 # must at least be 1
-		maniac_min_size = 50 # can be 0
-		maniac_divisor = 30 # must at least be 1
-		max_palette_size = 1024
-		chance_cutoff = 2 # must at least be 1
-		chance_alpha = 19 # must at least be 4, is float
-
-
-		interlace = False
-		no_channel_compact = True  # plc
-		force_color_buckets= True # acb
-		no_ycocg =  True # !rgba
-		keep_invisible_rgb = False #
-
-
-
-
-		#ACB=False
-		#PLC=True
-		#RGB=False
-		#A=False # --keep-alpha-zero
-
-		#INTERLACE=False  # set above
-		# PLC == false : passed -C or --no-plc
-		# RGB == True : passed -R or --rgb
-
-
-
-  # 'INT': False, 'force_color_buckets': False,  'no_channel_compact': True, 'no_ycocg':False, 'keep_invisible_rgb': False, 
-
-
-		"""
-		# --no-interlace  ; --interlace
-		best_dict[interlace] = Boolflag("--no-interlace", False)
-
-		# --no-channel-compact ; - 
-		no_channel_compact = Boolflag('--no-channel-compact', True)
-		
-		# --no-force-color-buckets  ; --force-color-buckets
-		force_color_buckets = Boolflag('--force-color-buckets', True)
-
-		# --no-ycocg ;  - 
-		no_ycocg = Boolflag("--no-ycocg", True)
-
-		# --keep-invisible-rgb ; -
-		keep_invisible_rgb = Boolflag("--keep-invisible-rgb", True)
-		"""
 
 		# use named tuples for boolean cmdline flags
 		Boolflag = namedtuple('boolflag', 'flag bool') # define the structure
@@ -1344,8 +1293,6 @@ try: # catch KeyboardInterrupt
 				'size': size_orig,
 				}
 
-# modify:
-# best_dict['no_ycocg']._replace(bool=False)
 
 		global count
 		count = 0 # how many recompression attempts did we take?
@@ -1354,7 +1301,7 @@ try: # catch KeyboardInterrupt
 		size_new = size_best = os.path.getsize(INFILE)
 
 		if (COMPARE):  #do a default flif run with no special arguments
-			proc = subprocess.Popen([flif_binary, INFILE,  '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
 			output_flifdefault = proc.stdout.read()
 			size_flifdefault = sys.getsizeof(output_flifdefault)
 			size_flifdefault_glob += size_flifdefault
@@ -1362,9 +1309,6 @@ try: # catch KeyboardInterrupt
 		if (DEBUG):
 			debug_array=[]
 			debug_dict = {'Nr': '', 'maniac_repeats':'', 'maniac_threshold':"", 'maniac_min_size':"", 'maniac_divisor':"", 'max_palette_size': "", 'ACB': "", 'INT':"", 'size':""}
-
-			# MANIAC learning          -r, --repeats=N          MANIAC learning iterations (default: N=3)
-
 
 
 		crush_max_palette_size()
