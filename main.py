@@ -1317,26 +1317,27 @@ try: # catch KeyboardInterrupt
 			debug_array=[]
 			debug_dict = {'Nr': '', 'maniac_repeats':'', 'maniac_threshold':"", 'maniac_min_size':"", 'maniac_divisor':"", 'max_palette_size': "", 'ACB': "", 'INT':"", 'size':""}
 
-		max_iterations = 10
+		max_iterations = 5
 		it = 0
+		#best_dict['maniac_repeats'] = 
 		while (it != max_iterations):
 			sze_beginning = best_dict['size']
-			crush_maniac_repeats()
 			crush_maniac_threshold()
 			crush_maniac_divisor()
 			crush_maniac_min_size()
 			crush_max_palette_size()
+			crush_chance_cutoff()
+			crush_chance_alpha()
 			crush_keep_invisible_rgb()
 			crush_force_color_buckets()
 			crush_no_ycocg()
 			crush_no_channel_compact()
 			crush_interlace()
-			crush_chance_cutoff()
-			crush_chance_alpha()
-			sze_end = best_dict['size']
+			crush_maniac_repeats()
+
 			# if iteration didn't reduce anything, stop'
 			it+=1
-			if (sze_beginning == sze_end):
+			if (sze_beginning == best_dict['size']):
 				break
 
 
