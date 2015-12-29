@@ -1317,18 +1317,28 @@ try: # catch KeyboardInterrupt
 			debug_array=[]
 			debug_dict = {'Nr': '', 'maniac_repeats':'', 'maniac_threshold':"", 'maniac_min_size':"", 'maniac_divisor':"", 'max_palette_size': "", 'ACB': "", 'INT':"", 'size':""}
 
-		crush_maniac_repeats()
-		crush_maniac_threshold()
-		crush_maniac_divisor()
-		crush_maniac_min_size()
-		crush_max_palette_size()
-		crush_keep_invisible_rgb()
-		crush_force_color_buckets()
-		crush_no_ycocg()
-		crush_no_channel_compact()
-		crush_interlace()
-		crush_chance_cutoff()
-		crush_chance_alpha()
+		max_iterations = 10
+		it = 0
+		while (it != max_iterations):
+			sze_beginning = best_dict['size']
+			crush_maniac_repeats()
+			crush_maniac_threshold()
+			crush_maniac_divisor()
+			crush_maniac_min_size()
+			crush_max_palette_size()
+			crush_keep_invisible_rgb()
+			crush_force_color_buckets()
+			crush_no_ycocg()
+			crush_no_channel_compact()
+			crush_interlace()
+			crush_chance_cutoff()
+			crush_chance_alpha()
+			sze_end = best_dict['size']
+			# if iteration didn't reduce anything, stop'
+			it+=1
+			if (sze_beginning == sze_end):
+				break
+
 
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
 			diff_to_flif_byte = best_dict['size'] - size_flifdefault
