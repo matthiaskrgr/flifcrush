@@ -124,6 +124,10 @@ def save_file():
 		print("\033[K", end="")
 		print("reduced from " + str(size_orig) + " b to "+ str(best_dict['size']) + " ( -"+ str(size_diff) + " b, "+ str((( best_dict['size'] - size_orig)/ size_orig )*100)[:6] + " %) " + str(count) +  " flif calls.\n\n")
 		#print("reduced from {size_orig}b to {size_flif}b ({size_diff}b, {perc_change} %) via \n [{bestoptim}] and {cnt} flif calls.\n\n".format(size_orig = os.path.getsize(INFILE), size_flif=size_flif, size_diff=(size_flif - size_orig), perc_change=str(((size_flif-size_orig) / size_orig)*100)[:6],  bestoptim=str("maniac repeats:" + str(best_dict['maniac_repeats']) + " maniac_threshold:" + str(best_dict['maniac_threshold']) + " maniac_min_size:" + str(best_dict['maniac_min_size'])+ " maniac_divisor:" + str(best_dict['maniac_divisor']) + " max_palette_size:" + str(best_dict['max_palette_size']) + " chance-cutoff:" + str(best_dict['chance_cutoff'])  + " chance-alpha:" + str(best_dict['chance_alpha']) +  " ACB:" + str(best_dict['ACB']) + " INTERLACE:" + str(best_dict['INT']) + " PLC:" + str(best_dict['PLC']) + " RGB:" +  str(best_dict['RGB']) +  " A:" + str(best_dict['A'])), cnt=str(count)), end="\r")
+
+		if (best_dict['size'] > size_orig):
+			print("WARNING: failed to reduce size")
+
 	else:
 		print("\033[K", end="")
 		print("WARNING: could not reduce size!")
