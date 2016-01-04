@@ -1249,8 +1249,10 @@ try: # catch KeyboardInterrupt
 
 # generation of input_files list is done:
 
-
+	current_file = 0
 	for INFILE in input_files: # iterate over every file that we go
+		current_file += 1
+		file_count_str = "(" + str(current_file) + "/" + str(len(input_files)) + ") " # X/Yth file
 		flif_to_flif = ""
 		files_count_glob += 1
 		#output some metrics about the png that we are about to convert
@@ -1274,7 +1276,7 @@ try: # catch KeyboardInterrupt
 
 		inf={'path': INFILE, 'sizeByte': os.path.getsize(INFILE), 'colors': len(Counter(img).items()), 'sizeX': im.size[0], 'sizeY': im.size[1], 'px': im.size[0]*im.size[1], 'filetype': INFILE.split('.')[-1]}
 
-		print(inf['path'] + "; dimensions: "  + str(inf['sizeX']) +"×"+ str(inf['sizeY']) + ", " + str(inf['sizeX']*inf['sizeY']) + " px, " + str(inf['colors']) + " unique colors," + " " + str(inf['sizeByte']) + " b")
+		print(file_count_str + inf['path'] + "; dimensions: "  + str(inf['sizeX']) +"×"+ str(inf['sizeY']) + ", " + str(inf['sizeX']*inf['sizeY']) + " px, " + str(inf['colors']) + " unique colors," + " " + str(inf['sizeByte']) + " b")
 		size_orig = inf['sizeByte']
 		size_before_glob  += size_orig
 
