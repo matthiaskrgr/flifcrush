@@ -386,7 +386,7 @@ def crush_maniac_divisor(): # -D
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size']) +
 				" " + TXT_UL +  " divisor: " + str(maniac_divisor) + " ] " + TXT_RES + # ] maniac      <----
 
@@ -494,7 +494,7 @@ def crush_maniac_min_size(): # -M
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " " + TXT_UL + " min_size: " + str(maniac_min_size)  + TXT_RES +                           #  <----
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -582,7 +582,7 @@ def crush_chance_cutoff():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -672,7 +672,7 @@ def crush_chance_alpha():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -766,7 +766,7 @@ def crush_max_palette_size():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -855,7 +855,7 @@ def crush_keep_invisible_rgb():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -944,7 +944,7 @@ def crush_force_color_buckets():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -1025,7 +1025,7 @@ def crush_no_ycocg():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -1105,7 +1105,7 @@ def crush_no_channel_compact():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
@@ -1191,7 +1191,7 @@ def crush_interlace():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 "threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size'])  + 
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
