@@ -495,7 +495,7 @@ def crush_maniac_min_size(): # -M
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
 				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " " + TXT_UL + " min_size: " + str(maniac_min_size)  + TXT_RES +                           #  <----
+				 " " + TXT_UL + "min_size: " + str(maniac_min_size)  + TXT_RES +                           #  <----
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
 				 " chance:[ cutoff: " + str(best_dict['chance_cutoff']) +
@@ -772,7 +772,7 @@ def crush_max_palette_size():
 
 				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
 				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-				 " "+ TXT_UL + " palette: " + str(best_dict['max_palette_size']) + TXT_RES +                 # <---.
+				 " "+ TXT_UL + "palette: " + str(best_dict['max_palette_size']) + TXT_RES +                 # <---.
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
@@ -954,7 +954,7 @@ def crush_force_color_buckets():
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
-				 " " +  TXT_UL + " Cbuck: " + str(best_dict['force_color_buckets'].bool) + TXT_RES + # <-
+				 " " +  TXT_UL + "Cbuck: " + str(best_dict['force_color_buckets'].bool) + TXT_RES + # <-
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
 
@@ -1036,7 +1036,7 @@ def crush_no_ycocg():
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
-				 " " +  TXT_UL + " no_ycocg: " + str(best_dict['no_ycocg'].bool) + TXT_RES + # <-
+				 " " +  TXT_UL + "no_ycocg: " + str(best_dict['no_ycocg'].bool) + TXT_RES + # <-
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
 
 				 " size " + str(size_new) + " b " +
@@ -1114,7 +1114,7 @@ def crush_no_channel_compact():
 				 " palette: " + str(best_dict['max_palette_size']) + 
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
-				 " " +  TXT_UL + " no_CC: " + str(best_dict['no_channel_compact'].bool) + TXT_RES +  # <- 
+				 " " +  TXT_UL + "no_CC: " + str(best_dict['no_channel_compact'].bool) + TXT_RES +  # <- 
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + 
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -1199,7 +1199,7 @@ def crush_interlace():
 				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
 				 " palette: " + str(best_dict['max_palette_size']) + 
 
-				" " +  TXT_UL + " itlc: " + str(best_dict['interlace'].bool) + TXT_RES  + # <<---
+				" " +  TXT_UL + "itlc: " + str(best_dict['interlace'].bool) + TXT_RES  + # <<---
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + 
 				 + " no_ycocg: " + str(best_dict['no_ycocg'].bool) +  
