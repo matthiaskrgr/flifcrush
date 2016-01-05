@@ -388,7 +388,7 @@ def crush_maniac_divisor(): # -D
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
 				 " threshold: " + str(best_dict['maniac_threshold']) + 
 				 " min_size: " + str(best_dict['maniac_min_size']) +
-				" " + TXT_UL +  " divisor: " + str(maniac_divisor) + " ] " + TXT_RES + # ] maniac      <----
+				" " + TXT_UL +  "divisor: " + str(maniac_divisor) + TXT_RES + " ] " + # ] maniac      <----
 
 				 " chance:[ cutoff: " + str(best_dict['chance_cutoff']) +
 				 " alpha: " + str(best_dict['chance_alpha']) + " ] " + # ] chance
