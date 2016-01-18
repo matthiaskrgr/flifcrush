@@ -614,7 +614,7 @@ def crush_chance_cutoff():
 
 
 
-def crush_chance_alpha():
+def crush_chance_alpha(): # -Z
 	# globals
 	global best_dict
 	global count
@@ -626,7 +626,7 @@ def crush_chance_alpha():
 	failed_attempts = 0
 	max_attempts=200
 
-	for chance_alpha in list(range(4, range_chance_alpha, 1)):
+	for chance_alpha in list(range(2, range_chance_alpha, 1)):
 		count += 1
 
 		raw_command = [
@@ -716,7 +716,8 @@ def crush_max_palette_size():
 
 	max_palette_size_range = set(chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)))
 	for max_palette_size in max_palette_size_range:
-		if ((max_palette_size < 0) or (max_palette_size > 30000)) : # in case inf['colors']  is >5
+		# according to flif code -32000 is also valid, perhaps try this at some point
+		if ((max_palette_size < 0) or (max_palette_size > 32000)) : # in case inf['colors']  is >5
 			continue
 
 		count +=1
