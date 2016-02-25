@@ -33,13 +33,11 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 parser = argparse.ArgumentParser()
 parser.add_argument("inpath", help="file or path (recursively) to be converted to flif", metavar='N', nargs='+', type=str)
-parser.add_argument("-o", "--options", help="extra command line options (e.g. try -o-Nc)", metavar='OPTIONS', nargs=1, type=str)
-parser.add_argument("-d", "--debug", help="print output of all runs at end", action='store_true')
+parser.add_argument("-o", "--options", help="extra command line options (e.g. -o-N for non-interlaced)", metavar='OPTIONS', nargs=1, type=str)
 parser.add_argument("-c", "--compare", help="compare to default flif compression", action='store_true')
 args = parser.parse_args()
 
 COMPARE = (args.compare)
-DEBUG = (args.debug)
 INPATHS = args.inpath
 
 if args.options:
@@ -78,8 +76,7 @@ def showActivity(func_arg, size_new):
 	if (arr_index == arrlen):
 		arr_index = 0
 	diff_best = best_dict['size'] - size_new
-	
-	print(progress_array[arr_index] + " " + str(count) + ": "  + str(func_arg) +  ", size: " + str(size_new) + " b        ", end="\r",flush=True)
+	sys.stderr.write(progress_array[arr_index] + " " + str(count) + ": "  + str(func_arg) +  ", size: " + str(size_new) + " b            \r")
 
 # save .flif file that had the best combination of parameters 
 def save_file():
@@ -149,6 +146,32 @@ def range_around_default(default, min, max, stepsize):
                 minus -= stepsize
             c += 1
             if c>20: # list is getting long, increase stepsize to reach boundaries faster
+                stepsize += 1
+                c = 0
+        return result
+
+def range_above_default(default, min, max, stepsize):
+        result = []
+        plus = default+stepsize
+        c = 0
+        while plus<=max:
+            result += [plus]
+            plus += stepsize
+            c += 1
+            if c>10: # list is getting long, increase stepsize to reach boundaries faster
+                stepsize += 1
+                c = 0
+        return result
+
+def range_below_default(default, min, max, stepsize):
+        result = []
+        minus = default-stepsize
+        c = 0
+        while minus>=min:
+            result += [minus]
+            minus -= stepsize
+            c += 1
+            if c>10: # list is getting long, increase stepsize to reach boundaries faster
                 stepsize += 1
                 c = 0
         return result
@@ -245,7 +268,7 @@ def encode_attempt(field,value):
 
 				 "\t| size " + str(size_new) + "b " +
 				 "-" + str(size_change) + "b " +
-				 perc_change + " %")
+				 perc_change + " %", flush=True)
 
 		best_dict['size'] = size_new
 		best_dict['count'] = count
@@ -263,43 +286,76 @@ def crush_maniac_repeats(): # -R
 		else: # file is not smaller
 			failed_attempts += 1
 			if (failed_attempts >= max_attempts):
-				return; # break out of loop, we have wasted enough time here
+				break # break out of loop, we have wasted enough time here
 
 
 def crush_maniac_threshold(): # -T
 	max_attempts = 20
 	failed_attempts = 0
-	for maniac_threshold in range_around_default(best_dict['maniac_threshold'],5,800,1):
+	improved = False
+	for maniac_threshold in range_above_default(best_dict['maniac_threshold'],5,800,1):
+		if encode_attempt('maniac_threshold',maniac_threshold):
+			failed_attempts = 0 # reset break-counter
+			improved = True
+		else: # file is not smaller
+			failed_attempts += 1
+			if (failed_attempts >= max_attempts):
+				break # break out of loop, we have wasted enough time here
+	if improved: return # found something better, no need to check range_below_default
+	failed_attempts = 0
+	for maniac_threshold in range_below_default(best_dict['maniac_threshold'],5,800,1):
 		if encode_attempt('maniac_threshold',maniac_threshold):
 			failed_attempts = 0 # reset break-counter
 		else: # file is not smaller
 			failed_attempts += 1
 			if (failed_attempts >= max_attempts):
-				return; # break out of loop, we have wasted enough time here
+				break # break out of loop, we have wasted enough time here
 
 
 def crush_maniac_divisor(): # -D
+	max_attempts = 8
 	failed_attempts = 0
-	max_attempts = 20
-	for maniac_divisor in range_around_default(best_dict['maniac_divisor'],1,100000,1):
+	improved=False
+	for maniac_divisor in range_above_default(best_dict['maniac_divisor'],1,100000,1):
 		if encode_attempt('maniac_divisor',maniac_divisor):
-			failed_attempts = 0 # reset break-counter
+			failed_attempts = 0
+			improved=True
 		else:
 			failed_attempts += 1
 			if (failed_attempts >= max_attempts):
-				break;
+				break
+	if improved: return
+	failed_attempts = 0
+	for maniac_divisor in range_below_default(best_dict['maniac_divisor'],1,100000,1):
+		if encode_attempt('maniac_divisor',maniac_divisor):
+			failed_attempts = 0
+		else:
+			failed_attempts += 1
+			if (failed_attempts >= max_attempts):
+				break
 
 
 def crush_maniac_min_size(): # -M
-	max_attempts = 20
+	max_attempts = 5
 	failed_attempts = 0
-	for maniac_min_size in range_around_default(best_dict['maniac_min_size'],0,30000,5):
+	improved = False
+	for maniac_min_size in range_above_default(best_dict['maniac_min_size'],0,30000,5):
 		if encode_attempt('maniac_min_size',maniac_min_size):
-			failed_attempts = 0 # reset break-counter
-		else: # file is not smaller
+			failed_attempts = 0
+			improved = True
+		else:
 			failed_attempts += 1
 			if (failed_attempts >= max_attempts):
-				return; # break out of loop, we have wasted enough time here
+				break
+	if improved: return
+	failed_attempts = 0
+	for maniac_min_size in range_below_default(best_dict['maniac_min_size'],0,30000,5):
+		if encode_attempt('maniac_min_size',maniac_min_size):
+			failed_attempts = 0
+		else:
+			failed_attempts += 1
+			if (failed_attempts >= max_attempts):
+				break
 
 def crush_chance_cutoff():
 	failed_attempts = 0
@@ -310,23 +366,34 @@ def crush_chance_cutoff():
 
 	for chance_cutoff in range_around_default(best_dict['chance_cutoff'],1,128,1):
 		if encode_attempt('chance_cutoff',chance_cutoff):
-			failed_attempts = 0 # reset break-counter
-		else: # file is not smaller
+			failed_attempts = 0
+		else:
 			failed_attempts += 1
 			if (failed_attempts >= max_attempts):
-				return; # break out of loop, we have wasted enough time here
+				break
 
 
 def crush_chance_alpha(): # -Z
 	failed_attempts = 0
-	max_attempts=5
-	for chance_alpha in range_around_default(best_dict['chance_alpha'],2,128,1):
+	max_attempts=4
+	improved=False
+	for chance_alpha in range_above_default(best_dict['chance_alpha'],2,128,1):
 		if encode_attempt('chance_alpha',chance_alpha):
-			failed_attempts = 0 # reset break-counter
-		else: # file is not smaller
+			failed_attempts = 0
+			improved = True
+		else:
 			failed_attempts += 1
 			if (failed_attempts >= max_attempts):
-				return; # break out of loop, we have wasted enough time here
+				break
+	if improved: return
+	failed_attempts = 0
+	for chance_alpha in range_below_default(best_dict['chance_alpha'],2,128,1):
+		if encode_attempt('chance_alpha',chance_alpha):
+			failed_attempts = 0
+		else:
+			failed_attempts += 1
+			if (failed_attempts >= max_attempts):
+				break
 
 def crush_max_palette_size():
 	for max_palette_size in [0, inf['colors']-1, inf['colors'], -inf['colors'], 1-inf['colors']]:
@@ -375,8 +442,8 @@ try: # catch KeyboardInterrupt
 	for path in INPATHS: # iterate over arguments
 		if (os.path.isfile(path)): # inpath is not a directory but a file
 			input_files.append(path) # add to list
-		else:  # else walk recursively 
-			for root, directories, filenames in os.walk(path): 
+		else:  # else walk recursively
+			for root, directories, filenames in os.walk(path):
 				for filename in filenames:
 					if (filename.split('.')[-1] in SUPPORTED_FILE_EXTENSIONS): # check for valid filetypes
 						input_files.append(os.path.join(root,filename)) # add to list
@@ -442,10 +509,11 @@ try: # catch KeyboardInterrupt
 		if (COMPARE):  #do a default flif run with no special arguments except those provided
 			proc = subprocess.Popen([flif_binary, INFILE, '/dev/stdout'] + OPTIONS, stdout=subprocess.PIPE)
 			output_flifdefault = proc.stdout.read()
-			size_flifdefault = sys.getsizeof(output_flifdefault)
+			#size_flifdefault = sys.getsizeof(output_flifdefault)
+			size_flifdefault = len(output_flifdefault)
 			size_flifdefault_glob += size_flifdefault
 
-		max_iterations = 10
+		max_iterations = 20
 		it = 0
 
 		# find the best color representation (should be mostly orthogonal to the other encode options)
@@ -461,10 +529,10 @@ try: # catch KeyboardInterrupt
 			crush_chance_cutoff()
 			crush_chance_alpha()
 			# try to find a good tree
-			crush_maniac_repeats()
 			crush_maniac_threshold()
 			crush_maniac_divisor()
 			crush_maniac_min_size()
+			crush_maniac_repeats()
 
 			# if iteration didn't reduce anything, stop'
 			it+=1
