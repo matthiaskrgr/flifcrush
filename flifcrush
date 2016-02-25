@@ -33,6 +33,7 @@ __author__ = 'Matthias "matthiaskrgr" Krüger'
 
 parser = argparse.ArgumentParser()
 parser.add_argument("inpath", help="file or path (recursively) to be converted to flif", metavar='N', nargs='+', type=str)
+parser.add_argument("-o", "--options", help="extra command line options (e.g. try -o-Nc)", metavar='OPTIONS', nargs=1, type=str)
 parser.add_argument("-d", "--debug", help="print output of all runs at end", action='store_true')
 parser.add_argument("-c", "--compare", help="compare to default flif compression", action='store_true')
 args = parser.parse_args()
@@ -41,6 +42,10 @@ COMPARE = (args.compare)
 DEBUG = (args.debug)
 INPATHS = args.inpath
 
+if args.options:
+    OPTIONS = args.options[0].split()
+else:
+    OPTIONS = []
 
 # make these global to access them easily inside functions 
 global size_before_glob, size_after_glob, files_count_glob, size_flifdefault_glob
@@ -198,13 +203,15 @@ def encode_attempt(field,value):
 		raw_command += ['--keep-invisible-rgb']
 	raw_command += [
 		INFILE,
-		'/dev/stdout',
-	] # = raw_command 
+		'/dev/stdout'
+	] # = raw_command
+	raw_command += OPTIONS
 
 	sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 	#print('running: ', sanitized_command)
 	output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
-	size_new = sys.getsizeof(output)
+	#size_new = sys.getsizeof(output)
+	size_new = len(output)
 	showActivity(field + ": " + str(value), size_new)
 	if ((best_dict['size'] > size_new) or (count==1)): # new file is smaller // count==1: make sure best_dict is filled with first values we obtain. this way we still continue crushing even if initial N-run does not reduce size smaller than size_orig
 		output_best = output
@@ -234,6 +241,7 @@ def encode_attempt(field,value):
 				 strfieldbool(field,parameters,'no_channel_compact','-C') + ' ' +
 				 strfieldbool(field,parameters,'keep_invisible_rgb','-K') + ' ' +
 				 strfieldbool(field,parameters,'no_ycocg','-Y') + ' ' +
+				 ' '.join(OPTIONS) + ' '
 
 				 "\t| size " + str(size_new) + "b " +
 				 "-" + str(size_change) + "b " +
@@ -431,8 +439,8 @@ try: # catch KeyboardInterrupt
 
 		size_new = size_best = os.path.getsize(INFILE)
 
-		if (COMPARE):  #do a default flif run with no special arguments
-			proc = subprocess.Popen([flif_binary, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+		if (COMPARE):  #do a default flif run with no special arguments except those provided
+			proc = subprocess.Popen([flif_binary, INFILE, '/dev/stdout'] + OPTIONS, stdout=subprocess.PIPE)
 			output_flifdefault = proc.stdout.read()
 			size_flifdefault = sys.getsizeof(output_flifdefault)
 			size_flifdefault_glob += size_flifdefault
