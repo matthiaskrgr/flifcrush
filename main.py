@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 #    flifcrush - tries to reduce FLIF files in size
 #    Copyright (C) 2015  Matthias Krüger
