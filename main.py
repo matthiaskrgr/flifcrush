@@ -78,9 +78,9 @@ output_best="none"
 global arr_index
 global progress_array
 arr_index = 0
-#progress_array=["|", "/", "-", "\\",]
-#progress_array=[".", "o", "0", "O", "O", "o", "."]
-progress_array=[" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃", "▁"]
+#progress_array="|/-\\"
+#progress_array=".o0OOo."
+progress_array=" ▁▂▃▄▅▆▇█▇▆▅▄▃▁"
 arrlen=len(progress_array)
 
 # prints activity indicator (some kind of ascii 'animation')
@@ -159,7 +159,7 @@ def crush_maniac_repeats(): # -N
 	max_attempts = 5 # give up after 5 unsuccesfull attempts
 	failed_attempts = 0
 
-	for maniac_repeats in list(range(0, range_maniac_repeats)):
+	for maniac_repeats in range(0, range_maniac_repeats):
 		count += 1
 		raw_command = [
 			flif_binary,
@@ -246,7 +246,7 @@ def crush_maniac_threshold(): # -T
 	max_attempts = 40
 	failed_attempts = 0
 
-	for maniac_threshold in list(range(1, range_maniac_threshold, 1)):
+	for maniac_threshold in range(1, range_maniac_threshold):
 
 		# skip maniac_threshold 1-4, it takes too much ram in extreme cases
 		if (maniac_threshold <= 4):  
@@ -446,7 +446,7 @@ def crush_maniac_min_size(): # -M
 	failed_attempts = 0
 
 
-	for maniac_min_size in list(range(0, range_maniac_min_size, 1)):
+	for maniac_min_size in range(0, range_maniac_min_size):
 		count +=1
 
 		#if (DEBUG):
@@ -536,7 +536,7 @@ def crush_chance_cutoff():
 	failed_attempts = 0
 	max_attempts=200
 
-	for chance_cutoff in list(range(1, range_chance_cutoff, 1)):
+	for chance_cutoff in range(1, range_chance_cutoff):
 		count += 1
 
 		raw_command = [
@@ -626,7 +626,7 @@ def crush_chance_alpha(): # -Z
 	failed_attempts = 0
 	max_attempts=200
 
-	for chance_alpha in list(range(2, range_chance_alpha, 1)):
+	for chance_alpha in range(2, range_chance_alpha):
 		count += 1
 
 		raw_command = [
