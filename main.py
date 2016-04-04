@@ -241,6 +241,9 @@ def crush_maniac_threshold(): # -T
 	global arr_index
 	global output_best
 
+	if (best_dict['maniac_repeats'] == 0): # nothing to do here
+		return
+
 	#locals
 	range_maniac_threshold = 40
 	max_attempts = 40
@@ -332,6 +335,9 @@ def crush_maniac_divisor(): # -D
 	global count
 	global arr_index
 	global output_best
+
+	if (best_dict['maniac_repeats'] == 0): # nothing to do here
+		return
 
 	#locals
 	range_maniac_divisor = 268435455
@@ -439,6 +445,9 @@ def crush_maniac_min_size(): # -M
 	global count
 	global arr_index
 	global output_best
+
+	if (best_dict['maniac_repeats'] == 0): # nothing to do here
+		return
 
 	#locals
 	range_maniac_min_size = 3000
