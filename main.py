@@ -205,7 +205,7 @@ def crush_maniac_repeats(): # -N
 				print("\033[K", end="")
 				print(
 					 str(count) +
-					 " maniac:[ " +  TXT_UL + "repeat: " + str(maniac_repeats) + TXT_RES +
+					 " maniac [ " +  TXT_UL + "repeat: " + str(maniac_repeats) + TXT_RES +
 					 " threshold: " + str(best_dict['maniac_threshold']) +
 					 " min_size: " + str(best_dict['maniac_min_size']) +
 					 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
