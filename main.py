@@ -1331,26 +1331,87 @@ try: # catch KeyboardInterrupt
 
 		max_iterations = 5
 		it = 0
-		#best_dict['maniac_repeats'] = 
-		while (it != max_iterations):
-			sze_beginning = best_dict['size']
-			crush_maniac_threshold()
-			crush_maniac_divisor()
-			crush_maniac_min_size()
-			crush_max_palette_size()
-			crush_chance_cutoff()
-			crush_chance_alpha()
-			crush_keep_invisible_rgb()
-			crush_force_color_buckets()
-			crush_no_ycocg()
-			crush_no_channel_compact()
-			crush_interlace()
-			crush_maniac_repeats()
+		#best_dict['maniac_repeats'] =
+		last_changing_pass = 0
 
-			# if iteration didn't reduce anything, stop'
+		while (it != max_iterations):
+			size_before = best_dict['size']
+
+			if (last_changing_pass == 1): break
+			crush_maniac_threshold()    #  1
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 1
+
+			if (last_changing_pass == 2): break
+			crush_maniac_divisor()      #  2
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 2
+
+
+			if (last_changing_pass == 3): break
+			crush_maniac_min_size()     #  3
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 3
+
+			if (last_changing_pass == 4): break
+			crush_max_palette_size()    #  4
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 4
+
+
+			if (last_changing_pass == 5): break
+			crush_chance_cutoff()       #  5
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 5
+
+			if (last_changing_pass == 6): break
+			crush_chance_alpha()        #  6
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 6
+
+			if (last_changing_pass == 7): break
+			crush_keep_invisible_rgb()  #  7
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 7
+
+			if (last_changing_pass == 8): break
+			crush_force_color_buckets() #  8
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 8
+
+			if (last_changing_pass == 9): break
+			crush_no_ycocg()            #  9
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 9
+
+			if (last_changing_pass == 10): break
+			crush_no_channel_compact()  # 10
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 10
+
+			if (last_changing_pass == 11): break
+			crush_interlace()           # 11
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 11
+
+			if (last_changing_pass == 12): break
+			crush_maniac_repeats()      # 12
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 12
+
 			it+=1
-			if (sze_beginning == best_dict['size']):
-				break
 
 
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
