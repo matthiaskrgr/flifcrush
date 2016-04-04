@@ -21,7 +21,7 @@
 import subprocess
 import sys
 import os
-from PIL import Image
+from PIL import Image # https://github.com/python-pillow/Pillow
 from collections import Counter
 from collections import namedtuple
 import argparse
