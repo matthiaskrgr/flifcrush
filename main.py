@@ -723,14 +723,16 @@ def crush_max_palette_size():
 	max_attempts=200
 
 
-	max_palette_size_range = set(chain(range(0, 11), range(inf['colors']-5, inf['colors']+10)))
+	range1 = range(-11, 11)
+	range2 = range(inf['colors']-5, inf['colors']+10)
+	range3 = range(-inf['colors'], 10-inf['colors']) # negative
+	max_palette_size_range = set(chain(range1, range2, range3))
+
 	for max_palette_size in max_palette_size_range:
-		# according to flif code -32000 is also valid, perhaps try this at some point
-		if ((max_palette_size < 0) or (max_palette_size > 32000)) : # in case inf['colors']  is >5
+		if ((max_palette_size < -32000) or (max_palette_size > 32000)) : # apparently negative values are ok 
 			continue
 
 		count +=1
-
 
 		raw_command = [
 			flif_binary,
@@ -782,7 +784,7 @@ def crush_max_palette_size():
 
 				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
 				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-				 " "+ TXT_UL + "palette: " + str(best_dict['max_palette_size']) + TXT_RES +                 # <---.
+				 " "+ TXT_UL + "palette: " + str(max_palette_size) + TXT_RES +                 # <---.
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
