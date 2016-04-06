@@ -130,7 +130,7 @@ def save_file():
 
 	else:
 		print("\033[K", end="")
-		print("WARNING: could not reduce size!")
+		print("WARNING: could not reduce size! (" + str(count) +  " attempts)")
 
 # generates a name for a file that does not exist in current directory, used for tmp files
 def get_rand_filename(): 
@@ -782,7 +782,7 @@ def crush_max_palette_size():
 
 
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
 			size_change = best_dict['size']-size_new
@@ -1362,12 +1362,14 @@ try: # catch KeyboardInterrupt
 			debug_array=[]
 			debug_dict = {'Nr': '', 'maniac_repeats':'', 'maniac_threshold':"", 'maniac_min_size':"", 'maniac_divisor':"", 'max_palette_size': "", 'ACB': "", 'INT':"", 'size':""}
 
-		max_iterations = 5
+		max_iterations = 10
 		it = 0
 		#best_dict['maniac_repeats'] =
 		last_changing_pass = 0
 
 		while (it != max_iterations):
+			# note: if none of the passes manage to reduce, we will have an infinite loop here!
+			
 			size_before = best_dict['size']
 
 			if (last_changing_pass == 1): break
