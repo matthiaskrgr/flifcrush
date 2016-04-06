@@ -722,7 +722,7 @@ def crush_chance_alpha(): # -Z
 				break;
 
 
-def crush_max_palette_size():
+def crush_palette():
 	# globals
 	global best_dict
 	global count
@@ -1392,7 +1392,7 @@ try: # catch KeyboardInterrupt
 				last_changing_pass = 3
 
 			if (last_changing_pass == 4): break
-			crush_max_palette_size()    #  4
+			crush_palette()    #  4
 			if best_dict['size'] < size_before:
 				size_before = best_dict['size']
 				last_changing_pass = 4
