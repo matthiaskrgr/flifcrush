@@ -730,10 +730,8 @@ def crush_palette():
 	global output_best
 
 	#locals
-	range_chance_alpha = 128
 	failed_attempts = 0
 	max_attempts=200
-
 
 	range1 = range(-11, 11)
 	range2 = range(inf['colors']-5, inf['colors']+10)
@@ -781,35 +779,40 @@ def crush_palette():
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
+		# crappy fix for #15 ; don't compare against size_orig at beginning
+		smaller_than_global = (best_dict['size'] > size_new)
+		smaller_than_flif_internal = (best_dict['size_flif_internal'] > size_new)
 
-		if (best_dict['size'] > size_new): # new file is smaller
+		if (smaller_than_global) or (smaller_than_flif_internal): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
-			size_change = best_dict['size']-size_new
-			perc_change = pct_of_best(size_new)
-			print("\033[K", end="")
-			print(
-				 str(count) +
-				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " min_size: " + str(best_dict['maniac_min_size'])  + 
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+			if (smaller_than_global):
+				size_change = best_dict['size']-size_new
+				perc_change = pct_of_best(size_new)
+				print("\033[K", end="")
+				print(
+					 str(count) +
+					 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+					 " threshold: " + str(best_dict['maniac_threshold']) + 
+					 " min_size: " + str(best_dict['maniac_min_size'])  + 
+					 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
 
-				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
-				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-				 " "+ TXT_UL + "palette: " + str(max_palette_size) + TXT_RES +                 # <---.
+					 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+					 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+					 " "+ TXT_UL + "palette: " + str(max_palette_size) + TXT_RES +                 # <---.
 
-				 " itlc: " + str(best_dict['interlace'].bool) +
-				 " guess: " + str(best_dict['guess']) +
-				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
-				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
-				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
-				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+					 " itlc: " + str(best_dict['interlace'].bool) +
+					 " guess: " + str(best_dict['guess']) +
+					 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+					 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
+					 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
+					 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
 
-				 " size " + str(size_new) + " b " +
-				 "-" + str(size_change) + " b " +
-				 perc_change + " %")
-
+					 " size " + str(size_new) + " b " +
+					 "-" + str(size_change) + " b " +
+					 perc_change + " %")
+			if (size_new < best_dict['size_flif_internal']):
+				best_dict['size_flif_internal'] = size_new
 			best_dict['max_palette_size'] = max_palette_size
 			best_dict['size'] = size_new
 			best_dict['count'] = count
@@ -1343,6 +1346,7 @@ try: # catch KeyboardInterrupt
 				'no_ycocg': Boolflag("", False), # --no-ycocg
 				'keep_invisible_rgb':  Boolflag("--keep-invisible-rgb", False),
 				'size': size_orig,
+				'size_flif_internal': float('inf'),
 				}
 
 
