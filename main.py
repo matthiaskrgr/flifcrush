@@ -1281,16 +1281,23 @@ except KeyError: # env var not set, check if /usr/bin/flif exists
 
 SUPPORTED_FILE_EXTENSIONS=['png', 'flif'] # @TODO add some more
 input_files = []
+bad_input_files = []
 try: # catch KeyboardInterrupt
 
 	for path in INPATHS: # iterate over arguments
-		if (os.path.isfile(path)): # inpath is not a directory but a file
+		if (os.path.isfile(path)):   # inpath is a file
 			input_files.append(path) # add to list
-		else:  # else walk recursively 
+		elif (os.path.isdir(path)):  # inpath is a directory
 			for root, directories, filenames in os.walk(path): 
 				for filename in filenames:
 					if (filename.split('.')[-1] in SUPPORTED_FILE_EXTENSIONS): # check for valid filetypes
 						input_files.append(os.path.join(root,filename)) # add to list
+		else: # path does not exist
+			bad_input_files.append(path)
+
+	if (bad_input_files):
+		print("WARNING: files not found:")
+		print(', '.join(bad_input_files) + "\n")
 
 # generation of input_files list is done:
 
@@ -1373,7 +1380,7 @@ try: # catch KeyboardInterrupt
 
 		while (it != max_iterations):
 			# note: if none of the passes manage to reduce, we will have an infinite loop here!
-			
+
 			size_before = best_dict['size']
 
 			if (last_changing_pass == 1): break
@@ -1474,7 +1481,7 @@ try: # catch KeyboardInterrupt
 			print("Flif default would have been: " + str(size_flifdefault_glob) + " b")
 		else:
 			print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
-except KeyboardInterrupt:
+except KeyboardInterrupt: # ctrl+c
 	print("\033[K", end="") # clear previous line
 	print("\rTermination requested, saving best file so far...\n")
 	try: # double ctrl+c shall quit immediately
