@@ -187,7 +187,8 @@ def crush_maniac_repeats(): # -N
 
 			INFILE,
 			interlace_flag,
-			'/dev/stdout',
+			'--overwrite',
+			'/dev/stdout'
 		] # = raw_command 
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
@@ -285,6 +286,7 @@ def crush_maniac_threshold(): # -T
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -380,6 +382,7 @@ def crush_maniac_divisor(): # -D
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -582,6 +585,7 @@ def crush_chance_cutoff():
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -674,6 +678,7 @@ def crush_chance_alpha(): # -Z
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -770,6 +775,7 @@ def crush_palette():
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -865,6 +871,7 @@ def crush_keep_invisible_rgb():
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -956,6 +963,7 @@ def crush_force_color_buckets():
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -1039,6 +1047,7 @@ def crush_no_ycocg():
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -1121,6 +1130,7 @@ def crush_no_channel_compact():
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
@@ -1213,6 +1223,7 @@ def crush_interlace():
 
 
 								INFILE,
+								'--overwrite',
 								'/dev/stdout',
 							] # = raw_command 
 
