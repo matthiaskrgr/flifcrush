@@ -51,7 +51,7 @@ interlace_flag="--no-interlace" # default: false
 INTERLACE=False
 INTERLACE_FORCE=False
 
-# make these global to access them easily inside functions 
+# make these global to access them easily inside functions
 global size_before_glob, size_after_glob, files_count_glob, size_flifdefault_glob
 size_before_glob = 0 # size of all images we process
 size_after_glob = 0 # size of all flifs we generated
@@ -93,10 +93,10 @@ def showActivity(func_arg, size_new):
 	if (arr_index == arrlen):
 		arr_index = 0
 	diff_best = best_dict['size'] - size_new
-	
+
 	print(progress_array[arr_index] + " " + str(count) + ": "  + str(func_arg) +  ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
-# save .flif file that had the best combination of parameters 
+# save .flif file that had the best combination of parameters
 def save_file():
 	global output_best
 	flif2flif = False # default, we need extra parameter if we convert .flif to -clif
@@ -136,7 +136,7 @@ def save_file():
 		print("WARNING: could not reduce size! (" + str(count) +  " attempts)")
 
 # generates a name for a file that does not exist in current directory, used for tmp files
-def get_rand_filename(): 
+def get_rand_filename():
 	# this prevents accidentally overwriting a preexisting file
 	filename =''.join(random.choice(string.ascii_uppercase) for i in range(9))
 	while (os.path.isfile(filename)): # if the name already exists, try again
@@ -150,7 +150,7 @@ def pct_of_best(size_new):
 	return pct
 
 
-def crush_maniac_repeats(): # -N 
+def crush_maniac_repeats(): # -N
 	# globals we modify
 	global best_dict
 	global count
@@ -188,7 +188,7 @@ def crush_maniac_repeats(): # -N
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout'
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -258,7 +258,7 @@ def crush_maniac_threshold(): # -T
 	for maniac_threshold in range(1, range_maniac_threshold):
 
 		# skip maniac_threshold 1-4, it takes too much ram in extreme cases
-		if (maniac_threshold <= 4):  
+		if (maniac_threshold <= 4):
 			continue
 
 		count += 1
@@ -287,7 +287,7 @@ def crush_maniac_threshold(): # -T
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
@@ -300,7 +300,7 @@ def crush_maniac_threshold(): # -T
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':best_dict['maniac_repeats'], 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
 			size_change = best_dict['size']-size_new
@@ -383,7 +383,7 @@ def crush_maniac_divisor(): # -D
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -394,7 +394,7 @@ def crush_maniac_divisor(): # -D
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
 			size_change = best_dict['size']-size_new
@@ -403,7 +403,7 @@ def crush_maniac_divisor(): # -D
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) +
 				 " min_size: " + str(best_dict['maniac_min_size']) +
 				" " + TXT_UL +  "divisor: " + str(maniac_divisor) + TXT_RES + " ] " + # ] maniac      <----
 
@@ -472,14 +472,14 @@ def crush_maniac_min_size(): # -M
 
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
-			
+
 		raw_command = [
 			flif_binary,
 			flif_to_flif,
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(maniac_min_size)),				# <-
 
 			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -497,7 +497,7 @@ def crush_maniac_min_size(): # -M
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -508,7 +508,7 @@ def crush_maniac_min_size(): # -M
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size': max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
 			size_change = best_dict['size']-size_new
@@ -517,9 +517,9 @@ def crush_maniac_min_size(): # -M
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
+				 " threshold: " + str(best_dict['maniac_threshold']) +
 				 " " + TXT_UL + "min_size: " + str(maniac_min_size)  + TXT_RES +                           #  <----
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
 
 				 " chance:[ cutoff: " + str(best_dict['chance_cutoff']) +
 				 " alpha: " + str(best_dict['chance_alpha']) + " ] " + # ] chance
@@ -569,7 +569,7 @@ def crush_chance_cutoff():
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 			('--chance-cutoff=' + str(chance_cutoff)),					# <-
@@ -587,7 +587,7 @@ def crush_chance_cutoff():
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -599,7 +599,7 @@ def crush_chance_cutoff():
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
 			size_change = best_dict['size']-size_new
@@ -608,9 +608,9 @@ def crush_chance_cutoff():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " min_size: " + str(best_dict['maniac_min_size'])  + 
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size'])  +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
 
 				 " chance:[ "+ TXT_UL + "cutoff: "  + str(chance_cutoff) +  TXT_RES +                           #  <----
 				 " alpha: " + str(best_dict['chance_alpha']) + " ] " + # ] chance
@@ -662,7 +662,7 @@ def crush_chance_alpha(): # -Z
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -680,7 +680,7 @@ def crush_chance_alpha(): # -Z
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -692,7 +692,7 @@ def crush_chance_alpha(): # -Z
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':maniac_min_size, 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
 			size_change = best_dict['size']-size_new
@@ -701,11 +701,11 @@ def crush_chance_alpha(): # -Z
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " min_size: " + str(best_dict['maniac_min_size'])  + 
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size'])  +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
 
-				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
 				 " "+ TXT_UL + "alpha: " + str(best_dict['chance_alpha']) + TXT_RES + " ] " + # ] chance              # <---.
 				 " palette: " + str(best_dict['max_palette_size']) +
 
@@ -748,7 +748,7 @@ def crush_palette():
 	max_palette_size_range = set(chain(range1, range2, range3))
 
 	for max_palette_size in max_palette_size_range:
-		if ((max_palette_size < -32000) or (max_palette_size > 32000)) : # apparently negative values are ok 
+		if ((max_palette_size < -32000) or (max_palette_size > 32000)) : # apparently negative values are ok
 			continue
 
 		count +=1
@@ -759,7 +759,7 @@ def crush_palette():
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -777,7 +777,7 @@ def crush_palette():
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -803,11 +803,11 @@ def crush_palette():
 				print(
 					 str(count) +
 					 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-					 " threshold: " + str(best_dict['maniac_threshold']) + 
-					 " min_size: " + str(best_dict['maniac_min_size'])  + 
-					 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+					 " threshold: " + str(best_dict['maniac_threshold']) +
+					 " min_size: " + str(best_dict['maniac_min_size'])  +
+					 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
 
-					 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+					 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
 					 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
 					 " "+ TXT_UL + "palette: " + str(max_palette_size) + TXT_RES +                 # <---.
 
@@ -855,7 +855,7 @@ def crush_keep_invisible_rgb():
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -873,7 +873,7 @@ def crush_keep_invisible_rgb():
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -884,7 +884,7 @@ def crush_keep_invisible_rgb():
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			output_best = output
 			size_change = best_dict['size']-size_new
 			perc_change = pct_of_best(size_new)
@@ -896,13 +896,13 @@ def crush_keep_invisible_rgb():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " min_size: " + str(best_dict['maniac_min_size'])  + 
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size'])  +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
 
-				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
 				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-				 " palette: " + str(best_dict['max_palette_size']) + 
+				 " palette: " + str(best_dict['max_palette_size']) +
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
@@ -947,7 +947,7 @@ def crush_force_color_buckets():
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -965,7 +965,7 @@ def crush_force_color_buckets():
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -976,7 +976,7 @@ def crush_force_color_buckets():
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			output_best = output
 			size_change = best_dict['size']-size_new
 			perc_change = pct_of_best(size_new)
@@ -988,13 +988,13 @@ def crush_force_color_buckets():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " min_size: " + str(best_dict['maniac_min_size'])  + 
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size'])  +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac    
 
-				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
 				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-				 " palette: " + str(best_dict['max_palette_size']) + 
+				 " palette: " + str(best_dict['max_palette_size']) +
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
@@ -1031,7 +1031,7 @@ def crush_no_ycocg():
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -1049,7 +1049,7 @@ def crush_no_ycocg():
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -1060,7 +1060,7 @@ def crush_no_ycocg():
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			output_best = output
 			size_change = best_dict['size']-size_new
 			perc_change = pct_of_best(size_new)
@@ -1072,13 +1072,13 @@ def crush_no_ycocg():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " min_size: " + str(best_dict['maniac_min_size'])  + 
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size'])  +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac    
 
-				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
 				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-				 " palette: " + str(best_dict['max_palette_size']) + 
+				 " palette: " + str(best_dict['max_palette_size']) +
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
@@ -1113,7 +1113,7 @@ def crush_no_channel_compact():
 
 			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-			('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -1132,7 +1132,7 @@ def crush_no_channel_compact():
 			interlace_flag,
 			'--overwrite',
 			'/dev/stdout',
-		] # = raw_command 
+		] # = raw_command
 
 		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -1143,7 +1143,7 @@ def crush_no_channel_compact():
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
-		if (best_dict['size'] > size_new): # new file is smaller 
+		if (best_dict['size'] > size_new): # new file is smaller
 			output_best = output
 			size_change = best_dict['size']-size_new
 			perc_change = pct_of_best(size_new)
@@ -1155,18 +1155,18 @@ def crush_no_channel_compact():
 			print(
 				 str(count) +
 				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-				 " threshold: " + str(best_dict['maniac_threshold']) + 
-				 " min_size: " + str(best_dict['maniac_min_size'])  + 
-				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size'])  +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac    
 
-				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
 				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-				 " palette: " + str(best_dict['max_palette_size']) + 
+				 " palette: " + str(best_dict['max_palette_size']) +
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
-				 " " +  TXT_UL + "no_CC: " + str(best_dict['no_channel_compact'].bool) + TXT_RES +  # <- 
-				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + 
+				 " " +  TXT_UL + "no_CC: " + str(best_dict['no_channel_compact'].bool) + TXT_RES +  # <-
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
 
@@ -1196,9 +1196,9 @@ def crush_interlace():
 				for b in 0,1,2,3:
 					for c in 0,1,2,3:
 						for d in 0,1,2,3:
-							pixel_predictor = str(a) + str(b) + str(c) + str(d) 
+							pixel_predictor = str(a) + str(b) + str(c) + str(d)
 
-							count += 1 
+							count += 1
 
 							raw_command = [
 								flif_binary,
@@ -1206,7 +1206,7 @@ def crush_interlace():
 
 								('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
 								('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-								('--maniac-divisor=' + str(best_dict['maniac_divisor'])), 
+								('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
 								('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
 								('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
@@ -1225,7 +1225,7 @@ def crush_interlace():
 								INFILE,
 								'--overwrite',
 								'/dev/stdout',
-							] # = raw_command 
+							] # = raw_command
 
 							sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
 							output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
@@ -1250,19 +1250,19 @@ def crush_interlace():
 								print(
 									 str(count) +
 									 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-									 " threshold: " + str(best_dict['maniac_threshold']) + 
-									 " min_size: " + str(best_dict['maniac_min_size'])  + 
-									 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac     
+									 " threshold: " + str(best_dict['maniac_threshold']) +
+									 " min_size: " + str(best_dict['maniac_min_size'])  +
+									 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac    
 
-									 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) + 
+									 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
 									 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-									 " palette: " + str(best_dict['max_palette_size']) + 
+									 " palette: " + str(best_dict['max_palette_size']) +
 
 									" " +  TXT_UL + "itlc: " + str(best_dict['interlace'].bool) +  # <<---
 									" guess: " + str(best_dict['guess']) + TXT_RES  +              # <----
 									 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
-									 " Cbuck: " + str(best_dict['force_color_buckets'].bool) + 
-									 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +  
+									 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
+									 " no_ycocg: " + str(best_dict['no_ycocg'].bool) + 
 									 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
 
 									 " size " + str(size_new) + " b " +
@@ -1303,7 +1303,7 @@ try: # catch KeyboardInterrupt
 		if (os.path.isfile(path)):   # inpath is a file
 			input_files.append(path) # add to list
 		elif (os.path.isdir(path)):  # inpath is a directory
-			for root, directories, filenames in os.walk(path): 
+			for root, directories, filenames in os.walk(path):
 				for filename in filenames:
 					if (filename.split('.')[-1] in SUPPORTED_FILE_EXTENSIONS): # check for valid filetypes
 						input_files.append(os.path.join(root,filename)) # add to list
