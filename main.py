@@ -92,7 +92,7 @@ def showActivity(func_arg, size_new):
 	arr_index+=1
 	if (arr_index == arrlen):
 		arr_index = 0
-	diff_best = best_dict['size'] - size_new
+#	diff_best = best_dict['size'] - size_new
 
 	print(progress_array[arr_index] + " " + str(count) + ": "  + str(func_arg) +  ", size: " + str(size_new) + " b        ", end="\r",flush=True)
 
