@@ -23,7 +23,6 @@ if (sys.version_info.major != 3): # no python 3
 	sys.exit(1)
 
 import subprocess
-import sys
 import os
 from PIL import Image # https://github.com/python-pillow/Pillow
 from collections import Counter
