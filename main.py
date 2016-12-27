@@ -496,6 +496,7 @@ def crush_maniac_min_size(): # -M
 
 			INFILE,
 			interlace_flag,
+			'--overwrite',
 			'/dev/stdout',
 		] # = raw_command 
 
