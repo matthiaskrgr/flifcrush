@@ -1379,7 +1379,7 @@ try: # catch KeyboardInterrupt
 		size_new = size_best = os.path.getsize(INFILE)
 
 		if (COMPARE):  #do a default flif run with no special arguments
-			proc = subprocess.Popen([flif_binary, INFILE, '/dev/stdout'], stdout=subprocess.PIPE)
+			proc = subprocess.Popen([flif_binary, INFILE,'--overwrite', '/dev/stdout'], stdout=subprocess.PIPE)
 			output_flifdefault = proc.stdout.read()
 			size_flifdefault = sys.getsizeof(output_flifdefault)
 			size_flifdefault_glob += size_flifdefault
