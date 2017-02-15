@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #    flifcrush - tries to reduce FLIF files in size
-#    Copyright (C) 2015  Matthias Krüger
+#    Copyright (C) 2017  Matthias Krüger
 
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
