@@ -1307,7 +1307,7 @@ def crush_interlace():
 
 										" " +  TXT_UL + "itlc: " + str(best_dict['interlace'].bool) +  # <<---
 										" guess: " + str(best_dict['guess']) +                        # <----
-										" invGuess:" + str(best_dict['invisible_guess']) + TXT_RES + # <----
+										" inv_Guess: " + str(best_dict['invisible_guess']) + TXT_RES + # <----
 										 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 										 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 										 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
