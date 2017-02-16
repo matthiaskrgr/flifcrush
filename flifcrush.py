@@ -184,6 +184,7 @@ def crush_maniac_repeats(): # -N
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -224,6 +225,7 @@ def crush_maniac_repeats(): # -N
 					 " guess: " + str(best_dict['guess']) +
 					 " inv_guess: " + str(best_dict['invisible_guess']) +
 					 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+					 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 					 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 					 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 					 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -285,6 +287,7 @@ def crush_maniac_threshold(): # -T
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -324,6 +327,7 @@ def crush_maniac_threshold(): # -T
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -383,6 +387,7 @@ def crush_maniac_divisor(): # -D
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -420,6 +425,7 @@ def crush_maniac_divisor(): # -D
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -499,6 +505,7 @@ def crush_maniac_min_size(): # -M
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -536,6 +543,7 @@ def crush_maniac_min_size(): # -M
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -591,6 +599,7 @@ def crush_chance_cutoff():
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -629,6 +638,7 @@ def crush_chance_cutoff():
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -686,6 +696,7 @@ def crush_chance_alpha(): # -Z
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -724,6 +735,7 @@ def crush_chance_alpha(): # -Z
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -785,6 +797,7 @@ def crush_palette():
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -828,6 +841,7 @@ def crush_palette():
 					 " guess: " + str(best_dict['guess']) +
 					 " inv_guess: " + str(best_dict['invisible_guess']) +
 					 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+					 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 					 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 					 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 					 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -883,6 +897,7 @@ def crush_keep_invisible_rgb():
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			flagstr,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -923,6 +938,7 @@ def crush_keep_invisible_rgb():
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " " +  TXT_UL + "inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) + TXT_RES + #    < ------
@@ -977,6 +993,7 @@ def crush_force_color_buckets():
 			best_dict['force_color_buckets'].flag,
 			flagstr,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -1017,6 +1034,7 @@ def crush_force_color_buckets():
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " " +  TXT_UL + "Cbuck: " + str(best_dict['force_color_buckets'].bool) + TXT_RES + # <-
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -1064,6 +1082,7 @@ def crush_no_ycocg():
 			best_dict['force_color_buckets'].flag,
 			flagstr,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -1104,6 +1123,7 @@ def crush_no_ycocg():
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " " +  TXT_UL + "no_ycocg: " + str(best_dict['no_ycocg'].bool) + TXT_RES + # <-
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -1148,6 +1168,7 @@ def crush_no_channel_compact():
 			best_dict['force_color_buckets'].flag,
 			best_dict['no_ycocg'].flag,
 			best_dict['keep_invisible_rgb'].flag,
+			best_dict['no_subtract_green'].flag,
 
 			INFILE,
 			interlace_flag,
@@ -1188,6 +1209,7 @@ def crush_no_channel_compact():
 				 " guess: " + str(best_dict['guess']) +
 				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " " +  TXT_UL + "no_CC: " + str(best_dict['no_channel_compact'].bool) + TXT_RES +  # <-
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
 				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -1243,6 +1265,7 @@ def crush_interlace():
 									best_dict['force_color_buckets'].flag,
 									best_dict['no_ycocg'].flag,
 									best_dict['keep_invisible_rgb'].flag,
+									best_dict['no_subtract_green'].flag,
 
 
 									INFILE,
@@ -1266,7 +1289,7 @@ def crush_interlace():
 									size_change = best_dict['size']-size_new
 									perc_change = pct_of_best(size_new)
 
-									best_dict['interlace'] = best_dict['interlace']._replace(flag=flagstr)
+									best_dict['interlace'] = best_dict['interlace']._replace(flag=interlace_flagstr)
 									best_dict['interlace'] = best_dict['interlace']._replace(bool=interlace)
 									best_dict['invisible_guess'] = invisible_guess
 
@@ -1286,6 +1309,7 @@ def crush_interlace():
 										" guess: " + str(best_dict['guess']) +                        # <----
 										" invGuess:" + str(best_dict['invisible_guess']) + TXT_RES + # <----
 										 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+										 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 										 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 										 " no_ycocg: " + str(best_dict['no_ycocg'].bool) + 
 										 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
@@ -1297,6 +1321,102 @@ def crush_interlace():
 									best_dict['size'] = size_new
 									best_dict['count'] = count
 									arr_index = 0
+
+
+
+
+
+
+
+
+def crush_no_subtract_green():
+	# globals
+	global best_dict
+	global count
+	global arr_index
+	global output_best
+
+	for no_subtract_green in True, False:
+		count +=1
+
+		flagstr = ("--no-subtract-green" if (no_subtract_green) else "")
+
+		raw_command = [
+			flif_binary,
+			flif_to_flif,
+
+			('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
+			('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
+			('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
+			('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
+
+			('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
+			('--chance-alpha=' + str(best_dict['chance_alpha'])),
+			('--max-palette-size=' + str(best_dict['max_palette_size'])),
+			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
+
+			best_dict['interlace'].flag,
+			best_dict['no_channel_compact'].flag,
+			best_dict['force_color_buckets'].flag,
+			best_dict['no_ycocg'].flag,
+			best_dict['keep_invisible_rgb'].flag,
+			flagstr,
+
+			INFILE,
+			interlace_flag,
+			'--overwrite',
+			'/dev/stdout',
+		] # = raw_command
+
+		sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+		output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
+		size_new = sys.getsizeof(output)
+		showActivity("no subtract green: " + str(no_subtract_green), size_new)
+
+
+		#if (DEBUG):
+		#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+
+		if (best_dict['size'] > size_new): # new file is smaller
+			output_best = output
+			size_change = best_dict['size']-size_new
+			perc_change = pct_of_best(size_new)
+
+			best_dict['no_subtract_green'] = best_dict['no_subtract_green']._replace(flag=flagstr)
+			best_dict['no_subtract_green'] = best_dict['no_subtract_green']._replace(bool=no_subtract_green)
+
+			print("\033[K", end="")
+			print(
+				 str(count) +
+				 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size'])  +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac    
+
+				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
+				 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+				 " palette: " + str(best_dict['max_palette_size']) +
+
+				 " itlc: " + str(best_dict['interlace'].bool) +
+				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
+				 "no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " " + TXT_UL + "no_subG: " + str(best_dict['no_subtract_green'].bool) + TXT_RES + # <-
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
+				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
+				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+
+				 " size " + str(size_new) + " b " +
+				 "-" + str(size_change) + " b " +
+				 perc_change + " %")
+
+			best_dict['size'] = size_new
+			best_dict['count'] = count
+			arr_index = 0
+
+
+
 
 
 
@@ -1394,6 +1514,7 @@ try: # catch KeyboardInterrupt
 				'force_color_buckets': Boolflag('', False), #--force-color-buckets
 				'no_ycocg': Boolflag("", False), # --no-ycocg
 				'keep_invisible_rgb':  Boolflag("--keep-invisible-rgb", False),
+				'no_subtract_green': Boolflag("--no-subtract-green", False),
 				'size': size_orig,
 				'size_flif_internal': float('inf'),
 				}
@@ -1482,22 +1603,28 @@ try: # catch KeyboardInterrupt
 				last_changing_pass = 9
 
 			if (last_changing_pass == 10): break
-			crush_no_channel_compact()  # 10
+			crush_no_subtract_green()    # 10
 			if best_dict['size'] < size_before:
 				size_before = best_dict['size']
 				last_changing_pass = 10
 
 			if (last_changing_pass == 11): break
-			crush_interlace()           # 11
+			crush_no_channel_compact()  # 11
 			if best_dict['size'] < size_before:
 				size_before = best_dict['size']
 				last_changing_pass = 11
 
 			if (last_changing_pass == 12): break
-			crush_maniac_repeats()      # 12
+			crush_interlace()           # 12
 			if best_dict['size'] < size_before:
 				size_before = best_dict['size']
 				last_changing_pass = 12
+
+			if (last_changing_pass == 13): break
+			crush_maniac_repeats()      # 13
+			if best_dict['size'] < size_before:
+				size_before = best_dict['size']
+				last_changing_pass = 13
 
 			it+=1
 
