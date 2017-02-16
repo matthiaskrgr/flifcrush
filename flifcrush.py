@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #    flifcrush - tries to reduce FLIF files in size
-#    Copyright (C) 2017  Matthias Krüger
+#    Copyright (C) 2015 - 2017  Matthias Krüger
 
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -177,6 +177,7 @@ def crush_maniac_repeats(): # -N
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -221,6 +222,7 @@ def crush_maniac_repeats(): # -N
 
 					 " itlc: " + str(best_dict['interlace'].bool) +
 					 " guess: " + str(best_dict['guess']) +
+					 " inv_guess: " + str(best_dict['invisible_guess']) +
 					 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 					 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 					 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -276,6 +278,7 @@ def crush_maniac_threshold(): # -T
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -319,6 +322,7 @@ def crush_maniac_threshold(): # -T
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -372,6 +376,7 @@ def crush_maniac_divisor(): # -D
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -413,6 +418,7 @@ def crush_maniac_divisor(): # -D
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -486,6 +492,7 @@ def crush_maniac_min_size(): # -M
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -527,6 +534,7 @@ def crush_maniac_min_size(): # -M
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -576,6 +584,7 @@ def crush_chance_cutoff():
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -618,6 +627,7 @@ def crush_chance_cutoff():
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -669,6 +679,7 @@ def crush_chance_alpha(): # -Z
 			('--chance-alpha=' + str(chance_alpha)),			# <-
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -711,6 +722,7 @@ def crush_chance_alpha(): # -Z
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -766,6 +778,7 @@ def crush_palette():
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(max_palette_size)),			#<-
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -813,6 +826,7 @@ def crush_palette():
 
 					 " itlc: " + str(best_dict['interlace'].bool) +
 					 " guess: " + str(best_dict['guess']) +
+					 " inv_guess: " + str(best_dict['invisible_guess']) +
 					 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 					 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 					 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -862,6 +876,7 @@ def crush_keep_invisible_rgb():
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -906,6 +921,7 @@ def crush_keep_invisible_rgb():
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -954,6 +970,7 @@ def crush_force_color_buckets():
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -998,6 +1015,7 @@ def crush_force_color_buckets():
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " " +  TXT_UL + "Cbuck: " + str(best_dict['force_color_buckets'].bool) + TXT_RES + # <-
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -1038,6 +1056,8 @@ def crush_no_ycocg():
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
+
 
 			best_dict['interlace'].flag,
 			best_dict['no_channel_compact'].flag,
@@ -1082,6 +1102,7 @@ def crush_no_ycocg():
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " " +  TXT_UL + "no_ycocg: " + str(best_dict['no_ycocg'].bool) + TXT_RES + # <-
@@ -1120,7 +1141,7 @@ def crush_no_channel_compact():
 			('--chance-alpha=' + str(best_dict['chance_alpha'])),
 			('--max-palette-size=' + str(best_dict['max_palette_size'])),
 			('--guess=' + str(best_dict['guess'])),
-
+			('--invisible-guess=' + str(best_dict['invisible_guess'])),
 
 			best_dict['interlace'].flag,
 			flagstr,
@@ -1165,6 +1186,7 @@ def crush_no_channel_compact():
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
 				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
 				 " " +  TXT_UL + "no_CC: " + str(best_dict['no_channel_compact'].bool) + TXT_RES +  # <-
 				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
 				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
@@ -1190,88 +1212,91 @@ def crush_interlace():
 
 	for interlace in True, False:
 		guessline=""
-		flagstr = ("--interlace" if (interlace) else "--no-interlace")
+		interlace_flagstr = ("--interlace" if (interlace) else "--no-interlace")
 		if (interlace):
 			for a in 0,1,2,3: # --guess=abcd
 				for b in 0,1,2,3:
 					for c in 0,1,2,3:
 						for d in 0,1,2,3:
 							pixel_predictor = str(a) + str(b) + str(c) + str(d)
+							for invisible_guess in 0,1,2:  # --invisible-guess={0,1,2}
+								invisible_guess_flagstr = ("--invisible-guess=" + str(invisible_guess))
+								count += 1
 
-							count += 1
+								raw_command = [
+									flif_binary,
+									flif_to_flif,
 
-							raw_command = [
-								flif_binary,
-								flif_to_flif,
+									('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
+									('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
+									('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
+									('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
 
-								('--maniac-repeats=' + str(best_dict['maniac_repeats'])),
-								('--maniac-threshold=' + str(best_dict['maniac_threshold'])),
-								('--maniac-divisor=' + str(best_dict['maniac_divisor'])),
-								('--maniac-min-size=' + str(best_dict['maniac_min_size'])),
+									('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
+									('--chance-alpha=' + str(best_dict['chance_alpha'])),
+									('--max-palette-size=' + str(best_dict['max_palette_size'])),
 
-								('--chance-cutoff=' + str(best_dict['chance_cutoff'])),
-								('--chance-alpha=' + str(best_dict['chance_alpha'])),
-								('--max-palette-size=' + str(best_dict['max_palette_size'])),
-
-								('--guess=' + pixel_predictor),
-								flagstr,
-
-								best_dict['no_channel_compact'].flag,
-								best_dict['force_color_buckets'].flag,
-								best_dict['no_ycocg'].flag,
-								best_dict['keep_invisible_rgb'].flag,
-
-
-								INFILE,
-								'--overwrite',
-								'/dev/stdout',
-							] # = raw_command
-
-							sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
-							output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
-							size_new = sys.getsizeof(output)
-							showActivity("interlace: " + (str(interlace) + " guess: " + str(pixel_predictor)) , size_new)
+									('--guess=' + pixel_predictor),
+									interlace_flagstr,
+									invisible_guess_flagstr,
+									best_dict['no_channel_compact'].flag,
+									best_dict['force_color_buckets'].flag,
+									best_dict['no_ycocg'].flag,
+									best_dict['keep_invisible_rgb'].flag,
 
 
+									INFILE,
+									'--overwrite',
+									'/dev/stdout',
+								] # = raw_command
 
-							#if (DEBUG):
-							#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
+								sanitized_command = [x for x in raw_command if x ] # remove empty elements, if any
+								output = subprocess.Popen(sanitized_command, stdout=subprocess.PIPE).stdout.read()
+								size_new = sys.getsizeof(output)
+								showActivity("interlace: " + (str(interlace) + " guess: " + str(pixel_predictor)) + " inv_guess: " + str(invisible_guess) , size_new)
 
-							if (best_dict['size'] > size_new): # new file is smaller
 
-								output_best = output
-								size_change = best_dict['size']-size_new
-								perc_change = pct_of_best(size_new)
 
-								best_dict['interlace'] = best_dict['interlace']._replace(flag=flagstr)
-								best_dict['interlace'] = best_dict['interlace']._replace(bool=interlace)
+								#if (DEBUG):
+								#	debug_array.append([{'Nr':count, 'maniac_repeats':str(best_dict['maniac_repeats']), 'maniac_threshold':str(best_dict['maniac_threshold']), 'maniac_min_size':str(best_dict['maniac_min_size']), 'maniac_divisor':str(best_dict['maniac_divisor']), 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
-								print("\033[K", end="")
-								print(
-									 str(count) +
-									 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
-									 " threshold: " + str(best_dict['maniac_threshold']) +
-									 " min_size: " + str(best_dict['maniac_min_size'])  +
-									 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac    
+								if (best_dict['size'] > size_new): # new file is smaller
 
-									 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
-									 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
-									 " palette: " + str(best_dict['max_palette_size']) +
+									output_best = output
+									size_change = best_dict['size']-size_new
+									perc_change = pct_of_best(size_new)
 
-									" " +  TXT_UL + "itlc: " + str(best_dict['interlace'].bool) +  # <<---
-									" guess: " + str(best_dict['guess']) + TXT_RES  +              # <----
-									 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
-									 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
-									 " no_ycocg: " + str(best_dict['no_ycocg'].bool) + 
-									 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+									best_dict['interlace'] = best_dict['interlace']._replace(flag=flagstr)
+									best_dict['interlace'] = best_dict['interlace']._replace(bool=interlace)
+									best_dict['invisible_guess'] = invisible_guess
 
-									 " size " + str(size_new) + " b " +
-									 "-" + str(size_change) + " b " +
-									 str(perc_change) + " %")
+									print("\033[K", end="")
+									print(
+										 str(count) +
+										 " maniac [ repeat: " + str(best_dict['maniac_repeats']) +
+										 " threshold: " + str(best_dict['maniac_threshold']) +
+										 " min_size: " + str(best_dict['maniac_min_size'])  +
+										 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac    
 
-								best_dict['size'] = size_new
-								best_dict['count'] = count
-								arr_index = 0
+										 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
+										 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
+										 " palette: " + str(best_dict['max_palette_size']) +
+
+										" " +  TXT_UL + "itlc: " + str(best_dict['interlace'].bool) +  # <<---
+										" guess: " + str(best_dict['guess']) +                        # <----
+										" invGuess:" + str(best_dict['invisible_guess']) + TXT_RES + # <----
+										 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+										 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
+										 " no_ycocg: " + str(best_dict['no_ycocg'].bool) + 
+										 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
+
+										 " size " + str(size_new) + " b " +
+										 "-" + str(size_change) + " b " +
+										 str(perc_change) + " %")
+
+									best_dict['size'] = size_new
+									best_dict['count'] = count
+									arr_index = 0
 
 
 
@@ -1353,6 +1378,7 @@ try: # catch KeyboardInterrupt
 
 		global best_dict
 		# these have to be the flif default values
+		# basically we want to cover all non-lossy flif cmdline encode options here
 		best_dict={'count': -1,
 				'maniac_repeats': 0, # 3
 				'maniac_threshold': 40,
@@ -1363,6 +1389,7 @@ try: # catch KeyboardInterrupt
 				'chance_alpha': 19,
 				'interlace':  Boolflag("--no-interlace", False),
 				'guess': '0000', # may need further changes
+				'invisible_guess': '0',
 				'no_channel_compact': Boolflag('--no-channel-compact', True),
 				'force_color_buckets': Boolflag('', False), #--force-color-buckets
 				'no_ycocg': Boolflag("", False), # --no-ycocg
@@ -1510,6 +1537,3 @@ except KeyboardInterrupt: # ctrl+c
 	except KeyboardInterrupt: # double ctrl+c
 		print("\033[K", end="") # clear previous line
 		print("Terminated by user.")
-
-
-
