@@ -200,39 +200,37 @@ def crush_maniac_repeats(): # -N
 		#if (DEBUG):
 		#	debug_array.append([{'Nr':count, 'maniac_repeats':maniac_repeats, 'maniac_threshold':maniac_threshold, 'maniac_min_size':maniac_min_size, 'maniac_divisor':maniac_divisor, 'max_palette_size':max_palette_size, 'ACB':ACB, 'INT': INTERLACE, 'size': size_new}])
 
-		if ((best_dict['size'] > size_new) or (count==1)): # new file is smaller // count==1: make sure best_dict is filled with first values we obtain. this way we still continue crushing even if initial N-run does not reduce size smaller than size_orig
+
+		if ((best_dict['size'] > size_new)): # new file is smaller // count==1: make sure best_dict is filled with first values we obtain. this way we still continue crushing even if initial N-run does not reduce size smaller than size_orig
 			failed_attempts = 0 # reset break-counter
 			output_best = output
-			if (size_orig > size_new):
 
-				#run_best = "orig" if (count == 1) else best_dict['count']
+			size_change = best_dict['size']-size_new
+			perc_change = pct_of_best(size_new)
+			print("\033[K", end="")
+			print(
+				 str(count) +
+				 " maniac [ " +  TXT_UL + "repeat: " + str(maniac_repeats) + TXT_RES +
+				 " threshold: " + str(best_dict['maniac_threshold']) +
+				 " min_size: " + str(best_dict['maniac_min_size']) +
+				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
 
-				size_change = best_dict['size']-size_new
-				perc_change = pct_of_best(size_new)
-				print("\033[K", end="")
-				print(
-					 str(count) +
-					 " maniac [ " +  TXT_UL + "repeat: " + str(maniac_repeats) + TXT_RES +
-					 " threshold: " + str(best_dict['maniac_threshold']) +
-					 " min_size: " + str(best_dict['maniac_min_size']) +
-					 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
+				 " chance:[ cutoff: " + str(best_dict['chance_cutoff']) +
+				 " alpha: " + str(best_dict['chance_alpha']) + " ] " + # ] chance
+				 " palette: " + str(best_dict['max_palette_size']) +
 
-					 " chance:[ cutoff: " + str(best_dict['chance_cutoff']) +
-					 " alpha: " + str(best_dict['chance_alpha']) + " ] " + # ] chance
-					 " palette: " + str(best_dict['max_palette_size']) +
+				 " itlc: " + str(best_dict['interlace'].bool) +
+				 " guess: " + str(best_dict['guess']) +
+				 " inv_guess: " + str(best_dict['invisible_guess']) +
+				 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
+				 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
+				 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
+				 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
+				 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
 
-					 " itlc: " + str(best_dict['interlace'].bool) +
-					 " guess: " + str(best_dict['guess']) +
-					 " inv_guess: " + str(best_dict['invisible_guess']) +
-					 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
-					 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
-					 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
-					 " no_ycocg: " + str(best_dict['no_ycocg'].bool) +
-					 " inv_rgb: " + str(best_dict['keep_invisible_rgb'].bool) +
-
-					 " size " + str(size_new) + " b " +
-					 "-" + str(size_change) + " b " +
-					 perc_change + " %")
+				 " size " + str(size_new) + " b " +
+				 "-" + str(size_change) + " b " +
+				 perc_change + " %")
 
 			best_dict['size'] = size_new
 			best_dict['count'] = count
