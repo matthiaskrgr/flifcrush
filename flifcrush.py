@@ -1645,22 +1645,18 @@ try: # catch KeyboardInterrupt
 			for index, val in enumerate(debug_array):
 				print("run:", val[0]['Nr'], "  maniac_repeats:", val[0]['maniac_repeats'],"  maniac_threshold:",  val[0]['maniac_threshold'],"   maniac_min_size:",  val[0]['maniac_min_size'],"  maniac_split_divisor:", val[0]['maniac_split_divisor'],"  max_palette_size:", val[0]['max_palette_size'], "ACB", val[0]['ACB'],"INT", val[0]['INT'], "  size:", val[0]['size'] )
 	if (files_count_glob > 1):
+		print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 		if (COMPARE):
-			print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 			print("Flif default would have been: " + str(size_flifdefault_glob) + " b")
-		else:
-			print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 except KeyboardInterrupt: # ctrl+c
 	print("\033[K", end="") # clear previous line
 	print("\rTermination requested, saving best file so far...\n")
 	try: # double ctrl+c shall quit immediately
 		save_file()
 		if (files_count_glob > 1):
+			print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 			if (COMPARE):
-				print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 				print("Flif default would have been: " + str(size_flifdefault_glob) + " b")
-			else:
-				print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 	except KeyboardInterrupt: # double ctrl+c
 		print("\033[K", end="") # clear previous line
 		print("Terminated by user.")
