@@ -817,7 +817,9 @@ def crush_palette():
 		smaller_than_global = (best_dict['size'] > size_new)
 		smaller_than_flif_internal = (best_dict['size_flif_internal'] > size_new)
 
-		if (smaller_than_global) or (smaller_than_flif_internal): # new file is smaller
+		# do the smaller_than_flif_internal check is needed because palette pass is as first pass
+		# so we have to ignore it when we passed the initial iteration through all passes
+		if (smaller_than_global) or ((it==0) and smaller_than_flif_internal): # new file is smaller
 			failed_attempts = 0 # reset break-counter
 			output_best = output
 			if (smaller_than_global):
