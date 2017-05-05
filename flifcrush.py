@@ -1637,7 +1637,6 @@ try: # catch KeyboardInterrupt
 			print("\033[K", end="") # clear previous line
 			print("\nComparing flifcrush (" + str(best_dict['size']) +" b) to default flif (" + str(size_flifdefault)  + " b): " + str(diff_to_flif_byte) + " b which are " + str(diff_to_flif_perc)[:6] + " %")
 
-
 		# write final best file
 		save_file()
 
@@ -1648,6 +1647,9 @@ try: # catch KeyboardInterrupt
 		print("In total, reduced " + str(size_before_glob) + " b to " + str(size_after_glob) + " b, " + str(files_count_glob) + " files , " + str(((size_after_glob - size_before_glob)/size_before_glob)*100)[:6] + "%")
 		if (COMPARE):
 			print("Flif default would have been: " + str(size_flifdefault_glob) + " b")
+			print("  Compared to original size: " + str(((size_flifdefault_glob - size_before_glob)/size_before_glob)*100)[:6] + "%" )
+			sign = "+" if (((size_flifdefault_glob - size_after_glob)/size_after_glob)*100 > 0) else ""
+			print("  Compared to crushed size: " + sign + str(((size_flifdefault_glob - size_after_glob)/size_after_glob)*100)[:6] + "%")
 except KeyboardInterrupt: # ctrl+c
 	print("\033[K", end="") # clear previous line
 	print("\rTermination requested, saving best file so far...\n")
