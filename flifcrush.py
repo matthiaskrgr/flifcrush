@@ -726,7 +726,7 @@ def crush_chance_alpha(): # -Z
 				 " divisor: " + str(best_dict['maniac_divisor']) + " ] " + # ] maniac
 
 				 " chance:[ cutoff: "  + str(best_dict['chance_cutoff']) +
-				 " "+ TXT_UL + "alpha: " + str(best_dict['chance_alpha']) + TXT_RES + " ] " + # ] chance              # <---.
+				 " "+ TXT_UL + "alpha: " + str(chance_alpha) + TXT_RES + " ] " + # ] chance              # <---.
 				 " palette: " + str(best_dict['max_palette_size']) +
 
 				 " itlc: " + str(best_dict['interlace'].bool) +
