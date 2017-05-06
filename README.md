@@ -22,3 +22,5 @@ optional arguments:
 ````
  ./flifcrush.py -c samples/FreedroidRPG.png
 ````
+
+![Usage Example](https://raw.githubusercontent.com/matthiaskrgr/flifcrush/master/samples/screenshot.png)
