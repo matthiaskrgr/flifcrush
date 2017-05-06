@@ -1632,7 +1632,7 @@ try: # catch KeyboardInterrupt
 		if (COMPARE): # how does flifcrush compare to default flif conversion?
 			diff_to_flif_byte = best_dict['size'] - size_flifdefault
 			if (best_dict['size'] > size_flifdefault):
-				print("WARNING: flifcrush failed reducing reducing size better than default flif, please report!")
+				print("WARNING: flifcrush failed reducing reducing size better than default flif, please report! File: " + INFILE)
 			diff_to_flif_perc = (((size_flifdefault-best_dict['size']) / best_dict['size'])*100)
 			print("\033[K", end="") # clear previous line
 			print("\nComparing flifcrush (" + str(best_dict['size']) +" b) to default flif (" + str(size_flifdefault)  + " b): " + str(diff_to_flif_byte) + " b which are " + str(diff_to_flif_perc)[:6] + " %")
