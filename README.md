@@ -18,3 +18,7 @@ optional arguments:
   -c, --compare      compare to default flif compression
 ````
 
+#### Example
+````
+ ./flifcrush.py -c samples/FreedroidRPG.png
+````
