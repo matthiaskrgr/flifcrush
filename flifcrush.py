@@ -1292,6 +1292,7 @@ def crush_interlace():
 									best_dict['interlace'] = best_dict['interlace']._replace(flag=interlace_flagstr)
 									best_dict['interlace'] = best_dict['interlace']._replace(bool=interlace)
 									best_dict['invisible_guess'] = invisible_guess
+									best_dict['guess'] = pixel_predictor
 
 									print("\033[K", end="")
 									print(
@@ -1305,9 +1306,9 @@ def crush_interlace():
 										 " alpha: " + str(best_dict['chance_alpha']) +  " ] " + # ] chance
 										 " palette: " + str(best_dict['max_palette_size']) +
 
-										" " +  TXT_UL + "itlc: " + str(best_dict['interlace'].bool) +  # <<---
-										" guess: " + str(best_dict['guess']) +                        # <----
-										" inv_Guess: " + str(best_dict['invisible_guess']) + TXT_RES + # <----
+										" " +  TXT_UL + "itlc: " + str(best_dict['interlace'].bool) +  # <---
+										" guess: " + str(best_dict['guess']) +                         # <---
+										" inv_Guess: " + str(best_dict['invisible_guess']) + TXT_RES + # <---
 										 " no_CC: " + str(best_dict['no_channel_compact'].bool) +
 										 " no_subG: " + str(best_dict['no_subtract_green'].bool) +
 										 " Cbuck: " + str(best_dict['force_color_buckets'].bool) +
